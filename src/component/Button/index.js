@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
             height:50,
             paddingVertical:8, 
             borderRadius:10,}} 
-            onPress={props.navigation}>
+            onPress={props.onPress}>
             <View style={{flexDirection:'row',paddingVertical:3,justifyContent:'center'}}>    
                 <View style={{paddingRight:10}}>
                     <FontAwesomeIcon icon={props.icon} style={{color:'#FFFFFF'}} size={ 27 } />

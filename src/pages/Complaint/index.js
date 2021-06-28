@@ -21,7 +21,7 @@ const HistoryComplaint=({navigation})=>{
                         title="Buka Tiket"
                         width='60%'
                         icon={faPlusSquare}
-                        navigation={()=>navigation.navigate('Complaint')}
+                        onPress={()=>navigation.navigate('Complaint')}
                     />
                      </View>
                     <Table

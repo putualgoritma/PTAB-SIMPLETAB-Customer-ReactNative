@@ -9,10 +9,8 @@ var data = props.data
 return (
     <View style={{width:'80%'}}>
         <SearchableDropDown
-        selectedItems = {selectedItem}
-        onItemSelect={(item) => {
-            setSelectedItem(item)
-        }}
+        selectedItems = {props.selectedItem}
+        onItemSelect={props.onItemSelect}
         itemStyle={{
             padding: 10,
             marginTop: 2,

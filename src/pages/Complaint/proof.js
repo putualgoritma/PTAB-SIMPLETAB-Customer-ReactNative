@@ -17,34 +17,46 @@ import {
     TextInput,
     Button,
     VideoPlayer} from '../../component';
-    const requestCameraPermission = async () => {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.CAMERA,
-            {
-              title: "Cool Photo App Camera Permission",
-              message:
-                "Cool Photo App needs access to your camera " +
-                "so you can take awesome pictures.",
-              buttonNeutral: "Ask Me Later",
-              buttonNegative: "Cancel",
-              buttonPositive: "OK"
-            }
-          );
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log("You can use the camera");
-          } else {
-            console.log("Camera permission denied");
-          }
-        } catch (err) {
-          console.warn(err);
+
+
+const requestCameraPermission = async () => {
+    try {
+        const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+            title: "Cool Photo App Camera Permission",
+            message:
+            "Cool Photo App needs access to your camera " +
+            "so you can take awesome pictures.",
+            buttonNeutral: "Ask Me Later",
+            buttonNegative: "Cancel",
+            buttonPositive: "OK"
         }
-      };
-const Proof =({navigation})=>{
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the camera");
+        } else {
+        console.log("Camera permission denied");
+        }
+    } catch (err) {
+        console.warn(err);
+    }
+};
+
+const Proof =({navigation, route})=>{
     const [response, setResponse] = React.useState(null);
+    const form = route.params.form
+    
         useEffect(() => {
-            requestCameraPermission()
-        })
+            let isAmounted = true
+            if(isAmounted){
+                requestCameraPermission()
+
+            }
+            return () => {
+                isAmounted = false
+            }
+        }, [])
     // const [response, setResponse] = useState(null)
     const [image, setImage] = useState({
         name : null,
@@ -84,12 +96,14 @@ const Proof =({navigation})=>{
                         title="Ambil Foto"
                         width="80%"
                         icon={faCamera}
-                        navigation={()=>launchCamera(
+                        onPress={()=>launchCamera(
                             {
                                 mediaType: 'photo',
                                 includeBase64:true,
                                 maxHeight: 200,
                                 maxWidth: 200,
+                                quality: 0.5,
+                                videoQuality: 'medium'
                             },
                             (response) => {
                                 setResponse(response);
@@ -98,7 +112,6 @@ const Proof =({navigation})=>{
                                     filename : response.fileName,
                                     data : response.base64
                                 })
-                                // console.log(response)
                             },
                             )}
                         />
@@ -108,9 +121,9 @@ const Proof =({navigation})=>{
                             title="Video"
                         />
                         {video && (
-                        <VideoPlayer
-                            src={{uri: video.uri}}
-                        />
+                            <VideoPlayer
+                                src={{uri: video.uri}}
+                            />
                         )}
                         </View>
                     <View style={{alignItems:'center',paddingVertical:10}}>
@@ -118,9 +131,11 @@ const Proof =({navigation})=>{
                             title="Ambil Video"
                             width="80%"
                             icon={faVideo}
-                            navigation={()=>launchCamera(
+                            onPress={()=>launchCamera(
                                 {
-                                    mediaType: 'video'
+                                    mediaType: 'video',
+                                    // quality: 0.5,
+                                    // videoQuality: 'medium'
                                 }, 
                                 (response) => {
                                 setVideo(response);

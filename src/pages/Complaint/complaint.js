@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
     View,
     ScrollView,
     ImageBackground
   } from 'react-native';
+import { useSelector } from 'react-redux';
   import {
     Footer,
     Button,
@@ -13,58 +14,104 @@ import {
     TextInput,
     TextArea,
     Dropdown} from '../../component';
+import API from '../../service';
 const Complaint =({navigation})=>{
+    const [categories, setCategories] = useState(null)
+    const TOKEN = useSelector((state) => state.TokenReducer);
+    const [loading, setLoading] = useState(true)
+    const [selectedItem, setSelectedItem] =useState({})
+
+    useEffect(() => {
+        let isAmounted = true
+        API.categories(TOKEN).then((res) => {
+            setCategories(res.data)
+            setLoading(false)
+        }).catch((e) => {
+            console.log(e);
+            setLoading(false)
+        })
+        return () => {
+            isAmounted = false
+        }
+    }, [])
+
+
+    const [form, setForm] = useState({
+        title : '',
+        category_id : '',
+        description : '',
+        
+    })
+
+
+    const handleFrom = (key , value) => {
+        setForm({
+            ...form,
+            [key] : value
+        })
+    }
+
+
+    const APiCaegories = () => {
+        API.categories(TOKEN).then((res) => {
+            console.log(res);
+        }).cath((e) => {
+            console.log(e);
+        })
+    }
+
     return(
         <View style={styles.container}> 
-            <ScrollView keyboardShouldPersistTaps = 'always'>
-                <View style={{backgroundColor:'#FFFFFF', width:'100%', height:165}}>
-                </View>
+            <View style={{flex : 1}} >
+                <View style={{backgroundColor:'#FFFFFF', width:'100%', height:165}}/>
                 <ImageBackground source={require('../../assets/img/background.png')} style={styles.image}>
-               
                 <View style={{alignItems:'center'}}>
                     <View style={styles.boxShadowBanner}>
                   
-                    <View style={{alignItems:'center',paddingVertical:10}}>
-                        <Title
-                        title="Pengaduan"
-                        />
-                        <TextInput
-                        title="Kategori Pengaduan"
-                        />
-                       <Dropdown
-                        data={[{id:1,name:'1'},
-                                {id:2,name:'2'},
-                                {id:3,name:'3'},
-                                {id:4,name:'4'}
-                                ]}
-                        placeholder="<--Pilih Kategori Pengaduan-->"
-                        />
-                         <TextInput
-                        title="Judul"
-                        />
-                        <Input
-                        placeholder="Judul"
-                         />
-                         <TextInput
-                        title="Keterangan"
-                        />
-                        <TextArea
-                        placeholder="Keterangan"
-                         />
+                        <View style={{alignItems:'center',paddingVertical:10}}>
+                            <Title
+                                title="Pengaduan"
+                            />
+                            <TextInput
+                                title="Kategori Pengaduan"
+                            />
+                            <Dropdown
+                                data={categories}
+                                placeholder="<--Pilih Kategori Pengaduan-->"
+                                onItemSelect = {(item) => handleFrom('category_id', item)}
+                                selectedItem = {form.category_id}
+                            />
+                            <ScrollView style={{width : '100%'}} >
+                                <View style={{alignItems : 'center'}}>
+                                    <TextInput
+                                        title="Judul"
+                                    />
+                                    <Input
+                                        placeholder="Judul"
+                                        onChangeText = {value => handleFrom('title', value)}
+                                    />
+                                    <TextInput
+                                        title="Keterangan"
+                                    />
+                                    <TextArea
+                                        placeholder="Keterangan"
+                                        onChangeText = {value => handleFrom('description', value)}
+                                    />
+
+                                    <View style={{marginVertical : 10}} />
+
+                                    <Button
+                                        title="Lanjut"
+                                        onPress={()=>navigation.navigate('Proof', {form : form})}
+                                    />
+                               </View>
+                            </ScrollView>
+                        </View>
+                    
+                        </View>
                     </View>
-                   
-                    <View style={{alignItems:'center',paddingVertical:10}}>
-                        <Button
-                        title="Lanjut"
-                        navigation={()=>navigation.navigate('Proof')}
-                        />
-                    </View>
-                    </View>
-                </View>
                 </ImageBackground>
-                
-                
-            </ScrollView>
+            </View>
             <Footer
                 navigation = {navigation}
                 focus = 'Menu'

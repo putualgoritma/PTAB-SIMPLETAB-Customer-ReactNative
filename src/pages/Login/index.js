@@ -46,7 +46,7 @@ const Login =({navigation,route})=>{
                                 title='Masyarakat Umum'
                                 width='80%'
                                 icon={faUser}
-                                navigation={()=>navigation.navigate('Public')}
+                                onPress={()=>navigation.navigate('Public')}
                             />
                         </View>
                     </View>
