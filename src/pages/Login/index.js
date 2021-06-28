@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Text,StyleSheet,View,ScrollView,} from 'react-native';
 import {Header,ButtonIcon,In,Input} from '../../component';
 import {faQrcode, faUser} from '@fortawesome/free-solid-svg-icons';
 import {launchCamera} from 'react-native-image-picker';
+import API from '../../service';
 const Login =({navigation,route})=>{
     const [response, setResponse] = React.useState(null);
+
     return(
         <View style={styles.container}>
             <ScrollView>
@@ -15,10 +17,10 @@ const Login =({navigation,route})=>{
                     <View style={styles.boxShadow}>
                         <View style={{alignItems:'center',paddingVertical:10}}>
                             <ButtonIcon
-                            title='Scan QR'
-                            width='80%'
-                            icon={faQrcode}
-                            navigation={()=> navigation.navigate('Scan') }
+                                title='Scan QR'
+                                width='80%'
+                                icon={faQrcode}
+                                navigation={()=> navigation.navigate('Scan') }
                             />
                         </View>
                         <View style={{alignItems:'center'}}>
@@ -32,8 +34,8 @@ const Login =({navigation,route})=>{
                         </View>
                         <View style={{alignItems:'center'}}>
                             <In
-                            title="Login"
-                            navigation={()=>navigation.navigate('SMS')}
+                                title="Login"
+                                navigation={()=>navigation.navigate('SMS')}
                             />
                         </View>
                         <View style={{alignItems:'center'}}>
@@ -41,10 +43,10 @@ const Login =({navigation,route})=>{
                         </View>
                         <View style={{alignItems:'center',paddingVertical:10}}>
                             <ButtonIcon
-                            title='Masyarakat Umum'
-                            width='80%'
-                            icon={faUser}
-                            navigation={()=>navigation.navigate('Public')}
+                                title='Masyarakat Umum'
+                                width='80%'
+                                icon={faUser}
+                                navigation={()=>navigation.navigate('Public')}
                             />
                         </View>
                     </View>

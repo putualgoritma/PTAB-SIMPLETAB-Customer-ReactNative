@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
   const Button =(props)=>{
     return(
-        <TouchableOpacity style={styles.buttonstyle} onPress={props.navigation}>
+        <TouchableOpacity style={styles.buttonstyle} onPress={props.onPress}>
             <View style={{flexDirection:'row',paddingVertical:3,justifyContent:'center', }}>    
                 <View style={{justifyContent:'center'}}>
                     <Text style={styles.text}>{props.title}</Text>

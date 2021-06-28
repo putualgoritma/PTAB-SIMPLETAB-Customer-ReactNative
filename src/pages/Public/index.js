@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     Text,
     StyleSheet,
@@ -9,7 +9,41 @@ import {
   import {Footer,Button,Title,Input,TextInput} from '../../component';
   import Background from '../../assets/img/background.svg'
   import { faQrcode } from '@fortawesome/free-solid-svg-icons';
+import API from '../../service';
+import { useDispatch } from 'react-redux';
+import { SET_DATA_USER, SET_DATA_TOKEN } from '../../redux/action';
+
 const Public =({navigation})=>{
+    const dispatch = useDispatch();
+
+    const [form, setForm] = useState({
+        name : '',
+        address : '',
+        phone :''
+    })
+    const handleForm = (key, value) => {
+        setForm({
+            ...form,
+            [key] : value
+        })
+    }
+
+
+    const handleRegister = () => {
+        API.registerCustomerPublic(form).then((res) => {
+            console.log(res);
+            dispatch(SET_DATA_USER(res.data))
+            dispatch(SET_DATA_TOKEN(res.token))
+            // storeDataToken(result.token.token)
+            // storeDataUser(result.user)
+        }).catch((e) => {
+            console.log(e.request);
+            // let mes = JSON.parse(e.request._response)
+            //     alert(mes.message)
+            //     // setLoading(false)
+            })
+    }
+
     return(
         <View style={styles.container}> 
             <ScrollView>
@@ -22,31 +56,35 @@ const Public =({navigation})=>{
                         
                     <View style={{alignItems:'center',paddingVertical:10}}>
                         <Title
-                        title="Masyarakat Umum"
+                             title="Masyarakat Umum"
                         />
                         <TextInput
-                        title="Nama"
+                             title="Nama"
                         />
                         <Input
-                        placeholder="Nama"
+                              placeholder="Nama"
+                              onChangeText = {(value) => handleForm('name', value)}
                          />
                          <TextInput
-                        title="Alamat"
+                              title="Alamat"
                         />
                         <Input
-                        placeholder="Alamat"
+                              placeholder="Alamat"
+                              onChangeText = {(value) => handleForm('address', value)}
                          />
                          <TextInput
-                        title="No Handphone"
+                              title="No Handphone"
                         />
                         <Input
-                        placeholder="No Handphone"
+                              placeholder="No Handphone"
+                              onChangeText = {(value) => handleForm('phone', value)}
                          />
                     </View>
                     <View style={{alignItems:'center',paddingVertical:10}}>
                         <Button
-                        title="Lanjut"
-                        navigation={()=>navigation.navigate('SMS')}
+                            title="Lanjut"
+                            // navigation={()=>navigation.navigate('SMS')}
+                            onPress = {handleRegister }
                         />
                     </View>
                     </View>
