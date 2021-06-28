@@ -1,29 +1,12 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { IconSpinner } from '../../assets'
+import { ActivityIndicator, Dimensions, View } from 'react-native'
 
-const Spinner = (props) => {
+const Spinner = () => {
     return (
-        <View style={styles.container}>
-            <IconSpinner/>
-            <Text style={styles.text}>
-                {props.info ? props.infp : 'Loading...'}
-            </Text>
+        <View style={{ position :'absolute', width :'100%', height : Dimensions.get('screen').height, zIndex:1, justifyContent : 'center', backgroundColor:'rgba(52, 52, 52, 0.8)'}}>
+            <ActivityIndicator color='blue' size={50} />
         </View>
     )
 }
 
 export default Spinner
-
-const styles = StyleSheet.create({
-    container : {
-        flex:1,
-        backgroundColor:'#ffffff',
-        flexDirection :'column',
-        justifyContent : 'center',
-        alignItems : 'center',
-    },
-    text:{
-        fontSize : 20
-    }
-})

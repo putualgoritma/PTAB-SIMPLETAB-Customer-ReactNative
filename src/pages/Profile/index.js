@@ -10,7 +10,11 @@ import {
 import {Footer, Header,ButtonIcon,In,InputLine, TextInput,Button} from '../../component';
 import IconLogout from '../../assets/icon/iconLogout.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { useSelector } from 'react-redux';
 const Profile =({navigation})=>{
+
+    const USER = useSelector((state) => state.UserReducer);
+
     return(
         <View style={styles.container}>
             <ScrollView>
@@ -55,7 +59,8 @@ const Profile =({navigation})=>{
                 <View style={{alignItems:'center',paddingVertical:40}}>
                         <Button
                         title="Simpan"
-                        navigation={()=>navigation.navigate('Menu')}
+                        // navigation={()=>navigation.navigate('Menu')}
+                        onPress = {() => console.log(USER)}
                         />
                     </View>    
             </ScrollView>

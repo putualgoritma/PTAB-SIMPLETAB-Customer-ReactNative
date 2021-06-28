@@ -12,10 +12,11 @@ import {
 import API from '../../service';
 import { useDispatch } from 'react-redux';
 import { SET_DATA_USER, SET_DATA_TOKEN } from '../../redux/action';
+import Spinner from '../../component/spinner';
 
 const Public =({navigation})=>{
     const dispatch = useDispatch();
-
+    const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({
         name : '',
         address : '',
@@ -30,14 +31,18 @@ const Public =({navigation})=>{
 
 
     const handleRegister = () => {
+        setLoading(true)
         API.registerCustomerPublic(form).then((res) => {
             console.log(res);
             dispatch(SET_DATA_USER(res.data))
             dispatch(SET_DATA_TOKEN(res.token))
+            setLoading(false)
+            navigation.navigate('Menu')
             // storeDataToken(result.token.token)
             // storeDataUser(result.user)
         }).catch((e) => {
             console.log(e.request);
+            setLoading(false)
             // let mes = JSON.parse(e.request._response)
             //     alert(mes.message)
             //     // setLoading(false)
@@ -46,6 +51,7 @@ const Public =({navigation})=>{
 
     return(
         <View style={styles.container}> 
+            {loading &&  <Spinner/>}
             <ScrollView>
                 <View style={{backgroundColor:'#FFFFFF', width:'100%', height:165}}>
                 </View>

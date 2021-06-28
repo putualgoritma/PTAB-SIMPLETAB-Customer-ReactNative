@@ -17,6 +17,7 @@ import TextArea from './TextArea'
 import Dropdown from './Dropdown'
 import DateMonth from './Month'
 import VideoPlayer from './Video'
+import Spinner from './spinner'
 
 export {
     Footer,
@@ -37,5 +38,6 @@ export {
     TextArea,
     Dropdown,
     DateMonth,
-    VideoPlayer
+    VideoPlayer,
+    Spinner
 }
