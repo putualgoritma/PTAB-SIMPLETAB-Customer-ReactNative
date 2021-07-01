@@ -10,6 +10,7 @@ import {
     Video
   } from 'react-native';
   import {launchCamera} from 'react-native-image-picker';
+import { useSelector } from 'react-redux';
   import {
     Footer,
     Title,
@@ -17,7 +18,9 @@ import {
     TextInput,
     Button,
     VideoPlayer} from '../../component';
-
+import API from '../../service';
+import FileBase64 from 'react-file-base64';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 const requestCameraPermission = async () => {
     try {
@@ -44,19 +47,28 @@ const requestCameraPermission = async () => {
 };
 
 const Proof =({navigation, route})=>{
-    const [response, setResponse] = React.useState(null);
-    const form = route.params.form
-    
-        useEffect(() => {
-            let isAmounted = true
-            if(isAmounted){
-                requestCameraPermission()
 
-            }
-            return () => {
-                isAmounted = false
-            }
-        }, [])
+    const TOKEN = useSelector((state) => state.TokenReducer);
+    const USER = useSelector((state) => state.UserReducer);
+    const [response, setResponse] = React.useState(null);
+    const data = route.params.form
+    const [form, setForm] = useState({
+        title : data.title,
+        category_id : data.category_id.id,
+        description : data.description,
+        customer_id : USER.id,
+    })
+    
+    useEffect(() => {
+        let isAmounted = true
+        if(isAmounted){
+            requestCameraPermission()
+            console.log(form);
+        }   
+        return () => {
+            isAmounted = false
+        }
+    }, [])
     // const [response, setResponse] = useState(null)
     const [image, setImage] = useState({
         name : null,
@@ -64,6 +76,81 @@ const Proof =({navigation, route})=>{
         data : null
     })
     const [video, setVideo] = useState(null)
+
+
+    const handleTicket = () => {
+        // if(form.title != '' && form.category_id != '' && form.description != '' ){
+        //     API.tikcetStore(form, TOKEN).then((res) => {
+        //         console.log('res res',res);
+        //         console.log(form);
+        //     }).catch((e) => {
+        //         console.log(e.request);
+        //     })
+        // }else{
+        //     alert('image atau video masih kosong ')
+        // }
+
+        // RNFetchBlob.fetch(
+        //     'POST',
+        //     'https://simpletabadmin.ptab-vps.com/api/close/customer/ticket/store',
+        //     {
+        //       Authorization: 'Bearer access-token',
+        //       otherHeader: 'foo',
+        //       'Content-Type': 'multipart/form-data',
+        //     },
+        //     [
+        //       // name: image adalah nama properti dari api kita
+        //       {name: 'form', filename: 'tempbody.jpg', data: form.image.base64},
+        //     //   {form}
+        //     ],
+        //   ).then((resp) => {
+        //     console.log('Response Saya');
+        //     console.log(resp.data);
+        //     alert('your image uploaded successfully');
+        //     // this.setState({avatarSource: null});
+        //   });
+
+        console.log(video);
+
+          RNFetchBlob.fetch(
+            'POST',
+            'https://simpletabadmin.ptab-vps.com/api/close/customer/ticket/store',
+            {
+              Authorization: `Bearer ${TOKEN}`,
+              otherHeader: 'foo',
+              'Accept' : 'application/json' ,
+              'Content-Type': 'multipart/form-data',
+            },
+            [
+              // name: image adalah nama properti dari api kita
+                {name: 'image', filename: response.fileName, data: response.base64},
+                { 
+                    name : 'video', 
+                    filename : video.fileName, 
+                    type:'mp4', 
+                    data: RNFetchBlob.wrap(video.uri)
+                },
+                {
+                    name: 'form',
+                    data : JSON.stringify(form)
+                }
+            ],
+          ).then((result) => {
+            //     let data = JSON.parse(result.data)
+            //   dispatch(SET_DATA_USER(data.data))
+            //   storeDataUser(data.data)
+            //   navigation.navigate('Info', {notif : 'Profile diupdate', navigasi : 'Home'} )
+            //   setLoading(false)
+            // console.log(JSON.parse(result.data));
+            // let data1= JSON.parse(result.data);
+            // // let data = JSON.parse(data1)
+            // console.log(JSON.parse(data1.data));
+            console.log(result);
+          }).catch((e) => {
+              console.log(e);
+            //   setLoading(false)
+          })
+    }
     return(
         <View style={styles.container}> 
             <ScrollView keyboardShouldPersistTaps = 'always'>
@@ -102,16 +189,20 @@ const Proof =({navigation, route})=>{
                                 includeBase64:true,
                                 maxHeight: 200,
                                 maxWidth: 200,
-                                quality: 0.5,
-                                videoQuality: 'medium'
                             },
                             (response) => {
-                                setResponse(response);
+                                setResponse(response.assets[0]);
                                 setImage({
                                     name : 'img',
-                                    filename : response.fileName,
-                                    data : response.base64
+                                    filename : response.assets[0].fileName,
+                                    data : response.assets[0].base64
                                 })
+                                setForm({
+                                    ...form,
+                                    image : response.assets[0].fileName
+                                })
+
+                                console.log('base defaulr : ', response.assets[0].base64);
                             },
                             )}
                         />
@@ -135,10 +226,20 @@ const Proof =({navigation, route})=>{
                                 {
                                     mediaType: 'video',
                                     // quality: 0.5,
-                                    // videoQuality: 'medium'
+                                    videoQuality: 'low'
+                                    // includeBase64: true 
                                 }, 
                                 (response) => {
-                                setVideo(response);
+                                setVideo(response.assets[0]);
+                                setForm({
+                                    ...form,
+                                    video : response.assets[0].fileName
+                                })
+
+                                // console.log(base64.encode(response.assets[0]));
+                                console.log(response.assets[0]);
+                                
+                                
                                 
                             })
                             }
@@ -147,7 +248,8 @@ const Proof =({navigation, route})=>{
                     <View style={{alignItems:'center',paddingVertical:10}}>
                         <Button
                             title="Kirim Tiket"
-                            navigation={()=>navigation.navigate('Heandling')}
+                            // navigation={()=>navigation.navigate('Heandling')}
+                            onPress={handleTicket}
                         
                         />
                     </View>

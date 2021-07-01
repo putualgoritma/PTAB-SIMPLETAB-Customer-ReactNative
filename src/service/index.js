@@ -8,12 +8,13 @@ const categories = (token) => Get('/api/close/customer/categories', false, token
 
 //POST
 const registerCustomerPublic =(data) => Post(Config.REACT_APP_REGISTER_PUBLIC, false, data);
-
+const tikcetStore = (data, token) => Post('/api/close/customer/ticket/store', false, data, token);
 // PUT
 
 const API = {
       registerCustomerPublic,
-      categories
+      categories,
+      tikcetStore
 }
 
 export default API;

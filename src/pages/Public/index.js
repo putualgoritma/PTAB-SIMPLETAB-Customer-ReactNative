@@ -47,6 +47,7 @@ const Public =({navigation})=>{
             //     alert(mes.message)
             //     // setLoading(false)
             })
+            console.log(form);
     }
 
     return(
