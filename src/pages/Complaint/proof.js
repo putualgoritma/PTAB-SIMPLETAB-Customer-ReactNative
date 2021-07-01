@@ -18,8 +18,6 @@ import { useSelector } from 'react-redux';
     TextInput,
     Button,
     VideoPlayer} from '../../component';
-import API from '../../service';
-import FileBase64 from 'react-file-base64';
 import RNFetchBlob from 'react-native-fetch-blob';
 
 const requestCameraPermission = async () => {
@@ -136,19 +134,9 @@ const Proof =({navigation, route})=>{
                 }
             ],
           ).then((result) => {
-            //     let data = JSON.parse(result.data)
-            //   dispatch(SET_DATA_USER(data.data))
-            //   storeDataUser(data.data)
-            //   navigation.navigate('Info', {notif : 'Profile diupdate', navigasi : 'Home'} )
-            //   setLoading(false)
-            // console.log(JSON.parse(result.data));
-            // let data1= JSON.parse(result.data);
-            // // let data = JSON.parse(data1)
-            // console.log(JSON.parse(data1.data));
             console.log(result);
           }).catch((e) => {
               console.log(e);
-            //   setLoading(false)
           })
     }
     return(
@@ -225,20 +213,20 @@ const Proof =({navigation, route})=>{
                             onPress={()=>launchCamera(
                                 {
                                     mediaType: 'video',
-                                    // quality: 0.5,
-                                    videoQuality: 'low'
+                                    quality: 0.5,
+                                    // videoQuality: 'low'
                                     // includeBase64: true 
                                 }, 
                                 (response) => {
-                                setVideo(response.assets[0]);
-                                setForm({
-                                    ...form,
-                                    video : response.assets[0].fileName
-                                })
+                                    if(response.assets){
+                                        setVideo(response.assets[0]);
+                                        setForm({
+                                            ...form,
+                                            video : response.assets[0].fileName
+                                        })
+                                    }
 
                                 // console.log(base64.encode(response.assets[0]));
-                                console.log(response.assets[0]);
-                                
                                 
                                 
                             })

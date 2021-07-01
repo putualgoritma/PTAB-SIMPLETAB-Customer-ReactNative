@@ -17,6 +17,7 @@ const VideoPlayer = (props) => {
 
     const onSeek = (seek) => {
         videoPlayer?.current.seek(seek);
+        console.log('seek');
     };
 
     const onSeeking = (currentVideoTime) => setCurrentTime(currentVideoTime);
@@ -24,6 +25,7 @@ const VideoPlayer = (props) => {
     const onPaused = (newState) => {
         setPaused(!paused);
         setPlayerState(newState);
+        console.log('onPause');
     };
 
     const onReplay = () => {
@@ -36,12 +38,16 @@ const VideoPlayer = (props) => {
             setPlayerState(PLAYER_STATES.PLAYING);
             setPaused(false);
         }
+
+        console.log('onReplay');
     };
 
     const onProgress = (data) => {
         if (!isLoading) {
             setCurrentTime(data.currentTime);
         }
+
+        console.log('onProgress');
     };
 
     const onLoad = (data) => {
@@ -54,6 +60,8 @@ const VideoPlayer = (props) => {
     const onEnd = () => {
         setPlayerState(PLAYER_STATES.ENDED);
         setCurrentTime(duration);
+
+        console.log('onLoad');
     };
 
     return (
