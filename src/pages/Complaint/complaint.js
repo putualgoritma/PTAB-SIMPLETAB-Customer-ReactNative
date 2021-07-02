@@ -3,7 +3,8 @@ import {
     StyleSheet,
     View,
     ScrollView,
-    ImageBackground
+    ImageBackground,
+    PermissionsAndroid
   } from 'react-native';
 import { useSelector } from 'react-redux';
   import {
@@ -13,35 +14,122 @@ import { useSelector } from 'react-redux';
     Input,
     TextInput,
     TextArea,
-    Dropdown} from '../../component';
+    Dropdown,
+    Spinner} from '../../component';
 import API from '../../service';
+import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
+import Geolocation from '@react-native-community/geolocation';
 const Complaint =({navigation})=>{
     const [categories, setCategories] = useState(null)
     const TOKEN = useSelector((state) => state.TokenReducer);
     const [loading, setLoading] = useState(true)
     const [selectedItem, setSelectedItem] =useState({})
-
-    useEffect(() => {
-        let isAmounted = true
-        API.categories(TOKEN).then((res) => {
-            setCategories(res.data)
-            setLoading(false)
-        }).catch((e) => {
-            console.log(e);
-            setLoading(false)
-        })
-        return () => {
-            isAmounted = false
-        }
-    }, [])
+    const [location, setLocation] = useState({
+        latitude: 0.00000,
+        longitude: 0.0000
+    })
+    const LATITUDE = -8.3978769;
+    const LONGITUDE = 115.2141418;
+    var defaultLoc = {};
 
 
     const [form, setForm] = useState({
         title : '',
         category_id : '',
         description : '',
+        lat : '',
+        lng : ''
         
     })
+
+
+    useEffect(() => {
+        let isAmounted = true
+        if(isAmounted){
+            setLoading(true)
+            // API.categories(TOKEN).then((res) => {
+            //     setCategories(res.data)
+            //     setLoading(false)
+            // }).catch((e) => {
+            //     console.log(e);
+            //     setLoading(false)
+            // })
+            // return () => {
+            //     isAmounted = false
+            // }
+
+            Promise.all([API.categories(TOKEN), permissionGps()]).then((res) => {
+                console.log(res);
+                setCategories(res[0].data)
+                setLoading(false)
+            }).catch((e) => {
+                console.log(e);
+                setLoading(false)
+            })
+       }
+    }, [])
+
+    const permissionGps = () => {
+        var positionNew
+        LocationServicesDialogBox.checkLocationServicesIsEnabled({
+            message: "<h2 style='color: #0af13e'>Use Location ?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
+            ok: "YES",
+            cancel: "NO",
+          }).then(function(success) {
+                requestLocationPermission().then(() => {
+                    Geolocation.getCurrentPosition(
+                        (position) => {
+                            console.log('posisi',position);
+                             positionNew = position;
+                             setForm({
+                                 ...form,
+                                 lat : position.coords.latitude,
+                                 lng : position.coords.longitude
+                             })
+                            setLocation({
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude, 
+                            })
+                            defaultLoc ={
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude, 
+                            }
+                            console.log( typeof (position.coords.latitude));
+                            return position;
+                        },
+                        (error) => {
+                            console.log(error);    
+                        },
+                            { enableHighAccuracy: true, timeout: 200000, maximumAge: 1000 },
+                        );
+                })
+          }).catch((error) => {
+              console.log(error.message); // error.message => "disabled"
+              navigation.navigate('Register')
+          });
+        return positionNew
+    }
+
+    const requestLocationPermission =  async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              'title': 'Location Permission',
+              'message': 'MyMapApp needs access to your location'
+            }
+            )
+    
+           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+               console.log("Location permission granted")
+           } else {
+               console.log("Location permission denied")
+           }
+        } catch (err) {
+           console.warn(err)
+        }
+      }
+    
 
 
     const handleFrom = (key , value) => {
@@ -52,16 +140,10 @@ const Complaint =({navigation})=>{
     }
 
 
-    const APiCaegories = () => {
-        API.categories(TOKEN).then((res) => {
-            console.log(res);
-        }).cath((e) => {
-            console.log(e);
-        })
-    }
 
     return(
         <View style={styles.container}> 
+                {loading &&  <Spinner/>}
             <View style={{flex : 1}} >
                 <View style={{backgroundColor:'#FFFFFF', width:'100%', height:165}}/>
                 <ImageBackground source={require('../../assets/img/background.png')} style={styles.image}>
@@ -80,6 +162,7 @@ const Complaint =({navigation})=>{
                                 placeholder="<--Pilih Kategori Pengaduan-->"
                                 onItemSelect = {(item) => handleFrom('category_id', item)}
                                 selectedItem = {form.category_id}
+                           
                             />
                             <ScrollView style={{width : '100%'}} >
                                 <View style={{alignItems : 'center'}}>

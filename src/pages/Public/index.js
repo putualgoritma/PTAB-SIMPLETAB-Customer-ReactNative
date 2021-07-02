@@ -85,6 +85,8 @@ const Public =({navigation})=>{
                         <Input
                               placeholder="No Handphone"
                               onChangeText = {(value) => handleForm('phone', value)}
+                              keyboardType = 'number-pad'
+                            //   keyboardType = 'number'
                          />
                     </View>
                     <View style={{alignItems:'center',paddingVertical:10}}>

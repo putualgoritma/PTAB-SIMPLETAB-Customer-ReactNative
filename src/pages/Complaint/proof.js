@@ -7,7 +7,8 @@ import {
     ImageBackground,
     PermissionsAndroid,
     Image,
-    Video
+    Video,
+    Alert
   } from 'react-native';
   import {launchCamera} from 'react-native-image-picker';
 import { useSelector } from 'react-redux';
@@ -17,7 +18,8 @@ import { useSelector } from 'react-redux';
     ButtonIcon,
     TextInput,
     Button,
-    VideoPlayer} from '../../component';
+    VideoPlayer,
+    Spinner} from '../../component';
 import RNFetchBlob from 'react-native-fetch-blob';
 
 const requestCameraPermission = async () => {
@@ -49,11 +51,14 @@ const Proof =({navigation, route})=>{
     const TOKEN = useSelector((state) => state.TokenReducer);
     const USER = useSelector((state) => state.UserReducer);
     const [response, setResponse] = React.useState(null);
+    const [loading, setLoading] = useState(false)
     const data = route.params.form
     const [form, setForm] = useState({
         title : data.title,
         category_id : data.category_id.id,
         description : data.description,
+        lat : data.lat,
+        lng : data.lng,
         customer_id : USER.id,
     })
     
@@ -77,70 +82,52 @@ const Proof =({navigation, route})=>{
 
 
     const handleTicket = () => {
-        // if(form.title != '' && form.category_id != '' && form.description != '' ){
-        //     API.tikcetStore(form, TOKEN).then((res) => {
-        //         console.log('res res',res);
-        //         console.log(form);
-        //     }).catch((e) => {
-        //         console.log(e.request);
-        //     })
-        // }else{
-        //     alert('image atau video masih kosong ')
-        // }
-
-        // RNFetchBlob.fetch(
-        //     'POST',
-        //     'https://simpletabadmin.ptab-vps.com/api/close/customer/ticket/store',
-        //     {
-        //       Authorization: 'Bearer access-token',
-        //       otherHeader: 'foo',
-        //       'Content-Type': 'multipart/form-data',
-        //     },
-        //     [
-        //       // name: image adalah nama properti dari api kita
-        //       {name: 'form', filename: 'tempbody.jpg', data: form.image.base64},
-        //     //   {form}
-        //     ],
-        //   ).then((resp) => {
-        //     console.log('Response Saya');
-        //     console.log(resp.data);
-        //     alert('your image uploaded successfully');
-        //     // this.setState({avatarSource: null});
-        //   });
-
-        console.log(video);
-
-          RNFetchBlob.fetch(
-            'POST',
-            'https://simpletabadmin.ptab-vps.com/api/close/customer/ticket/store',
-            {
-              Authorization: `Bearer ${TOKEN}`,
-              otherHeader: 'foo',
-              'Accept' : 'application/json' ,
-              'Content-Type': 'multipart/form-data',
-            },
-            [
-              // name: image adalah nama properti dari api kita
-                {name: 'image', filename: response.fileName, data: response.base64},
-                { 
-                    name : 'video', 
-                    filename : video.fileName, 
-                    type:'mp4', 
-                    data: RNFetchBlob.wrap(video.uri)
-                },
-                {
-                    name: 'form',
-                    data : JSON.stringify(form)
-                }
-            ],
-          ).then((result) => {
-            console.log(result);
-          }).catch((e) => {
-              console.log(e);
-          })
+        console.log(form);
+        if(form.title != '' && form.category_id != '' && form.description != '' && response != null && video !==null ){
+            if(video.fileSize < 98000000){
+                setLoading(true)
+                RNFetchBlob.fetch(
+                    'POST',
+                    'https://simpletabadmin.ptab-vps.com/api/close/customer/ticket/store',
+                    {
+                      Authorization: `Bearer ${TOKEN}`,
+                      otherHeader: 'foo',
+                      'Accept' : 'application/json' ,
+                      'Content-Type': 'multipart/form-data',
+                    },
+                    [
+                      // name: image adalah nama properti dari api kita
+                        {name: 'image', filename: response.fileName, data: response.base64},
+                        { 
+                            name : 'video', 
+                            filename : video.fileName, 
+                            type:'mp4', 
+                            data: RNFetchBlob.wrap(video.uri)
+                        },
+                        {
+                            name: 'form',
+                            data : JSON.stringify(form)
+                        }
+                    ],
+                ).then((result) => {
+                    setLoading(false)
+                    let data = JSON.parse(result.data);
+                    console.log(result);
+                    alert(data.message)
+                    navigation.navigate('Menu')
+                }).catch((e) => {
+                    console.log(e);
+                    setLoading(false)
+                })
+            }else{
+                alert('Size video terlalu besar')
+            }
+           
+        };
     }
     return(
         <View style={styles.container}> 
+            {loading &&  <Spinner/>}
             <ScrollView keyboardShouldPersistTaps = 'always'>
                 <View style={{backgroundColor:'#FFFFFF', width:'100%', height:165}}>
                 </View>
@@ -179,19 +166,19 @@ const Proof =({navigation, route})=>{
                                 maxWidth: 200,
                             },
                             (response) => {
-                                setResponse(response.assets[0]);
-                                setImage({
-                                    name : 'img',
-                                    filename : response.assets[0].fileName,
-                                    data : response.assets[0].base64
-                                })
-                                setForm({
-                                    ...form,
-                                    image : response.assets[0].fileName
-                                })
-
-                                console.log('base defaulr : ', response.assets[0].base64);
-                            },
+                                if(response.assets){
+                                    setResponse(response.assets[0]);
+                                    setImage({
+                                        name : 'img',
+                                        filename : response.assets[0].fileName,
+                                        data : response.assets[0].base64
+                                    })
+                                    setForm({
+                                        ...form,
+                                        image : response.assets[0].fileName
+                                    })
+                                }
+                            },  
                             )}
                         />
                     </View>
@@ -210,26 +197,40 @@ const Proof =({navigation, route})=>{
                             title="Ambil Video"
                             width="80%"
                             icon={faVideo}
-                            onPress={()=>launchCamera(
-                                {
-                                    mediaType: 'video',
-                                    quality: 0.5,
-                                    // videoQuality: 'low'
-                                    // includeBase64: true 
-                                }, 
-                                (response) => {
-                                    if(response.assets){
-                                        setVideo(response.assets[0]);
-                                        setForm({
-                                            ...form,
-                                            video : response.assets[0].fileName
-                                        })
-                                    }
-
-                                // console.log(base64.encode(response.assets[0]));
-                                
-                                
-                            })
+                            onPress={
+                                () => Alert.alert(
+                                    'Peringatan',
+                                    `Video tidak boleh lebih besar dari 10mb ! `,
+                                    [
+                                        {
+                                            text : 'Tidak',
+                                            onPress : () => console.log('tidak')
+                                        },
+                                        {
+                                            text : 'Ya',
+                                            // onPress : () => {generateCodeOTP(); setModalVisible(true)}
+                                            onPress : () => {
+                                                launchCamera(
+                                                    {
+                                                        mediaType: 'video',
+                                                        quality: 1,
+                                                        videoQuality: 'law'
+                                                        // includeBase64: true 
+                                                    }, 
+                                                    (response) => {
+                                                        if(response.assets){
+                                                            setVideo(response.assets[0]);
+                                                            setForm({
+                                                                ...form,
+                                                                video : response.assets[0].fileName
+                                                            })
+                                                            console.log(response.assets[0]);
+                                                        }
+                                                })
+                                            }
+                                        }
+                                    ]
+                                )
                             }
                         />
                     </View>

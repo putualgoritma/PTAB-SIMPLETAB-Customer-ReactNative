@@ -6,7 +6,7 @@ import {
   } from 'react-native';
 const input =(props)=>{
     return(
-            <TextInput style={styles.input} placeholder={props.placeholder} placeholderTextColor='#c7c7c7' value={props.value} onChangeText={props.onChangeText} />
+            <TextInput style={styles.input} placeholder={props.placeholder} placeholderTextColor='#c7c7c7' value={props.value} onChangeText={props.onChangeText}  keyboardType={props.keyboardType}/>
     )
 }
 const styles = StyleSheet.create({
