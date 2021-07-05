@@ -4,9 +4,10 @@ import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 import Video from 'react-native-video';
 
 const VideoPlayer = (props) => {
-    
+
+    const [fullScrenn, setFullScrenn] = useState(false)
     const video = props.src;
-    
+    const [isFullScreen, setIsFullScreen] = useState(false);
     const videoPlayer = useRef(null);
     const [duration, setDuration] = useState(0);
     const [paused, setPaused] = useState(true);
@@ -18,6 +19,16 @@ const VideoPlayer = (props) => {
     const onSeek = (seek) => {
         videoPlayer?.current.seek(seek);
         console.log('seek');
+    };
+
+    const noop = (item) => {
+        if(fullScrenn == false) {
+          setFullScrenn(true)
+        }
+
+        if(fullScrenn == true){
+           setFullScrenn(false)
+        }
     };
 
     const onSeeking = (currentVideoTime) => setCurrentTime(currentVideoTime);
@@ -65,7 +76,7 @@ const VideoPlayer = (props) => {
     };
 
     return (
-        <View style={{alignItems:'center', width:'100%'}}>
+        <View style={{alignItems:'center', width:'100%', flex:1}}>
             <Video
                 onEnd={onEnd}
                 onLoad={onLoad}
@@ -76,10 +87,11 @@ const VideoPlayer = (props) => {
                 ref={(ref) => (videoPlayer.current = ref)}
                 resizeMode={'cover'}
                 source={video}
-                style={styles.backgroundVideo}
+                style={styles.backgroundVideo(fullScrenn)}
             />
             <MediaControls
-                isFullScreen={false}
+                isFullScreen={isFullScreen}
+                onFullScreen={() => noop(fullScrenn)}
                 duration={duration}
                 isLoading={isLoading}
                 progress={currentTime}
@@ -96,11 +108,12 @@ const VideoPlayer = (props) => {
 };
 
 const styles = StyleSheet.create({
-    backgroundVideo: {
-        height: 150,
+    backgroundVideo: (fullScrenn) => ({
+        height: (fullScrenn ? '100%' : 150),
         width: '100%',
-        backgroundColor : 'black'
-    },
+        backgroundColor : 'black',
+        zIndex: 99
+    }),
     mediaControls: {
         height: '100%',
         flex: 1,

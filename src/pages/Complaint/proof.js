@@ -53,9 +53,10 @@ const Proof =({navigation, route})=>{
     const [response, setResponse] = React.useState(null);
     const [loading, setLoading] = useState(false)
     const data = route.params.form
+    const category = route.params.category
     const [form, setForm] = useState({
         title : data.title,
-        category_id : data.category_id.id,
+        category_id : category,
         description : data.description,
         lat : data.lat,
         lng : data.lng,
@@ -162,8 +163,8 @@ const Proof =({navigation, route})=>{
                             {
                                 mediaType: 'photo',
                                 includeBase64:true,
-                                maxHeight: 200,
-                                maxWidth: 200,
+                                maxHeight: 500,
+                                maxWidth: 500,
                             },
                             (response) => {
                                 if(response.assets){
@@ -177,6 +178,7 @@ const Proof =({navigation, route})=>{
                                         ...form,
                                         image : response.assets[0].fileName
                                     })
+                                    console.log(response);
                                 }
                             },  
                             )}

@@ -19,11 +19,12 @@ import { useSelector } from 'react-redux';
 import API from '../../service';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 import Geolocation from '@react-native-community/geolocation';
+import SearchableDropDown from 'react-native-searchable-dropdown';
 const Complaint =({navigation})=>{
     const [categories, setCategories] = useState(null)
     const TOKEN = useSelector((state) => state.TokenReducer);
     const [loading, setLoading] = useState(true)
-    const [selectedItem, setSelectedItem] =useState({})
+    const [selectedItem, setSelectedItem] =useState()
     const [location, setLocation] = useState({
         latitude: 0.00000,
         longitude: 0.0000
@@ -157,13 +158,66 @@ const Complaint =({navigation})=>{
                             <TextInput
                                 title="Kategori Pengaduan"
                             />
-                            <Dropdown
+                            {/* <Dropdown
                                 data={categories}
                                 placeholder="<--Pilih Kategori Pengaduan-->"
                                 onItemSelect = {(item) => handleFrom('category_id', item)}
                                 selectedItem = {form.category_id}
                            
-                            />
+                            /> */}
+
+                            <View style={{width:'80%'}}>
+                                <SearchableDropDown
+                                    onItemSelect={(item) => {
+                                        // handleFrom('category_id', item)
+                                        setSelectedItem(item);
+                                    }}
+                                    selectedItems={selectedItem}
+                                    containerStyle={{ padding: 5 ,}}
+                                    itemStyle={{
+                                    padding: 10,
+                                    marginTop: 2,
+                                    backgroundColor: '#ddd',
+                                    borderColor: '#bbb',
+                                    borderWidth: 1,
+                                    borderRadius: 5,
+                                    }}
+                                    itemStyle={{
+                                        padding: 10,
+                                        marginTop: 2,
+                                        backgroundColor: '#ffffff',
+                                        borderColor: '#087CDB',
+                                        borderWidth: 1,
+                                        borderRadius: 5,
+                                    }}
+                                    itemTextStyle={{ color: '#222' }}
+                                    itemsContainerStyle={{ maxHeight: 180 }}
+                                    items={categories}
+                                    // defaultIndex={2}
+                                    resetValue={false}
+                                    textInputProps={
+                                    {
+                                        placeholder: "Category",
+                                        underlineColorAndroid: "transparent",
+                                        style: {
+                                            padding: 12,
+                                            borderWidth: 1,
+                                            borderColor: '#087CDB',
+                                            borderRadius: 10,
+                                            backgroundColor:'#ffffff',
+                                            width:'100%'
+                                        },
+                                        // onTextChange: text => alert(text)
+                                    }
+                                    }
+                                    listProps={
+                                    {
+                                        nestedScrollEnabled: true,
+                                    }
+                                    }
+                                />
+                            </View>
+
                             <ScrollView style={{width : '100%'}} >
                                 <View style={{alignItems : 'center'}}>
                                     <TextInput
@@ -185,7 +239,8 @@ const Complaint =({navigation})=>{
 
                                     <Button
                                         title="Lanjut"
-                                        onPress={()=>navigation.navigate('Proof', {form : form})}
+                                        onPress={()=>navigation.navigate('Proof', {form : form, category : selectedItem.id})}
+                                        // onPress={() => console.log(selectedItem)}
                                     />
                                </View>
                             </ScrollView>
