@@ -95,7 +95,7 @@ const Complaint =({navigation})=>{
                                 longitude: position.coords.longitude, 
                             }
                             console.log( typeof (position.coords.latitude));
-                            return position;
+                            return 'hlo';
                         },
                         (error) => {
                             console.log(error);    
@@ -107,7 +107,7 @@ const Complaint =({navigation})=>{
               console.log(error.message); // error.message => "disabled"
               navigation.navigate('Register')
           });
-        return positionNew
+        return 'jlo'
     }
 
     const requestLocationPermission =  async () => {

@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
       paddingHorizontal:20,
       borderColor:'#087CDB',
       borderBottomWidth:1,
+      color:'black'
     },
 });
 export default InputLine;

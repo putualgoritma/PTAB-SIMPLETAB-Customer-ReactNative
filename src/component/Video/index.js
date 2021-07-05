@@ -65,7 +65,7 @@ const VideoPlayer = (props) => {
     };
 
     return (
-        <View style={{alignItems:'center', width:'80%'}}>
+        <View style={{alignItems:'center', width:'100%'}}>
             <Video
                 onEnd={onEnd}
                 onLoad={onLoad}
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     backgroundVideo: {
         height: 150,
         width: '100%',
+        backgroundColor : 'black'
     },
     mediaControls: {
         height: '100%',

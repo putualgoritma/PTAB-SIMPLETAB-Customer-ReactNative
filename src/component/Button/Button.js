@@ -8,10 +8,10 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
   const Button =(props)=>{
     return(
-        <TouchableOpacity style={styles.buttonstyle} onPress={props.onPress}>
+        <TouchableOpacity style={[{height : (props.height ? props.height : 50) }, styles.buttonstyle]} onPress={props.onPress}>
             <View style={{flexDirection:'row',paddingVertical:3,justifyContent:'center', }}>    
                 <View style={{justifyContent:'center'}}>
-                    <Text style={styles.text}>{props.title}</Text>
+                    <Text style={[{fontSize : (props.text ? props.text :18)},styles.text]}>{props.title}</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -21,15 +21,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
     buttonstyle:{
         backgroundColor:'#0C5CBF', 
         width:'80%', 
-        height:50,
-        paddingVertical:10, 
+        // paddingVertical:10, 
         borderRadius:10,
-        paddingTop:10
+        // paddingTop:10
+        justifyContent:'center'
     },
     text:{
         color:'#FFFFFF', 
         fontWeight:'bold',
-        fontSize:18
     }
  });
   export default Button

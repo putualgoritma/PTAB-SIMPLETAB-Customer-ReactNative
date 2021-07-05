@@ -29,23 +29,23 @@ const Profile =({navigation})=>{
                 <FontAwesomeIcon icon={faUser} style={{color:'#FFFFFF', postion:'absolute', top:-115, left:35}} size={43}/>
                 <View style={{flexDirection:'row', justifyContent:'flex-end', width:'100%', height:50, position:'absolute', top:104}}>
                     <View style={{backgroundColor:'#FFFFFF', width:'70%', height:50,borderTopLeftRadius:60, alignItems:'center'}}>
-                        <Text style={{fontSize:18, color:"#000000", fontWeight:'bold',top:15}}>Surya Dwipayana</Text>
+                        <Text style={{fontSize:18, color:"#000000", fontWeight:'bold',top:15}}>{USER.name}</Text>
                     </View>
                 </View>
                 <View style={{alignItems:'center'}}>
                    
                         <TextInput
-                            title="ID Pelanggan :"
+                            title="Code Pelanggan : "
                         />
                          <InputLine
-                            value="12332123477"
+                            value={USER.code}
                             editable={false}
                         />
                         <TextInput
                             title="Alamat :"
                         />
                         <InputLine
-                            value="Tabanan Indonesia"
+                            value={USER.address}
                             editable={false}
                         />  
                         <TextInput
@@ -53,7 +53,8 @@ const Profile =({navigation})=>{
                         />
                         <InputLine
                             placeholder="No Handphone"
-                            value="08923712342"
+                            value={USER.phone}
+                            editable={false}
                         />
                 </View> 
                 <View style={{alignItems:'center',paddingVertical:40}}>
