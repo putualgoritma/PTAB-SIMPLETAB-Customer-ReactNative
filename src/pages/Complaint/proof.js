@@ -184,7 +184,7 @@ const Proof =({navigation, route})=>{
                             )}
                         />
                     </View>
-                    <View style={{alignItems:'center',paddingVertical:10, paddingHorizontal:30}}>
+                    <View style={{paddingVertical:10, paddingHorizontal:30, height : 220}}>
                         <TextInput
                             title="Video"
                         />

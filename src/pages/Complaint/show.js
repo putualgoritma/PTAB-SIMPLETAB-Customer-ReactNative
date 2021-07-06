@@ -8,65 +8,76 @@ import { Dimensions } from 'react-native';
 const show = ({navigation, route}) => {
     const data = route.params.item
     const [loading, setLoading] = useState(false)
+    const [onFullScreen, setOnFullScreen] = useState(false)
     useEffect(() => {
        console.log(data);
     }, [])
     return (
         <View style={styles.container}> 
+            {onFullScreen && 
+                 <VideoPlayer
+                 src={{uri :  Config.REACT_APP_BASE_URL + `${String(data.video).replace('public/', '')}` }}
+                 onFullScreen = {() => setOnFullScreen (false)}
+             />}
             {loading &&  <Spinner/>}
-                            <ScrollView >
-            <View style={{backgroundColor:'#FFFFFF', width:'100%', height:165}}/>
-            
-                <ImageBackground source={require('../../assets/img/background.png')} style={styles.image} >
+                {!onFullScreen && 
+                    <View>
+                        <ScrollView >
+                            <View style={{backgroundColor:'#FFFFFF', width:'100%', height:165}}/>
+                
+                             <ImageBackground source={require('../../assets/img/background.png')} style={styles.image} >
                             <View style={{alignItems : 'center', paddingBottom:'10%'}}>
-                                    <View style={styles.box}>
-                                            <Title
-                                                title="Bukti Laporan"
-                                            />
-                                            <>
-                                            <TextInput
-                                                title="Code"
-                                            />
-                                            <Text style={styles.text} >{data.code}</Text>
-                                            </>
-                                            <>
-                                                <TextInput
-                                                    title="Keluhan"
-                                                />
-                                                <Text style={styles.text} >{data.title}</Text>
-                                            </>
-                                            <>
-                                            <TextInput
-                                                title="Bukti Foto"
-                                            />
-                                            <Image
-                                                source = {{uri : Config.REACT_APP_BASE_URL + `${String(data.image).replace('public/', '')}?time="` + new Date()}}
-                                                style={{height: '28%', width: '100%', marginRight: 20}}
-                                            /> 
-                                            </>
-                                            <>
-                                                <TextInput
-                                                    title="Bukti Video"
-                                                />
-                                                <VideoPlayer
-                                                    src={{uri :  Config.REACT_APP_BASE_URL + `${String(data.video).replace('public/', '')}` }}
-                                                />
-                                            </>
-                                            <>
-                                                <TextInput
-                                                    title="Description"
-                                                />
-                                                <Text style={styles.text} >{data.description}</Text>
-                                            </>
-                                    </View>
-                            </View>
-                </ImageBackground>
-                            </ScrollView>
-         
-            <Footer
-                navigation = {navigation}
-                focus = 'Menu'
-            />
+                                                    <View style={styles.box}>
+                                                        <Title
+                                                            title="Bukti Laporan"
+                                                        />
+                                                        <>
+                                                        <TextInput
+                                                            title="Code"
+                                                        />
+                                                        <Text style={styles.text} >{data.code}</Text>
+                                                        </>
+                                                        <>
+                                                            <TextInput
+                                                                title="Keluhan"
+                                                            />
+                                                            <Text style={styles.text} >{data.title}</Text>
+                                                        </>
+                                                        <>
+                                                        <TextInput
+                                                            title="Bukti Foto"
+                                                        />
+                                                        <Image
+                                                            source = {{uri : Config.REACT_APP_BASE_URL + `${String(data.image).replace('public/', '')}?time="` + new Date()}}
+                                                            style={{height: '28%', width: '100%', marginRight: 20}}
+                                                        /> 
+                                                        </>
+                                                        <>
+                                                            <TextInput
+                                                                title="Bukti Video"
+                                                            />
+                                                            <VideoPlayer
+                                                                src={{uri :  Config.REACT_APP_BASE_URL + `${String(data.video).replace('public/', '')}` }}
+                                                                onFullScreen = {() => setOnFullScreen (true)}
+                                                            />
+                                                        </>
+                                                        <>
+                                                            <TextInput
+                                                                title="Description"
+                                                            />
+                                                            <Text style={styles.text} >{data.description}</Text>
+                                                        </>
+                                                </View>
+                                        </View>
+                            </ImageBackground>
+                        </ScrollView>
+        
+                        <Footer
+                            navigation = {navigation}
+                            focus = 'Menu'
+                        />
+                    </View>
+                }
         </View>
     )
 }
@@ -82,7 +93,7 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: "cover",
         width:'100%',
-        height: 850
+        height: 1020
       
       },
    

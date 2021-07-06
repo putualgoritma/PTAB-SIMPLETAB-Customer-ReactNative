@@ -1,124 +1,111 @@
-import React, { useState, useRef } from 'react';
-import { StyleSheet, View, Platform } from 'react-native';
-import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
-import Video from 'react-native-video';
+import React, { useState, useRef } from "react";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
+import Video from "react-native-video";
+import MediaControls, {
+  PLAYER_STATES,
+} from "react-native-media-controls";
+
+
 
 const VideoPlayer = (props) => {
+  const videoPlayer = useRef(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [paused, setPaused] = useState(false);
+  const [playerState, setPlayerState] = useState(PLAYER_STATES.PLAYING);
+  const video = props.src;
+  const onSeek = (seek) => {
+    videoPlayer?.current.seek(seek);
+  };
 
-    const [fullScrenn, setFullScrenn] = useState(false)
-    const video = props.src;
-    const [isFullScreen, setIsFullScreen] = useState(false);
-    const videoPlayer = useRef(null);
-    const [duration, setDuration] = useState(0);
-    const [paused, setPaused] = useState(true);
+  const onPaused = (playerState) => {
+    setPaused(!paused);
+    setPlayerState(playerState);
+  };
 
-    const [currentTime, setCurrentTime] = useState(0);
-    const [playerState, setPlayerState] = useState(PLAYER_STATES.PAUSED);
-    const [isLoading, setIsLoading] = useState(true);
+  const onReplay = () => {
+    setPlayerState(PLAYER_STATES.PLAYING);
+    videoPlayer?.current.seek(0);
+  };
 
-    const onSeek = (seek) => {
-        videoPlayer?.current.seek(seek);
-        console.log('seek');
-    };
+  const onProgress = (data) => {
+    // Video Player will continue progress even if the video already ended
+    if (!isLoading) {
+      setCurrentTime(data.currentTime);
+    }
+  };
 
-    const noop = (item) => {
-        if(fullScrenn == false) {
-          setFullScrenn(true)
-        }
+  const onLoad = (data) => {
+    setDuration(data.duration);
+    setIsLoading(false);
+  };
 
-        if(fullScrenn == true){
-           setFullScrenn(false)
-        }
-    };
+  const onLoadStart = () => setIsLoading(true);
 
-    const onSeeking = (currentVideoTime) => setCurrentTime(currentVideoTime);
+  const onEnd = () => {
+    // Uncomment this line if you choose repeat=false in the video player
+    // setPlayerState(PLAYER_STATES.ENDED);
+  };
 
-    const onPaused = (newState) => {
-        setPaused(!paused);
-        setPlayerState(newState);
-        console.log('onPause');
-    };
+  const onSeeking = (currentTime) => setCurrentTime(currentTime);
 
-    const onReplay = () => {
-        videoPlayer?.current.seek(0);
-        setCurrentTime(0);
-        if (Platform.OS === 'android') {
-            setPlayerState(PLAYER_STATES.PAUSED);
-            setPaused(true);
-        } else {
-            setPlayerState(PLAYER_STATES.PLAYING);
-            setPaused(false);
-        }
-
-        console.log('onReplay');
-    };
-
-    const onProgress = (data) => {
-        if (!isLoading) {
-            setCurrentTime(data.currentTime);
-        }
-
-        console.log('onProgress');
-    };
-
-    const onLoad = (data) => {
-        setDuration(Math.round(data.duration));
-        setIsLoading(false);
-    };
-
-    const onLoadStart = () => setIsLoading(true);
-
-    const onEnd = () => {
-        setPlayerState(PLAYER_STATES.ENDED);
-        setCurrentTime(duration);
-
-        console.log('onLoad');
-    };
-
-    return (
-        <View style={{alignItems:'center', width:'100%', flex:1}}>
-            <Video
-                onEnd={onEnd}
-                onLoad={onLoad}
-                onLoadStart={onLoadStart}
-                posterResizeMode={'cover'}
-                onProgress={onProgress}
-                paused={paused}
-                ref={(ref) => (videoPlayer.current = ref)}
-                resizeMode={'cover'}
-                source={video}
-                style={styles.backgroundVideo(fullScrenn)}
-            />
-            <MediaControls
-                isFullScreen={isFullScreen}
-                onFullScreen={() => noop(fullScrenn)}
-                duration={duration}
-                isLoading={isLoading}
-                progress={currentTime}
-                onPaused={onPaused}
-                onReplay={onReplay}
-                onSeek={onSeek}
-                onSeeking={onSeeking}
-                mainColor={"#0C5CBF"}
-                playerState={playerState}
-                sliderStyle={{ containerStyle: {}, thumbStyle: {}, trackStyle: {} }}
-            />
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <Video
+        onEnd={onEnd}
+        onLoad={onLoad}
+        onLoadStart={onLoadStart}
+        onProgress={onProgress}
+        paused={paused}
+        ref={(ref) => (videoPlayer.current = ref)}
+        resizeMode="cover"
+        source={video}
+        repeat
+        style={styles.mediaPlayer()}
+        volume={0.0}
+      />
+      <MediaControls
+        isFullScreen={isFullScreen}
+        onFullScreen={props.onFullScreen}
+        duration={duration}
+        isLoading={isLoading}
+        mainColor={"#0C5CBF"}
+        onPaused={onPaused}
+        onReplay={onReplay}
+        onSeek={onSeek}
+        onSeeking={onSeeking}
+        playerState={playerState}
+        progress={currentTime}
+      >
+        {/* <MediaControls.Toolbar>
+          <View style={styles.toolbar}>
+            <Text>I'm a custom toolbar </Text>
+          </View>
+        </MediaControls.Toolbar> */}
+      </MediaControls>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    backgroundVideo: (fullScrenn) => ({
-        height: (fullScrenn ? '100%' : 150),
-        width: '100%',
-        backgroundColor : 'black',
-        zIndex: 99
-    }),
-    mediaControls: {
-        height: '100%',
-        flex: 1,
-        alignSelf: 'center',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#ebebeb',
+    // position : 'absolute',
+  },
+//   toolbar: {
+//     marginTop: 30,
+//     backgroundColor: "white",
+//     padding: 10,
+//     borderRadius: 5,
+//   },
+  mediaPlayer: () => ({
+    width: '100%',
+    backgroundColor : 'black',
+    height : '100%',
+  }),
 });
 
 export default VideoPlayer;

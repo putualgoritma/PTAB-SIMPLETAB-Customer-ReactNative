@@ -48,16 +48,6 @@ const Complaint =({navigation})=>{
         let isAmounted = true
         if(isAmounted){
             setLoading(true)
-            // API.categories(TOKEN).then((res) => {
-            //     setCategories(res.data)
-            //     setLoading(false)
-            // }).catch((e) => {
-            //     console.log(e);
-            //     setLoading(false)
-            // })
-            // return () => {
-            //     isAmounted = false
-            // }
 
             Promise.all([API.categories(TOKEN), permissionGps()]).then((res) => {
                 console.log(res);
@@ -140,6 +130,13 @@ const Complaint =({navigation})=>{
         })
     }
 
+    const handleAction = () => {
+        if(form.category_id != '' && form.description != '' && form.title !='' && form.lat != '' && form.lng !=''){
+            navigation.navigate('Proof', {form : form, category : selectedItem.id})
+        }else{
+            alert ('data belum lengkap')
+        }
+    }
 
 
     return(
@@ -239,7 +236,7 @@ const Complaint =({navigation})=>{
 
                                     <Button
                                         title="Lanjut"
-                                        onPress={()=>navigation.navigate('Proof', {form : form, category : selectedItem.id})}
+                                        onPress={handleAction}
                                         // onPress={() => console.log(selectedItem)}
                                     />
                                </View>

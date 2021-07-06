@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Text,
     StyleSheet,
@@ -13,6 +13,7 @@ import API from '../../service';
 import { useDispatch } from 'react-redux';
 import { SET_DATA_USER, SET_DATA_TOKEN } from '../../redux/action';
 import Spinner from '../../component/spinner';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const Public =({navigation})=>{
     const dispatch = useDispatch();
@@ -20,8 +21,20 @@ const Public =({navigation})=>{
     const [form, setForm] = useState({
         name : '',
         address : '',
-        phone :''
+        phone :'',
+        email : '',
+        passwordNew : '',
+        gender : ''
     })
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [items, setItems] = useState([
+        {label: 'Laki-laki', value: 'male'},
+        {label: 'Perempuan', value: 'female'}
+    ]);
+
+    // nested model virtualized
+    DropDownPicker.setListMode("SCROLLVIEW");
     const handleForm = (key, value) => {
         setForm({
             ...form,
@@ -29,6 +42,9 @@ const Public =({navigation})=>{
         })
     }
 
+    useEffect(() => {
+        handleForm('gender', value)
+    }, [value])
 
     const handleRegister = () => {
         setLoading(true)
@@ -53,7 +69,7 @@ const Public =({navigation})=>{
     return(
         <View style={styles.container}> 
             {loading &&  <Spinner/>}
-            <ScrollView>
+            <ScrollView  nestedScrollEnabled={true} >
                 <View style={{backgroundColor:'#FFFFFF', width:'100%', height:165}}>
                 </View>
                 <ImageBackground source={require('../../assets/img/background.png')} style={styles.image}>
@@ -73,6 +89,20 @@ const Public =({navigation})=>{
                               onChangeText = {(value) => handleForm('name', value)}
                          />
                          <TextInput
+                              title="Email"
+                        />
+                        <Input
+                              placeholder="Email"
+                              onChangeText = {(value) => handleForm('email', value)}
+                         />
+                           <TextInput
+                              title="Password"
+                        />
+                        <Input
+                              placeholder="Password"
+                              onChangeText = {(value) => handleForm('passwordNew', value)}
+                         />
+                         <TextInput
                               title="Alamat"
                         />
                         <Input
@@ -88,12 +118,27 @@ const Public =({navigation})=>{
                               keyboardType = 'number-pad'
                             //   keyboardType = 'number'
                          />
+                        <TextInput
+                            title="Jenis Kelamin"
+                        />
+                        <View style={{paddingHorizontal : 35}}>
+                            <DropDownPicker
+                                style={{borderColor : '#087CDB', paddingHorizontal : 20, }}
+                                placeholder='Jenis Kelamin'
+                                open={open}
+                                value={value}
+                                items={items}
+                                setOpen={setOpen}
+                                setValue={setValue}
+                                setItems={setItems}
+                            />
+                        </View>
                     </View>
                     <View style={{alignItems:'center',paddingVertical:10}}>
                         <Button
                             title="Lanjut"
                             // navigation={()=>navigation.navigate('SMS')}
-                            onPress = {handleRegister }
+                            onPress = {handleRegister}
                         />
                     </View>
                     </View>
@@ -117,7 +162,7 @@ const styles = StyleSheet.create({
     },
     boxShadowBanner:{
         width:'90%',
-        height:490,
+        height:'100%',
         top:-45,
         borderRadius:10,
         backgroundColor:'#FFFFFF',
