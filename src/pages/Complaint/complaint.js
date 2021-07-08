@@ -24,7 +24,7 @@ const Complaint =({navigation})=>{
     const [categories, setCategories] = useState(null)
     const TOKEN = useSelector((state) => state.TokenReducer);
     const [loading, setLoading] = useState(true)
-    const [selectedItem, setSelectedItem] =useState()
+    const [selectedItem, setSelectedItem] =useState('')
     const [location, setLocation] = useState({
         latitude: 0.00000,
         longitude: 0.0000
@@ -54,7 +54,7 @@ const Complaint =({navigation})=>{
                 setCategories(res[0].data)
                 setLoading(false)
             }).catch((e) => {
-                console.log(e);
+                console.log(e.request);
                 setLoading(false)
             })
        }
@@ -131,11 +131,12 @@ const Complaint =({navigation})=>{
     }
 
     const handleAction = () => {
-        if(form.category_id != '' && form.description != '' && form.title !='' && form.lat != '' && form.lng !=''){
+        if(selectedItem!= '' && form.description != '' && form.title !='' && form.lat != '' && form.lng !=''){
             navigation.navigate('Proof', {form : form, category : selectedItem.id})
         }else{
             alert ('data belum lengkap')
         }
+        console.log(selectedItem);
     }
 
 

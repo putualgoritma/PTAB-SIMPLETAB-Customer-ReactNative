@@ -6,7 +6,19 @@ import {
   } from 'react-native';
 const input =(props)=>{
     return(
-            <TextInput style={styles.input} placeholder={props.placeholder} placeholderTextColor='#c7c7c7' value={props.value} onChangeText={props.onChangeText}  keyboardType={props.keyboardType}/>
+            <TextInput 
+            
+            style={[styles.input, 
+              {
+                fontSize : props.fontSize ? props.fontSize : null,
+                textAlign : props.textAlign ? props.textAlign : null
+              }
+            ]}
+            
+            
+            
+            
+            placeholder={props.placeholder} placeholderTextColor='#c7c7c7' value={props.value} onChangeText={props.onChangeText}  keyboardType={props.keyboardType} secureTextEntry={props.secureTextEntry} maxLength={props.maxLength ? props.maxLength : null} />
     )
 }
 const styles = StyleSheet.create({

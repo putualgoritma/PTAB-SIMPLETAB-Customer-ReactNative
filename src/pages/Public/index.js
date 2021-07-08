@@ -101,6 +101,7 @@ const Public =({navigation})=>{
                         <Input
                               placeholder="Password"
                               onChangeText = {(value) => handleForm('passwordNew', value)}
+                              secureTextEntry = {true}
                          />
                          <TextInput
                               title="Alamat"
@@ -147,10 +148,6 @@ const Public =({navigation})=>{
                 
                 
             </ScrollView>
-            <Footer
-                navigation = {navigation}
-                focus = 'Menu'
-            />
         </View>
         
     )

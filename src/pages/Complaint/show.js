@@ -93,8 +93,8 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: "cover",
         width:'100%',
-        height: 1020
-      
+        height: 1000
+        
       },
    
       text : {
@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
                 shadowOpacity: 0.44,
                 shadowRadius: 10.32,
                 elevation: 3,
-                paddingHorizontal : '5%'
+                paddingHorizontal : '5%',
+                padding : 20
       }
 })
