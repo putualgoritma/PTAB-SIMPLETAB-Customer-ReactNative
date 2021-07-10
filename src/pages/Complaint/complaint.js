@@ -77,7 +77,7 @@ const Complaint =({navigation})=>{
                              setForm({
                                  ...form,
                                  lat : position.coords.latitude,
-                                 lng : position.coords.longitude
+                                 lng : position.coords.longitude 
                              })
                             setLocation({
                                 latitude: position.coords.latitude,
