@@ -9,7 +9,7 @@ const Login =({navigation,route})=>{
     const isFocused = useIsFocused();
     const [user, setUser] = useState(null)
     const [form, setForm] = useState({
-        email : null,
+        phone : null,
         password : null,
         OTP : null
     })
@@ -21,6 +21,20 @@ const Login =({navigation,route})=>{
               OTP += digits[Math.floor(Math.random() * 10)]; 
         } 
         handleForm('OTP', OTP);
+
+        let code = route.params ? (route.params.code ? route.params.code : null) : null;
+        if(code !== null){
+            setLoading(true)
+            API.scanCode({code : code}).then((result)=> {
+                console.log(result);
+                handleForm('phone' , result.data.phone)
+                setLoading(false)
+            }).catch((e) => {
+                console.log(e.request);
+                alert('data tidak ada')
+                setLoading(false)
+            })
+        }
     }, [isFocused])
 
     const handleForm = (key, value) => {
@@ -31,7 +45,7 @@ const Login =({navigation,route})=>{
     }
 
     const handleAction = () => {
-        if(form.email != null && form.password != null && form.OTP != null){
+        if(form.phone != null && form.password != null && form.OTP != null){
             console.log(form.OTP);
             setLoading(true)
             API.login(form).then((result) => {
@@ -48,7 +62,7 @@ const Login =({navigation,route})=>{
                 })
                 console.log(result);
             }).catch((e) => {
-                console.log(e.request);
+                console.log(e);
                 setLoading(false)
             })
         }else{
@@ -69,14 +83,16 @@ const Login =({navigation,route})=>{
                             title='Scan QR'
                             width='80%'
                             icon={faQrcode}
-                            navigation={()=> navigation.navigate('Scan') }
+                            onPress={()=> navigation.navigate('Scan') }
                         />
                         <Text style={styles.text}>Atau</Text>
-                        <TextInput title='Email' />
+                        <TextInput title='Phone' />
                         <Input
-                            placeholder="Email"
-                            onChangeText = {(value) => handleForm('email', value)}
+                            value = {form.phone !== null ? form.phone : null}
+                            placeholder="Phone"
+                            onChangeText = {(value) => handleForm('phone', value)}
                             // value={route.params ? route.params.dataId:''}
+                            keyboardType='number-pad'
                         />
                         <TextInput title='Password' />
                         <Input

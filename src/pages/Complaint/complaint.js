@@ -50,9 +50,11 @@ const Complaint =({navigation})=>{
             setLoading(true)
 
             Promise.all([API.categories(TOKEN), permissionGps()]).then((res) => {
-                console.log(res);
+                console.log('corrrrrr',res);
                 setCategories(res[0].data)
-                setLoading(false)
+                if(res[1]){
+                    setLoading(false)
+                }
             }).catch((e) => {
                 console.log(e.request);
                 setLoading(false)
@@ -61,7 +63,7 @@ const Complaint =({navigation})=>{
     }, [])
 
     const permissionGps = () => {
-        var positionNew
+        var positionNew = null;
         LocationServicesDialogBox.checkLocationServicesIsEnabled({
             message: "<h2 style='color: #0af13e'>Use Location ?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
             ok: "YES",
@@ -86,7 +88,7 @@ const Complaint =({navigation})=>{
                                 longitude: position.coords.longitude, 
                             }
                             console.log( typeof (position.coords.latitude));
-                            return 'hlo';
+                           return position;
                         },
                         (error) => {
                             console.log(error);    
@@ -98,7 +100,8 @@ const Complaint =({navigation})=>{
               console.log(error.message); // error.message => "disabled"
               navigation.navigate('Register')
           });
-        return 'jlo'
+
+          return true;
     }
 
     const requestLocationPermission =  async () => {

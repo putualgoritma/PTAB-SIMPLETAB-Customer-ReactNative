@@ -14,6 +14,7 @@ const login = (data) => Post('/api/open/customer/login', false, data);
 const registerCustomerPublic =(data) => Post(Config.REACT_APP_REGISTER_PUBLIC, false, data);
 const tikcetStore = (data, token) => Post(Config.REACT_APP_TICKET_STORE, false, data, token);
 const OTP = (data) =>Post(Config.REACT_APP_OTP, false, data);
+const scanCode = (data) =>Post('/api/open/customer/code', false, data);
 // PUT
 
 const API = {
@@ -23,7 +24,8 @@ const API = {
       tickets,
       login,
       OTP, 
-      logout
+      logout,
+      scanCode
 }
 
 export default API;

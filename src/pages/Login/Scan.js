@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import { AppRegistry, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
+import API from '../../service';
 
 const PendingView = () => (
   <View
@@ -16,8 +17,21 @@ const PendingView = () => (
   </View>
 );
 
+
 const Scan =({navigation}) => {
-    const [data, setData] = useState(null)
+  
+    // const [barcode, setBarcode] = useState(null)
+
+
+    // const getDataUser = (code) => {
+    //   console.log(code);
+    //   return;
+    //   // API.scanCode({code : code}).then((result) => {
+    //   //   console.log(result);
+    //   // }).catch((e) => {
+    //   //   console.log(e.request);
+    //   // })
+    // }
     return (
       <View style={styles.container}>
         <RNCamera
@@ -36,13 +50,9 @@ const Scan =({navigation}) => {
             buttonPositive: 'Ok',
             buttonNegative: 'Cancel',
           }}
-          onBarCodeRead={(barcode) => {
-            setData(barcode);
-            // console.log('barcode',barcode.data);
-            // navigation.navigate('Login', {dataId : parseInt(barcode.data)})
-            // navigation.navigate('Login', {dataId :(barcode.data)})
-            navigation.navigate('SMS', {dataId :(barcode.data)})
-        }}
+          onBarCodeRead={(item) => 
+            navigation.navigate('Login', {code : item.data})
+          }
         >
           {({status}) => {
             if (status !== 'READY') return <PendingView />;

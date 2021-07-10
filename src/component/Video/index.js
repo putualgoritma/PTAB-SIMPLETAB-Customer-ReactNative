@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Dimensions, StyleSheet, Text, View } from "react-native";
 import Video from "react-native-video";
 import MediaControls, {
   PLAYER_STATES,
@@ -15,6 +15,7 @@ const VideoPlayer = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [paused, setPaused] = useState(false);
   const [playerState, setPlayerState] = useState(PLAYER_STATES.PLAYING);
+  const [opacity,setOpacity] = useState()
   const video = props.src;
   const onSeek = (seek) => {
     videoPlayer?.current.seek(seek);
@@ -27,6 +28,7 @@ const VideoPlayer = (props) => {
 
   const onReplay = () => {
     setPlayerState(PLAYER_STATES.PLAYING);
+    console.log('onReplay');
     videoPlayer?.current.seek(0);
   };
 
@@ -34,11 +36,16 @@ const VideoPlayer = (props) => {
     // Video Player will continue progress even if the video already ended
     if (!isLoading) {
       setCurrentTime(data.currentTime);
+      // console.log('onProgress');
+      setOpacity(0)
     }
   };
 
   const onLoad = (data) => {
     setDuration(data.duration);
+   
+    props.onLoad();
+    console.log(props.onLoad());
     setIsLoading(false);
   };
 
@@ -49,13 +56,17 @@ const VideoPlayer = (props) => {
     // setPlayerState(PLAYER_STATES.ENDED);
   };
 
+  const onBuffer = ({isBuffering}) => {
+    setOpacity(isBuffering ? 1 : 0)
+}
+
   const onSeeking = (currentTime) => setCurrentTime(currentTime);
 
   return (
     <View style={styles.container}>
       <Video
         onEnd={onEnd}
-        onLoad={onLoad}
+        onLoad={(item) => {onLoad(item)}}
         onLoadStart={onLoadStart}
         onProgress={onProgress}
         paused={paused}
@@ -65,7 +76,14 @@ const VideoPlayer = (props) => {
         repeat
         style={styles.mediaPlayer()}
         volume={0.0}
+        // hideShutterView = {true}
       />
+       <ActivityIndicator
+                animating
+                size="large"
+                color='blue'
+                style={[styles.activityIndicator, {opacity: opacity}]}
+            />
       <MediaControls
         isFullScreen={isFullScreen}
         onFullScreen={props.onFullScreen}
@@ -78,12 +96,9 @@ const VideoPlayer = (props) => {
         onSeeking={onSeeking}
         playerState={playerState}
         progress={currentTime}
+        poster = "https://somesite/thumb.png"
+        onBuffer={onBuffer}
       >
-        {/* <MediaControls.Toolbar>
-          <View style={styles.toolbar}>
-            <Text>I'm a custom toolbar </Text>
-          </View>
-        </MediaControls.Toolbar> */}
       </MediaControls>
     </View>
   );
@@ -95,6 +110,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#ebebeb',
     // position : 'absolute',
   },
+  activityIndicator: {
+    position: 'absolute',
+    top: 70,
+    left: 70,
+    right: 70,
+    height: 50,
+},
+
 //   toolbar: {
 //     marginTop: 30,
 //     backgroundColor: "white",
@@ -103,8 +126,9 @@ const styles = StyleSheet.create({
 //   },
   mediaPlayer: () => ({
     width: '100%',
-    backgroundColor : 'black',
+    // backgroundColor : 'black',
     height : '100%',
+    
   }),
 });
 

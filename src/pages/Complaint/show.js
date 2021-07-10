@@ -1,7 +1,7 @@
 import { faCamera, faVideo } from '@fortawesome/free-solid-svg-icons'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Config from 'react-native-config'
 import { Button, ButtonIcon, Footer, Spinner, TextInput, Title, VideoPlayer } from '../../component'
 import { Dimensions } from 'react-native';
@@ -9,6 +9,9 @@ const show = ({navigation, route}) => {
     const data = route.params.item
     const [loading, setLoading] = useState(false)
     const [onFullScreen, setOnFullScreen] = useState(false)
+    const [onFullScreenImage, setOnFullScreenImage] = useState(false)
+    const [loadingImage, setLoadingImage] = useState(true)
+    const [loadingVideo, setLoadingVideo] = useState(false)
     useEffect(() => {
        console.log(data);
     }, [])
@@ -19,6 +22,14 @@ const show = ({navigation, route}) => {
                  src={{uri :  Config.REACT_APP_BASE_URL + `${String(data.video).replace('public/', '')}` }}
                  onFullScreen = {() => setOnFullScreen (false)}
              />}
+            {onFullScreenImage && 
+                <TouchableOpacity  onPress={() => setOnFullScreenImage(onFullScreenImage ? false : true, )} >
+                <Image
+                    onLoadEnd={() => {setLoadingImage(false); console.log('end');}}
+                    source = {{uri : Config.REACT_APP_BASE_URL + `${String(data.image).replace('public/', '')}?time="` + new Date()}}
+                    style={{height: '100%', width: '100%'}}
+                /> 
+            </TouchableOpacity> }
             {loading &&  <Spinner/>}
                 {!onFullScreen && 
                     <View>
@@ -47,25 +58,38 @@ const show = ({navigation, route}) => {
                                                         <TextInput
                                                             title="Bukti Foto"
                                                         />
-                                                        <Image
+                                                        {/* {loadingImage &&   <ActivityIndicator color='blue' size={50} />}
+                                                        {!loadingImage &&  <Image
+                                                            onProgress={() => {setLoadingImage(false); console.log('end');}}
                                                             source = {{uri : Config.REACT_APP_BASE_URL + `${String(data.image).replace('public/', '')}?time="` + new Date()}}
                                                             style={{height: '28%', width: '100%', marginRight: 20}}
-                                                        /> 
+                                                        /> } */}
+                                                        <TouchableOpacity style={{height : '28%'}}  onPress={() => setOnFullScreenImage(onFullScreenImage ? false : true, )} >
+                                                            <Image
+                                                                onLoadEnd={() => {setLoadingImage(false); console.log('end');}}
+                                                                source = {{uri : Config.REACT_APP_BASE_URL + `${String(data.image).replace('public/', '')}`}}
+                                                                style={{height: '100%', width: '100%', marginRight: 20, resizeMode : 'stretch'}}
+                                                            /> 
+                                                        </TouchableOpacity>
                                                         </>
                                                         <>
                                                             <TextInput
                                                                 title="Bukti Video"
                                                             />
+                                                            {!loadingVideo && <Text style={{textAlign : 'center', fontSize : 20}}>Video is Loading...</Text>}
                                                             <VideoPlayer
                                                                 src={{uri :  Config.REACT_APP_BASE_URL + `${String(data.video).replace('public/', '')}` }}
                                                                 onFullScreen = {() => setOnFullScreen (true)}
+                                                                onLoad={() => {setLoadingVideo(loadingVideo ? false : true); return loadingVideo}} 
+                                                                poster="https://somesite/thumb.png"
+                                                                
                                                             />
                                                         </>
                                                         <>
                                                             <TextInput
                                                                 title="Description"
                                                             />
-                                                            <Text style={styles.text} >{data.description}</Text>
+                                                            <Text style={styles.text} >{loadingVideo ? 'true' : 'false'}</Text>
                                                         </>
                                                 </View>
                                         </View>
