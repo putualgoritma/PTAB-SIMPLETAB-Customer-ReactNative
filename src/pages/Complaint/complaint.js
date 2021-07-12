@@ -25,6 +25,7 @@ const Complaint =({navigation})=>{
     const TOKEN = useSelector((state) => state.TokenReducer);
     const [loading, setLoading] = useState(true)
     const [selectedItem, setSelectedItem] =useState('')
+    const [success, setSuccess] = useState(false)
     const [location, setLocation] = useState({
         latitude: 0.00000,
         longitude: 0.0000
@@ -52,9 +53,9 @@ const Complaint =({navigation})=>{
             Promise.all([API.categories(TOKEN), permissionGps()]).then((res) => {
                 console.log('corrrrrr',res);
                 setCategories(res[0].data)
-                if(res[1]){
-                    setLoading(false)
-                }
+                // if(setSuccess){
+                //     setLoading(false)
+                // }
             }).catch((e) => {
                 console.log(e.request);
                 setLoading(false)
@@ -88,7 +89,9 @@ const Complaint =({navigation})=>{
                                 longitude: position.coords.longitude, 
                             }
                             console.log( typeof (position.coords.latitude));
-                           return position;
+                        //    return position;
+                            setSuccess(true)
+                            setLoading(false)
                         },
                         (error) => {
                             console.log(error);    
@@ -98,7 +101,7 @@ const Complaint =({navigation})=>{
                 })
           }).catch((error) => {
               console.log(error.message); // error.message => "disabled"
-              navigation.navigate('Register')
+            //   navigation.navigate('Register')
           });
 
           return true;

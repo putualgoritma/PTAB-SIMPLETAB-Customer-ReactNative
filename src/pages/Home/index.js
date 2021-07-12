@@ -1,13 +1,10 @@
 import React from 'react';
-import { Dimensions } from 'react-native'
 import {
-    Text,
-    StyleSheet,
-    View,
-    Image
-  } from 'react-native';    
-import Beranda from '../../assets/img/beranda.svg'
-import {Footer} from '../../component';
+    Dimensions, Image, StyleSheet,
+    View
+} from 'react-native';
+import Beranda from '../../assets/img/beranda.svg';
+import { Footer } from '../../component';
 const { width, height} = Dimensions.get('screen');
 const Home =({navigation})=>{
     return(

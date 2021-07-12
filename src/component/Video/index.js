@@ -44,8 +44,10 @@ const VideoPlayer = (props) => {
   const onLoad = (data) => {
     setDuration(data.duration);
    
+   if(props.onLoad){
     props.onLoad();
-    console.log(props.onLoad());
+   }
+    // console.log(props.onLoad());
     setIsLoading(false);
   };
 

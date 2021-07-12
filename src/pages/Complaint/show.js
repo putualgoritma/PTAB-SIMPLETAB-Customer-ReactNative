@@ -1,10 +1,7 @@
-import { faCamera, faVideo } from '@fortawesome/free-solid-svg-icons'
-import React, { useState } from 'react'
-import { useEffect } from 'react'
-import { ActivityIndicator, Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Dimensions, Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Config from 'react-native-config'
-import { Button, ButtonIcon, Footer, Spinner, TextInput, Title, VideoPlayer } from '../../component'
-import { Dimensions } from 'react-native';
+import { Footer, Spinner, TextInput, Title, VideoPlayer } from '../../component'
 const show = ({navigation, route}) => {
     const data = route.params.item
     const [loading, setLoading] = useState(false)
@@ -89,7 +86,7 @@ const show = ({navigation, route}) => {
                                                             <TextInput
                                                                 title="Description"
                                                             />
-                                                            <Text style={styles.text} >{loadingVideo ? 'true' : 'false'}</Text>
+                                                            <Text style={styles.text} >{data.description}</Text>
                                                         </>
                                                 </View>
                                         </View>

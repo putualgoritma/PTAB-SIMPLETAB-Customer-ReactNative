@@ -1,8 +1,7 @@
 'use strict';
-import React, {useState} from 'react';
-import { AppRegistry, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import API from '../../service';
 
 const PendingView = () => (
   <View
