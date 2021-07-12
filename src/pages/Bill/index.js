@@ -1,11 +1,9 @@
 import React from 'react';
 import {
-    Text,
-    StyleSheet,
-    View,
-    ScrollView,
-  } from 'react-native';
-import {Footer1,Out,In,Input,TextInput,Header1,Title} from '../../component';
+    ScrollView, StyleSheet,
+    View
+} from 'react-native';
+import { Footer1, Header1, In, Input, Out, TextInput, Title } from '../../component';
 const Bill=({navigation})=>{
     return(
         <View style={styles.container}>

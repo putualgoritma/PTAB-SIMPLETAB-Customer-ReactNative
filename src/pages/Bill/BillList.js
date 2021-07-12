@@ -1,13 +1,10 @@
-import {faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import {
-    Text,
-    StyleSheet,
-    View,
-    ScrollView,
-    TouchableOpacity
-  } from 'react-native';
-import {Footer,Header2,Title,ButtonIcon,Table,Input,DateMonth} from '../../component';
+    ScrollView, StyleSheet,
+    View
+} from 'react-native';
+import { ButtonIcon, DateMonth, Footer, Header2, Table, Title } from '../../component';
 const BillList=({navigation})=>{
     return(
         <View style={styles.container}>

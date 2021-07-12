@@ -1,9 +1,9 @@
 import { faQrcode, faUser } from '@fortawesome/free-solid-svg-icons';
+import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ButtonIcon, Header, In, Input, Spinner, TextInput } from '../../component';
 import API from '../../service';
-import { useIsFocused } from '@react-navigation/native';
 const Login =({navigation,route})=>{
     const [loading, setLoading]= useState(false)
     const isFocused = useIsFocused();
