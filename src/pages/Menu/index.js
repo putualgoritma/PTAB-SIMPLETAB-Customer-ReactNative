@@ -35,14 +35,14 @@ const Menu =({navigation})=>{
                         </View>
                             <View style={{height:200, alignItems:'center'}}>
                                 <SliderBox
-                                images={images}
-                                sliderBoxHeight={200}
-                                onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
-                                dotColor="#00F6FD"
-                                inactiveDotColor="#90A4AE"
-                                paginationBoxVerticalPadding={20}
-                                autoplay
-                                circleLoop
+                                    images={images}
+                                    sliderBoxHeight={200}
+                                    onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
+                                    dotColor="#00F6FD"
+                                    inactiveDotColor="#90A4AE"
+                                    paginationBoxVerticalPadding={20}
+                                    autoplay
+                                    circleLoop
                                 />
                             </View>
                         <Distance distanceV={10}/>

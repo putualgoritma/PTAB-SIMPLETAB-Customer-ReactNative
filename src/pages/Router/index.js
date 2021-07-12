@@ -17,6 +17,7 @@ import Fare from '../Fare'
 import Meter from '../Meter'
 import Profile from '../Profile'
 import Scan from '../Login/Scan'
+import ShowComplaint from '../Complaint/show'
 const Stack = createStackNavigator();
 const Router = () =>{
     return(
@@ -104,6 +105,11 @@ const Router = () =>{
             <Stack.Screen
                 name="Scan"
                 component={Scan}
+                options={{headerShown:false}}
+            />
+             <Stack.Screen
+                name="ShowComplaint"
+                component={ShowComplaint}
                 options={{headerShown:false}}
             />
         </Stack.Navigator>

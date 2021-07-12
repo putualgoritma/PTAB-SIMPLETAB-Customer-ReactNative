@@ -1,102 +1,135 @@
-import React, { useState, useRef } from 'react';
-import { StyleSheet, View, Platform } from 'react-native';
-import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
-import Video from 'react-native-video';
+import React, { useState, useRef } from "react";
+import { ActivityIndicator, Dimensions, StyleSheet, Text, View } from "react-native";
+import Video from "react-native-video";
+import MediaControls, {
+  PLAYER_STATES,
+} from "react-native-media-controls";
+
+
 
 const VideoPlayer = (props) => {
-    
-    const video = props.src;
-    
-    const videoPlayer = useRef(null);
-    const [duration, setDuration] = useState(0);
-    const [paused, setPaused] = useState(true);
+  const videoPlayer = useRef(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [paused, setPaused] = useState(false);
+  const [playerState, setPlayerState] = useState(PLAYER_STATES.PLAYING);
+  const [opacity,setOpacity] = useState()
+  const video = props.src;
+  const onSeek = (seek) => {
+    videoPlayer?.current.seek(seek);
+  };
 
-    const [currentTime, setCurrentTime] = useState(0);
-    const [playerState, setPlayerState] = useState(PLAYER_STATES.PAUSED);
-    const [isLoading, setIsLoading] = useState(true);
+  const onPaused = (playerState) => {
+    setPaused(!paused);
+    setPlayerState(playerState);
+  };
 
-    const onSeek = (seek) => {
-        videoPlayer?.current.seek(seek);
-    };
+  const onReplay = () => {
+    setPlayerState(PLAYER_STATES.PLAYING);
+    console.log('onReplay');
+    videoPlayer?.current.seek(0);
+  };
 
-    const onSeeking = (currentVideoTime) => setCurrentTime(currentVideoTime);
+  const onProgress = (data) => {
+    // Video Player will continue progress even if the video already ended
+    if (!isLoading) {
+      setCurrentTime(data.currentTime);
+      // console.log('onProgress');
+      setOpacity(0)
+    }
+  };
 
-    const onPaused = (newState) => {
-        setPaused(!paused);
-        setPlayerState(newState);
-    };
+  const onLoad = (data) => {
+    setDuration(data.duration);
+   
+    props.onLoad();
+    console.log(props.onLoad());
+    setIsLoading(false);
+  };
 
-    const onReplay = () => {
-        videoPlayer?.current.seek(0);
-        setCurrentTime(0);
-        if (Platform.OS === 'android') {
-            setPlayerState(PLAYER_STATES.PAUSED);
-            setPaused(true);
-        } else {
-            setPlayerState(PLAYER_STATES.PLAYING);
-            setPaused(false);
-        }
-    };
+  const onLoadStart = () => setIsLoading(true);
 
-    const onProgress = (data) => {
-        if (!isLoading) {
-            setCurrentTime(data.currentTime);
-        }
-    };
+  const onEnd = () => {
+    // Uncomment this line if you choose repeat=false in the video player
+    // setPlayerState(PLAYER_STATES.ENDED);
+  };
 
-    const onLoad = (data) => {
-        setDuration(Math.round(data.duration));
-        setIsLoading(false);
-    };
+  const onBuffer = ({isBuffering}) => {
+    setOpacity(isBuffering ? 1 : 0)
+}
 
-    const onLoadStart = () => setIsLoading(true);
+  const onSeeking = (currentTime) => setCurrentTime(currentTime);
 
-    const onEnd = () => {
-        setPlayerState(PLAYER_STATES.ENDED);
-        setCurrentTime(duration);
-    };
-
-    return (
-        <View style={{alignItems:'center', width:'80%'}}>
-            <Video
-                onEnd={onEnd}
-                onLoad={onLoad}
-                onLoadStart={onLoadStart}
-                posterResizeMode={'cover'}
-                onProgress={onProgress}
-                paused={paused}
-                ref={(ref) => (videoPlayer.current = ref)}
-                resizeMode={'cover'}
-                source={video}
-                style={styles.backgroundVideo}
+  return (
+    <View style={styles.container}>
+      <Video
+        onEnd={onEnd}
+        onLoad={(item) => {onLoad(item)}}
+        onLoadStart={onLoadStart}
+        onProgress={onProgress}
+        paused={paused}
+        ref={(ref) => (videoPlayer.current = ref)}
+        resizeMode="cover"
+        source={video}
+        repeat
+        style={styles.mediaPlayer()}
+        volume={0.0}
+        // hideShutterView = {true}
+      />
+       <ActivityIndicator
+                animating
+                size="large"
+                color='blue'
+                style={[styles.activityIndicator, {opacity: opacity}]}
             />
-            <MediaControls
-                isFullScreen={false}
-                duration={duration}
-                isLoading={isLoading}
-                progress={currentTime}
-                onPaused={onPaused}
-                onReplay={onReplay}
-                onSeek={onSeek}
-                onSeeking={onSeeking}
-                mainColor={"#0C5CBF"}
-                playerState={playerState}
-                sliderStyle={{ containerStyle: {}, thumbStyle: {}, trackStyle: {} }}
-            />
-        </View>
-    );
+      <MediaControls
+        isFullScreen={isFullScreen}
+        onFullScreen={props.onFullScreen}
+        duration={duration}
+        isLoading={isLoading}
+        mainColor={"#0C5CBF"}
+        onPaused={onPaused}
+        onReplay={onReplay}
+        onSeek={onSeek}
+        onSeeking={onSeeking}
+        playerState={playerState}
+        progress={currentTime}
+        poster = "https://somesite/thumb.png"
+        onBuffer={onBuffer}
+      >
+      </MediaControls>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    backgroundVideo: {
-        height: 150,
-        width: '100%',
-    },
-    mediaControls: {
-        height: '100%',
-        flex: 1,
-        alignSelf: 'center',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#ebebeb',
+    // position : 'absolute',
+  },
+  activityIndicator: {
+    position: 'absolute',
+    top: 70,
+    left: 70,
+    right: 70,
+    height: 50,
+},
+
+//   toolbar: {
+//     marginTop: 30,
+//     backgroundColor: "white",
+//     padding: 10,
+//     borderRadius: 5,
+//   },
+  mediaPlayer: () => ({
+    width: '100%',
+    // backgroundColor : 'black',
+    height : '100%',
+    
+  }),
 });
 
 export default VideoPlayer;

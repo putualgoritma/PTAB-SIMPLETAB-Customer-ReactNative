@@ -15,6 +15,7 @@ import {
 const styles = StyleSheet.create({
     Container:{
         alignItems:'center',
+        backgroundColor:'black'
     },
 });
   export default Footer1

@@ -14,7 +14,8 @@ const TextArea =(props)=>{
               maxLength={255}
               placeholder={props.placeholder}
               placeholderTextColor={'#c7c7c7'}
-              />
+              onChangeText = {props.onChangeText}
+            />
         </View>
     )
 }

@@ -7,44 +7,72 @@ import {
     ImageBackground,
     PermissionsAndroid,
     Image,
-    Video
+    Video,
+    Alert
   } from 'react-native';
   import {launchCamera} from 'react-native-image-picker';
+import { useSelector } from 'react-redux';
   import {
     Footer,
     Title,
     ButtonIcon,
     TextInput,
     Button,
-    VideoPlayer} from '../../component';
-    const requestCameraPermission = async () => {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.CAMERA,
-            {
-              title: "Cool Photo App Camera Permission",
-              message:
-                "Cool Photo App needs access to your camera " +
-                "so you can take awesome pictures.",
-              buttonNeutral: "Ask Me Later",
-              buttonNegative: "Cancel",
-              buttonPositive: "OK"
-            }
-          );
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log("You can use the camera");
-          } else {
-            console.log("Camera permission denied");
-          }
-        } catch (err) {
-          console.warn(err);
+    VideoPlayer,
+    Spinner} from '../../component';
+import RNFetchBlob from 'react-native-fetch-blob';
+
+const requestCameraPermission = async () => {
+    try {
+        const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+            title: "Cool Photo App Camera Permission",
+            message:
+            "Cool Photo App needs access to your camera " +
+            "so you can take awesome pictures.",
+            buttonNeutral: "Ask Me Later",
+            buttonNegative: "Cancel",
+            buttonPositive: "OK"
         }
-      };
-const Proof =({navigation})=>{
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the camera");
+        } else {
+        console.log("Camera permission denied");
+        }
+    } catch (err) {
+        console.warn(err);
+    }
+};
+
+const Proof =({navigation, route})=>{
+
+    const TOKEN = useSelector((state) => state.TokenReducer);
+    const USER = useSelector((state) => state.UserReducer);
     const [response, setResponse] = React.useState(null);
-        useEffect(() => {
+    const [loading, setLoading] = useState(false)
+    const data = route.params.form
+    const category = route.params.category
+    const [form, setForm] = useState({
+        title : data.title,
+        category_id : category,
+        description : data.description,
+        lat : data.lat,
+        lng : data.lng,
+        customer_id : USER.id,
+    })
+    
+    useEffect(() => {
+        let isAmounted = true
+        if(isAmounted){
             requestCameraPermission()
-        })
+            console.log(form);
+        }   
+        return () => {
+            isAmounted = false
+        }
+    }, [])
     // const [response, setResponse] = useState(null)
     const [image, setImage] = useState({
         name : null,
@@ -52,8 +80,55 @@ const Proof =({navigation})=>{
         data : null
     })
     const [video, setVideo] = useState(null)
+
+
+    const handleTicket = () => {
+        console.log(form);
+        if(form.title != '' && form.category_id != '' && form.description != '' && response != null && video !==null ){
+            if(video.fileSize < 98000000){
+                setLoading(true)
+                RNFetchBlob.fetch(
+                    'POST',
+                    'https://simpletabadmin.ptab-vps.com/api/close/customer/ticket/store',
+                    {
+                      Authorization: `Bearer ${TOKEN}`,
+                      otherHeader: 'foo',
+                      'Accept' : 'application/json' ,
+                      'Content-Type': 'multipart/form-data',
+                    },
+                    [
+                      // name: image adalah nama properti dari api kita
+                        {name: 'image', filename: response.fileName, data: response.base64},
+                        { 
+                            name : 'video', 
+                            filename : video.fileName, 
+                            type:'mp4', 
+                            data: RNFetchBlob.wrap(video.uri)
+                        },
+                        {
+                            name: 'form',
+                            data : JSON.stringify(form)
+                        }
+                    ],
+                ).then((result) => {
+                    setLoading(false)
+                    let data = JSON.parse(result.data);
+                    console.log(result);
+                    alert(data.message)
+                    navigation.navigate('Menu')
+                }).catch((e) => {
+                    console.log(e);
+                    setLoading(false)
+                })
+            }else{
+                alert('Size video terlalu besar')
+            }
+           
+        };
+    }
     return(
         <View style={styles.container}> 
+            {loading &&  <Spinner/>}
             <ScrollView keyboardShouldPersistTaps = 'always'>
                 <View style={{backgroundColor:'#FFFFFF', width:'100%', height:165}}>
                 </View>
@@ -84,33 +159,39 @@ const Proof =({navigation})=>{
                         title="Ambil Foto"
                         width="80%"
                         icon={faCamera}
-                        navigation={()=>launchCamera(
+                        onPress={()=>launchCamera(
                             {
                                 mediaType: 'photo',
                                 includeBase64:true,
-                                maxHeight: 200,
-                                maxWidth: 200,
+                                maxHeight: 500,
+                                maxWidth: 500,
                             },
                             (response) => {
-                                setResponse(response);
-                                setImage({
-                                    name : 'img',
-                                    filename : response.fileName,
-                                    data : response.base64
-                                })
-                                // console.log(response)
-                            },
+                                if(response.assets){
+                                    setResponse(response.assets[0]);
+                                    setImage({
+                                        name : 'img',
+                                        filename : response.assets[0].fileName,
+                                        data : response.assets[0].base64
+                                    })
+                                    setForm({
+                                        ...form,
+                                        image : response.assets[0].fileName
+                                    })
+                                    console.log(response);
+                                }
+                            },  
                             )}
                         />
                     </View>
-                    <View style={{alignItems:'center',paddingVertical:10}}>
+                    <View style={{paddingVertical:10, paddingHorizontal:30, height : 220}}>
                         <TextInput
                             title="Video"
                         />
                         {video && (
-                        <VideoPlayer
-                            src={{uri: video.uri}}
-                        />
+                            <VideoPlayer
+                                src={{uri: video.uri}}
+                            />
                         )}
                         </View>
                     <View style={{alignItems:'center',paddingVertical:10}}>
@@ -118,21 +199,48 @@ const Proof =({navigation})=>{
                             title="Ambil Video"
                             width="80%"
                             icon={faVideo}
-                            navigation={()=>launchCamera(
-                                {
-                                    mediaType: 'video'
-                                }, 
-                                (response) => {
-                                setVideo(response);
-                                
-                            })
+                            onPress={
+                                () => Alert.alert(
+                                    'Peringatan',
+                                    `Video tidak boleh lebih besar dari 10mb ! `,
+                                    [
+                                        {
+                                            text : 'Tidak',
+                                            onPress : () => console.log('tidak')
+                                        },
+                                        {
+                                            text : 'Ya',
+                                            // onPress : () => {generateCodeOTP(); setModalVisible(true)}
+                                            onPress : () => {
+                                                launchCamera(
+                                                    {
+                                                        mediaType: 'video',
+                                                        quality: 1,
+                                                        videoQuality: 'law'
+                                                        // includeBase64: true 
+                                                    }, 
+                                                    (response) => {
+                                                        if(response.assets){
+                                                            setVideo(response.assets[0]);
+                                                            setForm({
+                                                                ...form,
+                                                                video : response.assets[0].fileName
+                                                            })
+                                                            console.log(response.assets[0]);
+                                                        }
+                                                })
+                                            }
+                                        }
+                                    ]
+                                )
                             }
                         />
                     </View>
                     <View style={{alignItems:'center',paddingVertical:10}}>
                         <Button
                             title="Kirim Tiket"
-                            navigation={()=>navigation.navigate('Heandling')}
+                            // navigation={()=>navigation.navigate('Heandling')}
+                            onPress={handleTicket}
                         
                         />
                     </View>
