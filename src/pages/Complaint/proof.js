@@ -143,7 +143,7 @@ const Proof =({navigation, route})=>{
                         />
                     </View>
                     
-                    <View style={{alignItems:'center',paddingVertical:10}}>
+                    <View style={{alignItems:'center',paddingVertical:10,height:210}}>
                         <TextInput
                             title="Foto"
                         />
@@ -156,6 +156,7 @@ const Proof =({navigation, route})=>{
                     </View>
                     <View style={{alignItems:'center',paddingVertical:10}}>
                         <ButtonIcon
+                        backgroundColor='#1DA0E0'
                         title="Ambil Foto"
                         width="80%"
                         icon={faCamera}
@@ -196,6 +197,7 @@ const Proof =({navigation, route})=>{
                         </View>
                     <View style={{alignItems:'center',paddingVertical:10}}>
                         <ButtonIcon
+                        backgroundColor='#1DA0E0'
                             title="Ambil Video"
                             width="80%"
                             icon={faVideo}
@@ -252,7 +254,7 @@ const Proof =({navigation, route})=>{
             </ScrollView>
             <Footer
                 navigation = {navigation}
-                focus = 'Menu'
+                focus = 'Complaint'
             />
         </View>
         

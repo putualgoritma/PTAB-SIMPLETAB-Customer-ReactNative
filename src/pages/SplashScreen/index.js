@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect} from 'react';
-import {Image,View,StyleSheet} from 'react-native';
+import {Image,View,StyleSheet,ImageBackground} from 'react-native';
 import { useDispatch } from 'react-redux';
 import Splash from '../../assets/img/Splash.svg'
 import { SET_DATA_TOKEN, SET_DATA_USER } from '../../redux/action';
@@ -10,7 +10,7 @@ import { SET_DATA_TOKEN, SET_DATA_USER } from '../../redux/action';
       //       navigation.replace('Login')
       //     }, 2000);
       // })
-
+      const image =require('../../assets/img/SplashScreen.png')
 
       const dispatch = useDispatch();
       useEffect(() => {
@@ -22,7 +22,7 @@ import { SET_DATA_TOKEN, SET_DATA_USER } from '../../redux/action';
                               dispatch(SET_DATA_USER(response[0]))
                               dispatch(SET_DATA_TOKEN(response[1]))
                               setTimeout(() => {
-                                    navigation.replace('Home')
+                                    navigation.replace('Menu')
                               }, 2000);
                         }else{
                               setTimeout(() => {
@@ -67,21 +67,15 @@ import { SET_DATA_TOKEN, SET_DATA_USER } from '../../redux/action';
 
 
       return (
-        <View style={styles.container}>
-          <View style={{flex:1.1,alignItems:'center',top:180}}>
-          <Image source={require('../../assets/img/logo.png')} style={{width:155, height:122}} />
-          </View>
-          <View style={{flex:1, bottom:0}}>
-            <Splash width={'100%'} height={400}/>
-          </View>
-        </View>
+            <ImageBackground source={image} style={styles.image}>
+            </ImageBackground>
       )
   }
   const styles = StyleSheet.create({
-    container:{
-      flex:1, 
-      backgroundColor:'white', 
-      width:'100%'
-    },
+    image: {
+      flex: 1,
+      resizeMode: "cover",
+      justifyContent: "center"
+  },
   })
   export default SplashScreen

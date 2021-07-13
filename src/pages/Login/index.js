@@ -1,9 +1,12 @@
 import { faQrcode, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View,Image, TouchableOpacity } from 'react-native';
 import { ButtonIcon, Header, In, Input, Spinner, TextInput } from '../../component';
 import API from '../../service';
+import Distance from '../../utils/distance';
+
+
 const Login =({navigation,route})=>{
     const [loading, setLoading]= useState(false)
     const isFocused = useIsFocused();
@@ -74,17 +77,15 @@ const Login =({navigation,route})=>{
         <View style={styles.container}>
             {loading && <Spinner/>}
             <ScrollView>
-                <Header
-                    text="Login"
-                />
+                <Header/>
                 <View style={styles.baseBoxShadow} >
                     <View style={styles.boxShadow} >
-                        <ButtonIcon
-                            title='Scan QR'
-                            width='80%'
-                            icon={faQrcode}
-                            onPress={()=> navigation.navigate('Scan') }
-                        />
+                        <TouchableOpacity onPress={()=>navigation.navigate('Scan')}>
+                            <Image source={require('../../assets/icon/iconQR.png')} style={{width:113, height:129}} />
+                        </TouchableOpacity>
+                        <Distance distanceV={5}/>
+                        <View style={{backgroundColor:'#C4C4C4', height:2, width:'80%'}}></View>
+                        <Distance distanceV={5}/>
                         <Text style={styles.text}>Atau</Text>
                         <TextInput title='Phone' />
                         <Input
@@ -105,13 +106,20 @@ const Login =({navigation,route})=>{
                             title="Login"
                             onPress={handleAction}
                         />
-                        <Text style={[styles.text, {marginBottom : 20}]}>Atau</Text>
-                        <ButtonIcon
+                        <Distance distanceV={5}/>
+                        <View style={{backgroundColor:'#C4C4C4', height:2, width:'80%'}}></View>
+                        <Distance distanceV={5}/>
+                        <Text style={styles.text}>Atau</Text>
+                        <Distance distanceV={5}/>
+                        <TouchableOpacity onPress={()=>navigation.navigate('Public')}>
+                            <Image source={require('../../assets/img/MasyarakatUmum.png')} style={{width:181, height:131}} />
+                        </TouchableOpacity>
+                        {/* <ButtonIcon
                             title='Masyarakat Umum'
                             width='80%'
                             icon={faUser}
                             onPress={()=>navigation.navigate('Public')}
-                        />
+                        /> */}
                     </View>
                 </View>
             </ScrollView>
@@ -132,8 +140,8 @@ const styles = StyleSheet.create({
         backgroundColor : '#ffffff',
         width : '90%',
         alignItems : 'center',
-        top:-40,
-        paddingVertical : 60,
+        top:-80,
+        paddingVertical : 35,
         borderRadius:10,
         backgroundColor:'#FFFFFF',
         shadowColor: "#000",
@@ -147,8 +155,7 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:16, 
-        color:'#696969',
-        paddingTop : 20 
+        color:'#696969', 
     }
     
 });

@@ -2,12 +2,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import {
     ScrollView, StyleSheet,
-    View
+    View,
+    Text
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Button, Header1, In, Input, Out, Spinner, TextInput, Title } from '../../component';
 import { SET_DATA_TOKEN, SET_DATA_USER } from '../../redux/action';
 import API from '../../service';
+import Distance from '../../utils/distance';
 
 
 const SMS=({navigation,route})=>{
@@ -37,7 +39,7 @@ const SMS=({navigation,route})=>{
                 dispatch(SET_DATA_TOKEN(token))
                 storeDataToken(token)
                 storeDataUser(user)
-                navigation.replace('Home')
+                navigation.replace('Menu')
             }else{
                 alert('OTP Salah')
             }
@@ -112,25 +114,29 @@ const SMS=({navigation,route})=>{
                                 secureTextEntry={true}
                         />
                         <View style={{marginVertical : 10}} />
+                      
+{/*                         
                         <Button 
                             title = {send ? 'Kirim Ulang Otp' : 'Mohon tunggu max 3 menit sms otp'}
                             onPress={() => {send ? sendOTP() : alert('Mohon tunggu sms otp anda')}}
-                        />
-                        <View style={{flexDirection:'row'}}>
-                            <View style={{flex:1}}>
-                                <Out
-                                    title="Kembali"
-                                    navigation={()=>navigation.navigate('Login')}
-                                />
-                            </View>   
-                            <View style={{flex:1}}>
-                                <In
-                                    title="Masuk"
-                                    onPress={checkOTP}
-                                />
+                        /> */}
+                        <Distance distanceV={5}/>
+                        <View style={{flexDirection:'row',width:'100%',justifyContent:'center'}}>
+                            <In
+                                title="Masuk"
+                                onPress={checkOTP}
+                            />
                         </View>
-                        </View>
+                        <Distance distanceV={5}/>
+                        <View style={{width:'80%'}}>
+                            <View style={{width:send?'45%' : '100%'}}>
+                                <Text style={{color:'#FC7979', fontSize:18, borderColor:'#0C5CBF',borderBottomWidth:2}} onPress={() => {send ? sendOTP() : alert('Mohon Tunggu SMS OTP Anda')}}>{send ? 'Kirim Ulang OTP' : 'Mohon Tunggu Max 3 Menit SMS OTP'}</Text>
+                            </View>
+                            {/* <Distance distanceV={2}/>
+                            <View style={{backgroundColor:'#0C5CBF', width:80, height:3}}></View>  */}
+                         </View>                     
                     </View>
+                   
                 </View>
                 {/* <Footer1/> */}
             </ScrollView>

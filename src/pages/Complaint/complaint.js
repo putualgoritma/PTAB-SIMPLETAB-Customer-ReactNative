@@ -256,7 +256,7 @@ const Complaint =({navigation})=>{
             </View>
             <Footer
                 navigation = {navigation}
-                focus = 'Menu'
+                focus = 'Complaint'
             />
         </View>
         

@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
   const ButtonIcon =(props)=>{
     return(
         <TouchableOpacity style={{
-            backgroundColor:'#0C5CBF', 
+            backgroundColor:props.backgroundColor ?props.backgroundColor:'#0C5CBF', 
             width:props.width, 
             height:50,
             paddingVertical:8, 

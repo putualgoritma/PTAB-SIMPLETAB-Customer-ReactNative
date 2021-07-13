@@ -27,7 +27,7 @@ const HistoryComplaint=({navigation})=>{
                        item.created_at,
                        item.description,
                        item.status,
-                       <View  >
+                       <View style={{alignItems:'center', justifyContent:'center'}} >
                             <Button title='Show' height ={40} text = {13} onPress={() => (navigation.navigate('ShowComplaint', {item : item}))}/>
                         </View>
                    ]
@@ -73,7 +73,7 @@ const HistoryComplaint=({navigation})=>{
                 
             </ScrollView>
             <Footer
-                focus="Menu"
+                focus="Complaint"
                 navigation = {navigation}
             />
         </View>

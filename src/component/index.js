@@ -18,6 +18,7 @@ import Dropdown from './Dropdown'
 import DateMonth from './Month'
 import VideoPlayer from './Video'
 import Spinner from './spinner'
+import HeaderBeranda from './Header/headerberanda'
 
 export {
     Footer,
@@ -39,5 +40,6 @@ export {
     Dropdown,
     DateMonth,
     VideoPlayer,
-    Spinner
+    Spinner,
+    HeaderBeranda
 }

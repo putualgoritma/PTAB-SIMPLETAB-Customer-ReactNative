@@ -13,7 +13,7 @@ import {
   import IconTagihan from '../../assets/icon/iconTagihan.svg'
   import IconBacaMeter from '../../assets/icon/iconBacaMeter.svg'
   import IconTarif from '../../assets/icon/iconTarif.svg'
-  import {Footer, Header} from '../../component';
+  import {Footer, Header,HeaderBeranda} from '../../component';
 import {faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { SliderBox } from "react-native-image-slider-box";
 const Menu =({navigation})=>{
@@ -21,34 +21,26 @@ const Menu =({navigation})=>{
     return(
         <View style={styles.container}>
             <ScrollView>
-            <Header
-            text="PERUMDA Kab.Tabanan"
-            />
+            <HeaderBeranda/>
+                <Distance distanceV={10}/>
                 <View style={{alignItems:'center'}}>
-                    <View style={styles.boxShadowHeader}>
-                        <Text style={styles.textHeader}>Silahkan melakukan login untuk dapat membayarkan tagihan PDAM Anda </Text>
-                            <TouchableOpacity style={{position:'absolute', left:'85%', paddingVertical:12}}>
-                                <FontAwesomeIcon icon={faSignInAlt} style={{color:'#0C5CBF'}} size={ 27 }/>
-                            </TouchableOpacity>
+                    <View style={{height:200, alignItems:'center'}}>
+                        <SliderBox
+                            images={images}
+                            sliderBoxHeight={200}
+                            parentWidth={350}
+                            onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
+                            dotColor="#00F6FD"
+                            inactiveDotColor="#90A4AE"
+                            paginationBoxVerticalPadding={20}
+                            autoplay
+                            circleLoop
+                        />
                     </View>
-                        <View style={{width:'100%', height:3, backgroundColor:'#E5E5E5', top:-15}}> 
-                        </View>
-                            <View style={{height:200, alignItems:'center'}}>
-                                <SliderBox
-                                    images={images}
-                                    sliderBoxHeight={200}
-                                    onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
-                                    dotColor="#00F6FD"
-                                    inactiveDotColor="#90A4AE"
-                                    paginationBoxVerticalPadding={20}
-                                    autoplay
-                                    circleLoop
-                                />
-                            </View>
-                        <Distance distanceV={10}/>
-                        <View style={{backgroundColor:'#0C5CBF', width:'90%', height:50, borderRadius:5,}}>
-                            <Text style={{color:'#FFFFFF', fontSize:15, fontWeight:'bold', padding:12}}>Layanan PDAM</Text>
-                        </View>
+                    <Distance distanceV={10}/>
+                    <View style={{backgroundColor:'#0C5CBF', width:'90%', height:50, borderRadius:5,}}>
+                        <Text style={{color:'#FFFFFF', fontSize:15, fontWeight:'bold', padding:12}}>Layanan PDAM</Text>
+                    </View>
                     <View style={{flexDirection:'row', width:'90%'}}>
                         <TouchableOpacity style={{flex:1, alignItems:'center', paddingVertical:20}} onPress={()=>navigation.navigate('HistoryComplaint')}>
                             <IconPengaduan width={120}/>

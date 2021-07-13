@@ -95,7 +95,7 @@ const show = ({navigation, route}) => {
         
                         <Footer
                             navigation = {navigation}
-                            focus = 'Menu'
+                            focus = 'Complaint'
                         />
                     </View>
                 }
@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
         fontWeight : 'bold', 
         borderBottomWidth : 1,
         fontSize : 15,
-        paddingVertical : 10
+        paddingVertical : 10,
+        borderColor:'#087CDB'
       },
       box : {
             // flexDirection: "column",
