@@ -10,7 +10,7 @@ const tickets = (id, token) => Get(Config.REACT_APP_TICKET + id, false, token)
 const logout = (token) => Get('/api/open/customer/logout/', false, token) ;
 
 //POST
-const login = (data) => Post('/api/open/customer/login', false, data);
+const login = (data) => Post('/api/open/admin/login', false, data);
 const registerCustomerPublic =(data) => Post(Config.REACT_APP_REGISTER_PUBLIC, false, data);
 const tikcetStore = (data, token) => Post(Config.REACT_APP_TICKET_STORE, false, data, token);
 const OTP = (data) =>Post(Config.REACT_APP_OTP, false, data);

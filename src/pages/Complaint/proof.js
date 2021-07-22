@@ -156,31 +156,31 @@ const Proof =({navigation, route})=>{
                     </View>
                     <View style={{alignItems:'center',paddingVertical:10}}>
                         <ButtonIcon
-                        title="Ambil Foto"
-                        width="80%"
-                        icon={faCamera}
-                        onPress={()=>launchCamera(
-                            {
-                                mediaType: 'photo',
-                                includeBase64:true,
-                                maxHeight: 500,
-                                maxWidth: 500,
-                            },
-                            (response) => {
-                                if(response.assets){
-                                    setResponse(response.assets[0]);
-                                    setImage({
-                                        name : 'img',
-                                        filename : response.assets[0].fileName,
-                                        data : response.assets[0].base64
-                                    })
-                                    setForm({
-                                        ...form,
-                                        image : response.assets[0].fileName
-                                    })
-                                    console.log(response);
-                                }
-                            },  
+                            title="Ambil Foto"
+                            width="80%"
+                            icon={faCamera}
+                            onPress={()=>launchCamera(
+                                {
+                                    mediaType: 'photo',
+                                    includeBase64:true,
+                                    maxHeight: 500,
+                                    maxWidth: 500,
+                                },
+                                (response) => {
+                                    if(response.assets){
+                                        setResponse(response.assets[0]);
+                                        setImage({
+                                            name : 'img',
+                                            filename : response.assets[0].fileName,
+                                            data : response.assets[0].base64
+                                        })
+                                        setForm({
+                                            ...form,
+                                            image : response.assets[0].fileName
+                                        })
+                                        console.log(response);
+                                    }
+                                },  
                             )}
                         />
                     </View>
@@ -193,7 +193,7 @@ const Proof =({navigation, route})=>{
                                 src={{uri: video.uri}}
                             />
                         )}
-                        </View>
+                    </View>
                     <View style={{alignItems:'center',paddingVertical:10}}>
                         <ButtonIcon
                             title="Ambil Video"

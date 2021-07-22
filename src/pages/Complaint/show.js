@@ -78,7 +78,6 @@ const show = ({navigation, route}) => {
                                                                 src={{uri :  Config.REACT_APP_BASE_URL + `${String(data.video).replace('public/', '')}` }}
                                                                 onFullScreen = {() => setOnFullScreen (true)}
                                                                 onLoad={() => {setLoadingVideo(loadingVideo ? false : true); return loadingVideo}} 
-                                                                poster="https://somesite/thumb.png"
                                                                 
                                                             />
                                                         </>
