@@ -7,14 +7,15 @@ import {
 
 const TextArea =(props)=>{
     return(
-        <View style={{width:'80%'}}>
+        <View style={{width:props.width ? props.width:'80%'}}>
             <Textarea
               containerStyle={styles.textareaContainer}
               style={styles.textarea}
               maxLength={255}
               placeholder={props.placeholder}
               placeholderTextColor={'#c7c7c7'}
-              />
+              onChangeText = {props.onChangeText}
+            />
         </View>
     )
 }

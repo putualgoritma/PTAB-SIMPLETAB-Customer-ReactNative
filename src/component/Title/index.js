@@ -7,7 +7,7 @@ import {
   } from 'react-native';
 const Title =(props)=>{
     return(
-        <View style={{flexDirection:'row',width:'80%', paddingVertical:15}}>
+        <View style={{flexDirection:'row',width:props.width ? props.width:'80%', paddingVertical:15}}>
             <Text style={styles.title}>{props.title}</Text>
         </View>   
     )

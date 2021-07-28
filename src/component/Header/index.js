@@ -3,13 +3,14 @@ import {
     Text,
     StyleSheet,
     View,
+    Image,
+    Dimensions
   } from 'react-native';
-  import Header from '../../assets/img/header.svg'
 
   const header=(props)=>{
     return(
         <View style={styles.Container}>
-            <Header height={165} width={'100%'}/>
+            <Image source={require('../../assets/img/header.png')} style={{width: Dimensions.get('window').width,height: Dimensions.get('window').height/100*19}}/>
             <Text style={styles.Text}>{props.text}</Text>
         </View>
     )

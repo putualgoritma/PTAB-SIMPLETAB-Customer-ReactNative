@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
     View,
     ScrollView,
-    ImageBackground
+    ImageBackground,
+    PermissionsAndroid
   } from 'react-native';
+import { useSelector } from 'react-redux';
   import {
     Footer,
     Button,
@@ -12,62 +14,218 @@ import {
     Input,
     TextInput,
     TextArea,
-    Dropdown} from '../../component';
+    Dropdown,
+    Spinner,
+    Select} from '../../component';
+import API from '../../service';
+import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
+import Geolocation from '@react-native-community/geolocation';
+import SearchableDropDown from 'react-native-searchable-dropdown';
+import Select2 from "react-native-select-two"
+
+const mockData = [
+    { id: 1, name: "React Native Developer", checked: true },
+    { id: 2, name: "Android Developer" },
+    { id: 3, name: "iOS Developer" }
+  ]
+
+
+
 const Complaint =({navigation})=>{
+    const [categories, setCategories] = useState(null)
+    const TOKEN = useSelector((state) => state.TokenReducer);
+    const [loading, setLoading] = useState(true)
+    const [selectedItem, setSelectedItem] =useState('')
+    const [success, setSuccess] = useState(false)
+    const [location, setLocation] = useState({
+        latitude: 0.00000,
+        longitude: 0.0000
+    })
+    const LATITUDE = -8.3978769;
+    const LONGITUDE = 115.2141418;
+    var defaultLoc = {};
+
+
+    const [form, setForm] = useState({
+        title : '',
+        category_id : '',
+        description : '',
+        lat : '',
+        lng : ''
+        
+    })
+
+
+    useEffect(() => {
+        let isAmounted = true
+        if(isAmounted){
+            setLoading(true)
+console.log(TOKEN)
+            Promise.all([API.categories(TOKEN), permissionGps()]).then((res) => {
+                console.log('corrrrrr',res);
+                setCategories(res[0].data)
+                // if(setSuccess){
+                //     setLoading(false)
+                // }
+            }).catch((e) => {
+                console.log(e.request);
+                setLoading(false)
+            })
+       }
+    }, [])
+
+    const permissionGps = () => {
+        var positionNew = null;
+        LocationServicesDialogBox.checkLocationServicesIsEnabled({
+            message: "<h2 style='color: #0af13e'>Use Location ?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
+            ok: "YES",
+            cancel: "NO",
+          }).then(function(success) {
+                requestLocationPermission().then(() => {
+                    Geolocation.getCurrentPosition(
+                        (position) => {
+                            console.log('posisi',position);
+                             positionNew = position;
+                             setForm({
+                                 ...form,
+                                 lat : position.coords.latitude,
+                                 lng : position.coords.longitude 
+                             })
+                            setLocation({
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude, 
+                            })
+                            defaultLoc ={
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude, 
+                            }
+                            console.log( typeof (position.coords.latitude));
+                        //    return position;
+                            setSuccess(true)
+                            setLoading(false)
+                        },
+                        (error) => {
+                            console.log(error);    
+                        },
+                            { enableHighAccuracy: true, timeout: 200000, maximumAge: 1000 },
+                        );
+                })
+          }).catch((error) => {
+              console.log(error.message); // error.message => "disabled"
+            //   navigation.navigate('Register')
+          });
+
+          return true;
+    }
+
+    const requestLocationPermission =  async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              'title': 'Location Permission',
+              'message': 'MyMapApp needs access to your location'
+            }
+            )
+    
+           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+               console.log("Location permission granted")
+           } else {
+               console.log("Location permission denied")
+           }
+        } catch (err) {
+           console.warn(err)
+        }
+      }
+    
+
+
+    const handleFrom = (key , value) => {
+        setForm({
+            ...form,
+            [key] : value
+        })
+    }
+
+    const handleAction = () => {
+        if(form.category_id!= '' && form.description != '' && form.title !='' && form.lat != '' && form.lng !=''){
+            navigation.navigate('Proof', {form : form, category : form.category_id})
+        }else{
+            alert ('data belum lengkap')
+        }
+        console.log(selectedItem);
+    }
+
+
     return(
         <View style={styles.container}> 
-            <ScrollView keyboardShouldPersistTaps = 'always'>
-                <View style={{backgroundColor:'#FFFFFF', width:'100%', height:165}}>
-                </View>
+                {loading &&  <Spinner/>}
+            <View style={{flex : 1}} >
+                <View style={{backgroundColor:'#FFFFFF', width:'100%', height:165}}/>
                 <ImageBackground source={require('../../assets/img/background.png')} style={styles.image}>
-               
                 <View style={{alignItems:'center'}}>
                     <View style={styles.boxShadowBanner}>
                   
-                    <View style={{alignItems:'center',paddingVertical:10}}>
-                        <Title
-                        title="Pengaduan"
-                        />
-                        <TextInput
-                        title="Kategori Pengaduan"
-                        />
-                       <Dropdown
-                        data={[{id:1,name:'1'},
-                                {id:2,name:'2'},
-                                {id:3,name:'3'},
-                                {id:4,name:'4'}
-                                ]}
-                        placeholder="<--Pilih Kategori Pengaduan-->"
-                        />
-                         <TextInput
-                        title="Judul"
-                        />
-                        <Input
-                        placeholder="Judul"
-                         />
-                         <TextInput
-                        title="Keterangan"
-                        />
-                        <TextArea
-                        placeholder="Keterangan"
-                         />
+                        <View style={{alignItems:'center',paddingVertical:10}}>
+                            <Title
+                                title="Pengaduan"
+                            />
+                            <TextInput
+                                title="Kategori Pengaduan"
+                            />
+                            <View style={{width:'80%'}}>
+                            {categories &&   
+                            <Select
+                                searchPlaceHolderText='Cari Kategori'
+                                title='Kategori'
+                                popupTitle='Select Kategori'
+                                data={categories}
+                                onSelect={data => {
+                                    handleFrom('category_id', data[0])
+                                }}
+                                onRemoveItem={data => {
+                                    handleFrom('category_id', data[0])
+                                }} 
+                                
+                            />
+                            }   
+                            </View>
+
+                            <ScrollView style={{width : '100%'}} >
+                                <View style={{alignItems : 'center'}}>
+                                    <TextInput
+                                        title="Judul"
+                                    />
+                                    <Input
+                                        placeholder="Judul"
+                                        onChangeText = {value => handleFrom('title', value)}
+                                    />
+                                    <TextInput
+                                        title="Keterangan"
+                                    />
+                                    <TextArea
+                                        placeholder="Keterangan"
+                                        onChangeText = {value => handleFrom('description', value)}
+                                    />
+
+                                    <View style={{marginVertical : 10}} />
+
+                                    <Button
+                                        title="Lanjut"
+                                        onPress={handleAction}
+                                        // onPress={() => console.log(selectedItem)}
+                                    />
+                               </View>
+                            </ScrollView>
+                        </View>
+                    
+                        </View>
                     </View>
-                   
-                    <View style={{alignItems:'center',paddingVertical:10}}>
-                        <Button
-                        title="Lanjut"
-                        navigation={()=>navigation.navigate('Proof')}
-                        />
-                    </View>
-                    </View>
-                </View>
                 </ImageBackground>
-                
-                
-            </ScrollView>
+            </View>
             <Footer
                 navigation = {navigation}
-                focus = 'Menu'
+                focus = 'Complaint'
             />
         </View>
         

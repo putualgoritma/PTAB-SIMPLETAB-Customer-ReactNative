@@ -1,13 +1,9 @@
-import {faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import {
-    Text,
-    StyleSheet,
-    View,
-    ScrollView,
-    TouchableOpacity
-  } from 'react-native';
-import {Footer,Header2,Title,ButtonIcon,Table1,Dropdown} from '../../component';
+    ScrollView, StyleSheet,View, Dimensions,
+} from 'react-native';
+import { ButtonIcon, Dropdown, Footer, Header2, Table1, Title } from '../../component';
 const Fare=({navigation})=>{
     return(
         <View style={styles.container}>

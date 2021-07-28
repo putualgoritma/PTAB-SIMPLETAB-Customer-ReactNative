@@ -9,18 +9,17 @@ var data = props.data
 return (
     <View style={{width:'80%'}}>
         <SearchableDropDown
-        selectedItems = {selectedItem}
-        onItemSelect={(item) => {
-            setSelectedItem(item)
-        }}
-        itemStyle={{
-            padding: 10,
-            marginTop: 2,
-            backgroundColor: '#ffffff',
-            borderColor: '#087CDB',
-            borderWidth: 1,
-            borderRadius: 5,
-        }}
+            selectedItems = {props.selectedItem}
+            onItemSelect={props.onItemSelect}
+            onTextChange
+            itemStyle={{
+                padding: 10,
+                marginTop: 2,
+                backgroundColor: '#ffffff',
+                borderColor: '#087CDB',
+                borderWidth: 1,
+                borderRadius: 5,
+            }}
         itemTextStyle={{ color: '#222' }}
         itemsContainerStyle={{ maxHeight: 180 }}
         items={data}

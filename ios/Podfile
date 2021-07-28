@@ -12,6 +12,12 @@ target 'SIMPELTAB' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-config', :path => '../node_modules/react-native-config'
+
+  pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
+
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
   target 'SIMPELTABTests' do
     inherit! :complete
     # Pods for testing

@@ -1,42 +1,87 @@
-import { faPlus, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
+import { faPlusCircle, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect, useState } from 'react';
 import {
-    Text,
     StyleSheet,
     View,
     ScrollView,
-    TouchableOpacity
   } from 'react-native';
-import {Footer,Header2,Title,ButtonIcon,Table} from '../../component';
+import { useSelector } from 'react-redux';
+import {Footer,Header2,Title,ButtonIcon,Table, Spinner, Button,IconDetail,ButtonAdd} from '../../component';
+import API from '../../service';
+import {colors} from '../../utils/colors';
+import Distance from '../../utils/distance';
+
+
 const HistoryComplaint=({navigation})=>{
+    const TOKEN = useSelector((state) => state.TokenReducer);
+    const USER = useSelector((state) => state.UserReducer);
+    const [ticket, setTicket] = useState(null)
+    const [loading, setLoading] = useState(true)
+    useEffect(() => {
+        let isAmounted = true
+        if(isAmounted){
+            console.log(USER.id);
+            API.tickets(USER.id, TOKEN).then((result) => {
+                let data = []
+                let no = 1
+                result.data.map((item, index) => {
+                    // console.log(Object.keys(result.data[index]));
+                   data[index] = [
+                       no++,
+                       item.created_at,
+                       item.description,
+                       item.status,
+                       <View style={{alignItems:'center', justifyContent:'center'}} >
+                            <IconDetail onPress={() => (navigation.navigate('ShowComplaint', {item : item}))}/>
+                            {/* <Button title='Show' height ={40} text = {13} onPress={() => (navigation.navigate('ShowComplaint', {item : item}))}/> */}
+                        </View>
+                   ]
+                })
+                
+                setTicket(data)
+                // setTicket(result.data)
+                setLoading(false)
+                console.log(data);
+            }).catch((e) => {
+                console.log(e);
+                setLoading(false)
+            })
+        }
+
+        return () => {
+            isAmounted = false;
+        }
+    }, [])
+
     return(
         <View style={styles.container}>
+            {loading && <Spinner/>}
             <ScrollView>
                 <Header2/>
                 <View style={{paddingLeft:10}}>
                     <Title
                     title="History Pengaduan"
                     />
-                    <ButtonIcon
+                    <View>
+
+                    </View>
+                    <ButtonAdd
                         title="Buka Tiket"
                         width='60%'
-                        icon={faPlusSquare}
-                        navigation={()=>navigation.navigate('Complaint')}
+                        icon={faPlusCircle}
+                        onPress={()=>navigation.navigate('Complaint')}
                     />
                      </View>
-                    <Table
-                    tbhead={['No','Tanggal','Keterangan','Status']}
-                    tbdata={[
-                            ['1','2021-01-04','Pipa Bocor','Selesai'],
-                            ['2','2021-01-05','Air Mampet','Selesai'],
-                             ]}
-                    cellindex={4}
-                  />
+                  {ticket &&   <Table
+                    tbhead={['No','Tanggal','Keterangan','Status', 'Show']}
+                    tbdata={ticket}
+                    cellindex={5}
+                  />}
                     
                 
             </ScrollView>
             <Footer
-                focus="Menu"
+                focus="Complaint"
                 navigation = {navigation}
             />
         </View>

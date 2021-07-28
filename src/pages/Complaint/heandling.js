@@ -76,7 +76,7 @@ const Heandling =({navigation})=>{
             </ScrollView>
             <Footer
                 navigation = {navigation}
-                focus = 'Menu'
+                focus = 'Complaint'
             />
         </View>
         

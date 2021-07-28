@@ -7,7 +7,7 @@ import {
   import IconIn from '../../assets/icon/iconIn.svg'
   const In =(props)=>{
       return(
-        <TouchableOpacity style={styles.section} onPress={props.navigation}>
+        <TouchableOpacity style={styles.section} onPress={props.onPress}>
             <Text style={styles.text}>{props.title}</Text>
             <IconIn/>
         </TouchableOpacity>

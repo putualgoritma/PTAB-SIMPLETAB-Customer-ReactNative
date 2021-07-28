@@ -6,7 +6,7 @@ import {
   } from 'react-native';
 const TextInput =(props)=>{
     return(
-        <View style={styles.section}>
+        <View style={[styles.section,{width:props.width ? props.width:'80%'}]}>
             <View style={{flex:1}}>
                 <Text style={styles.textinput}>{props.title}</Text>
             </View>
@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
     section:{
         flexDirection:'row', 
         justifyContent:'center', 
-        width:'80%',
     }
 });    
 export default TextInput;

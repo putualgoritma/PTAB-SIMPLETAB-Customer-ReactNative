@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from'../SplashScreen'
-import Home from'../Home'
 import Menu from'../Menu'
 import Login from'../Login'
 import SMS from'../SMS'
@@ -15,8 +14,12 @@ import Bill from '../Bill'
 import BillList from '../Bill/BillList'
 import Fare from '../Fare'
 import Meter from '../Meter'
+import AddMeter from '../Meter/add'
 import Profile from '../Profile'
 import Scan from '../Login/Scan'
+import ShowComplaint from '../Complaint/show'
+import DetailMeter from '../Meter/detail';
+
 const Stack = createStackNavigator();
 const Router = () =>{
     return(
@@ -24,11 +27,6 @@ const Router = () =>{
             <Stack.Screen
                 name="SplashScreen"
                 component={SplashScreen}
-                options={{headerShown:false}}
-            />
-            <Stack.Screen
-                name="Home"
-                component={Home}
                 options={{headerShown:false}}
             />
             <Stack.Screen
@@ -97,6 +95,11 @@ const Router = () =>{
                 options={{headerShown:false}}
             />
             <Stack.Screen
+                name="AddMeter"
+                component={AddMeter}
+                options={{headerShown:false}}
+            />
+            <Stack.Screen
                 name="Profile"
                 component={Profile}
                 options={{headerShown:false}}
@@ -106,6 +109,17 @@ const Router = () =>{
                 component={Scan}
                 options={{headerShown:false}}
             />
+             <Stack.Screen
+                name="ShowComplaint"
+                component={ShowComplaint}
+                options={{headerShown:false}}
+            />
+             <Stack.Screen
+                name="DetailMeter"
+                component={DetailMeter}
+                options={{headerShown:false}}
+            />
+            
         </Stack.Navigator>
     )
 }

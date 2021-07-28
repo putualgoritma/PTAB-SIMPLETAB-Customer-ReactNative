@@ -1,6 +1,7 @@
 import Footer from './Footer'
 import Header from './Header'
 import ButtonIcon from './Button'
+import ButtonAdd from './Button/Buttonadd'
 import In from './In'
 import Out from './Out'
 import TextInput from './TextInput'
@@ -17,6 +18,14 @@ import TextArea from './TextArea'
 import Dropdown from './Dropdown'
 import DateMonth from './Month'
 import VideoPlayer from './Video'
+import Spinner from './spinner'
+import HeaderBeranda from './Header/headerberanda'
+import ImageFoto from './ImageFoto'
+import Select  from './Select2'
+import IconDetail from './Action/Detail'
+import IconEdit from './Action/Edit'
+import IconDelete from './Action/Delete'
+
 
 export {
     Footer,
@@ -37,5 +46,13 @@ export {
     TextArea,
     Dropdown,
     DateMonth,
-    VideoPlayer
+    VideoPlayer,
+    Spinner,
+    HeaderBeranda,
+    ImageFoto,
+    Select,
+    IconDetail,
+    IconEdit,
+    IconDelete,
+    ButtonAdd
 }
