@@ -119,7 +119,6 @@ const Router = () =>{
                 component={DetailMeter}
                 options={{headerShown:false}}
             />
-            
         </Stack.Navigator>
     )
 }

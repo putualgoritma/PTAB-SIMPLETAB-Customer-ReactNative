@@ -5,9 +5,34 @@ import { ScrollView, StyleSheet, Text, View,Image, TouchableOpacity } from 'reac
 import { ButtonIcon, Header, In, Input, Spinner, TextInput } from '../../component';
 import API from '../../service';
 import Distance from '../../utils/distance';
+import { copilot, walkthroughable, CopilotStep,Button} from "react-native-copilot";
 
+const CustomCopilot = (props) => {
+    const {copilot} =props;
+    return(  
+    <View {...copilot} 
+        style={{
+            position:'absolute',
+            width: props.width ? props.width:'85%', 
+            height:props.height? props.height:90, 
+            marginTop:props.marginTop,
+            
+        }}>
+    </View>
+     )
+   }
 
-const Login =({navigation,route})=>{
+const Login =(props)=>{
+    
+    const { navigation } = props;
+    const {route} =props;
+    const WalkthroughableText = walkthroughable(Text)
+    const WalkthroughableImage = walkthroughable(Image)
+
+    const handleStepChange = (step) => {
+        console.log (`Current data: ${step.name}`)
+
+    }
     const [loading, setLoading]= useState(false)
     const isFocused = useIsFocused();
     const [user, setUser] = useState(null)
@@ -39,6 +64,11 @@ const Login =({navigation,route})=>{
             })
         }
     }, [isFocused])
+
+    useEffect(()=>{
+        props.copilotEvents.on('stepChange', handleStepChange)
+        props.start()
+    },[])
 
     const handleForm = (key, value) => {
         setForm({
@@ -72,6 +102,8 @@ const Login =({navigation,route})=>{
             alert('Mohon isi data dengan Lengkap')
         }
     }
+    
+    
 
     return(
         <View style={styles.container}>
@@ -80,46 +112,102 @@ const Login =({navigation,route})=>{
                 <Header/>
                 <View style={styles.baseBoxShadow} >
                     <View style={styles.boxShadow} >
-                        <TouchableOpacity onPress={()=>navigation.navigate('Scan')}>
-                            <Image source={require('../../assets/icon/iconQR.png')} style={{width:113, height:129}} />
-                        </TouchableOpacity>
+                        <View style={{width:'80%', alignItems:'center'}}>
+                                <CopilotStep
+                                    text="Scan atau arahkan Camera pada Stand Meter Anda"
+                                    order={1}
+                                    name="SatuUnique"
+                                    >
+                                    <CustomCopilot marginTop={15} width={113} height={141}/>
+                                    </CopilotStep>
+                                <TouchableOpacity onPress={()=>navigation.navigate('Scan')}>
+                                    <Image source={require('../../assets/icon/iconQR.png')} style={{width:113, height:129}} />
+                                </TouchableOpacity>
+                        </View>
+
+                        {/* <TouchableOpacity onPress={()=>navigation.navigate('Scan')}>
+                            <CopilotStep
+                                text='Scan atau arahkan Camera pada Stand Meter Anda'
+                                order={1}
+                                name='SatuUnique'
+                            >
+                                <WalkthroughableImage 
+                                    source={require('../../assets/icon/iconQR.png')}
+                                    style={{width:113, height:129}}
+                                />
+                            </CopilotStep>
+                         </TouchableOpacity> */}
+
                         <Distance distanceV={5}/>
                         <View style={{backgroundColor:'#C4C4C4', height:2, width:'80%'}}></View>
                         <Distance distanceV={5}/>
                         <Text style={styles.text}>Atau</Text>
-                        <TextInput title='Phone' />
-                        <Input
-                            value = {form.phone !== null ? form.phone : null}
-                            placeholder="Phone"
-                            onChangeText = {(value) => handleForm('phone', value)}
-                            // value={route.params ? route.params.dataId:''}
-                            keyboardType='number-pad'
-                        />
-                        <TextInput title='Password' />
-                        <Input
-                            placeholder="Pasaword"
-                            onChangeText = {(value) => handleForm('password', value)}
-                            // value={route.params ? route.params.dataId:''}
-                            secureTextEntry = {true}
-                        />
+                        <View style={{width:'100%', alignItems:'center'}}>
+                            <CopilotStep
+                                text="Masukan No Handphone yang telah terdaftar sebagai Pelanggan"
+                                order={2}
+                                name="DuaUnique"
+                                >
+                                <CustomCopilot marginTop={38}/>
+                            </CopilotStep>
+
+                            <TextInput title='Phone' />
+                                <Input
+                                    value = {form.phone !== null ? form.phone : null}
+                                    placeholder="Phone"
+                                    onChangeText = {(value) => handleForm('phone', value)}
+                                    // value={route.params ? route.params.dataId:''}
+                                    keyboardType='number-pad'
+                                />
+                         </View>
+                         <View style={{width:'100%', alignItems:'center'}}>
+                            <CopilotStep
+                                text="Masukan Password, untuk pertama kali gunakan password = 123456, untuk selanjutnya dapat disesuaikan"
+                                order={3}
+                                name="TigaUnique"
+                                >
+                                <CustomCopilot marginTop={38}/>
+                            </CopilotStep>
+                            <TextInput title='Password' />
+                            <Input
+                                placeholder="Pasaword"
+                                onChangeText = {(value) => handleForm('password', value)}
+                                // value={route.params ? route.params.dataId:''}
+                                secureTextEntry = {true}
+                            />
+                        </View>
+                        <View style={{width:'80%', flexDirection:'row', justifyContent:'flex-end'}}>
+                            <CopilotStep
+                                text="Klik tombol Login dan pastikan no handphone dan password sudah benar"
+                                order={4}
+                                name="EmpatUnique"
+                                >
+                                <CustomCopilot marginTop={38} width={'35%'} height={40}/>
+                            </CopilotStep>
                         <In
                             title="Login"
                             onPress={handleAction}
                         />
+                         </View>
+
                         <Distance distanceV={5}/>
                         <View style={{backgroundColor:'#C4C4C4', height:2, width:'80%'}}></View>
                         <Distance distanceV={5}/>
                         <Text style={styles.text}>Atau</Text>
                         <Distance distanceV={5}/>
-                        <TouchableOpacity onPress={()=>navigation.navigate('Public')}>
-                            <Image source={require('../../assets/img/MasyarakatUmum.png')} style={{width:181, height:131}} />
-                        </TouchableOpacity>
-                        {/* <ButtonIcon
-                            title='Masyarakat Umum'
-                            width='80%'
-                            icon={faUser}
-                            onPress={()=>navigation.navigate('Public')}
-                        /> */}
+                        <View style={{width:'80%', alignItems:'center'}}>
+                            <CopilotStep
+                                text="Bagi yang bukan pelanggan dapat mengakses menu ini"
+                                order={5}
+                                name="LimaUnique"
+                                >
+                                <CustomCopilot marginTop={18} width={181} height={151}/>
+                                </CopilotStep>
+                            <TouchableOpacity onPress={()=>navigation.navigate('Public')}>
+                                <Image source={require('../../assets/img/MasyarakatUmum.png')} style={{width:181, height:131}} />
+                            </TouchableOpacity>
+                        </View>
+                       
                     </View>
                 </View>
             </ScrollView>
@@ -159,4 +247,14 @@ const styles = StyleSheet.create({
     }
     
 });
-export default Login
+const style = {
+    backgroundColor: "white",
+    borderRadius: 2,
+    borderColor:'#137FC2',
+    borderWidth:1
+  };
+export default copilot({
+    overlay: "svg", // or 'view'
+    animated: true, // or false
+    tooltipStyle: style
+  })(Login);
