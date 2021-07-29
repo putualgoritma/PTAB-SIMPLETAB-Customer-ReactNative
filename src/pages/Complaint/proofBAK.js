@@ -28,7 +28,6 @@ import { colors } from '../../utils/colors';
 
 const ButtonImage = (props) => {
     const [qty, setQty] = useState(1)
-    const [show, setShow] = useState(true)
     var myloop = [];
     for (let index = 0; index < qty; index++) {
         myloop.push(
@@ -43,16 +42,15 @@ const ButtonImage = (props) => {
                     />
 
                 </View>
-                {props.dataImage[index]==null &&
-                <View style={{alignItems:'center',paddingVertical:10}}>
+                <View style={{alignItems:'center',paddingVertical:10}} key={index}>
                     <ButtonIcon
-                        onPress={() => {props.Image(); props.dataImage ? setShow(false) : null}}
+                        onPress={props.Image}
                         backgroundColor='#1DA0E0'
                         title="Ambil Foto"
                         width="80%"
                         icon={faCamera}
                     />
-                </View>}
+                </View>
            </View>
           );
         
@@ -63,17 +61,12 @@ const ButtonImage = (props) => {
         <View >
            {myloop}
             <View style={{flexDirection : 'row', marginHorizontal : 30}}>
-                {(props.dataImage[qty-1] != null) &&
-                <TouchableOpacity style={{backgroundColor :colors.primary, padding : 5, borderRadius : 5}} onPress={() => {setQty(qty + 1); setShow(true)}}>
-                    <Text style={{color:'#ffffff', fontWeight : 'bold'}}>Add</Text>
-                </TouchableOpacity>}
-                <View style={{marginHorizontal:3}} />
-                <TouchableOpacity style={{backgroundColor :colors.danger, padding : 5, borderRadius : 5}} onPress={() => {qty > 1 ? setQty(qty - 1) : alert('data tidak boleh dihapus'); props.deleteImage()}}>
-                    <Text style={{color:'#ffffff', fontWeight : 'bold'}}>Delete </Text>
+                <TouchableOpacity style={{backgroundColor :colors.primary, padding : 5, borderRadius : 5}} onPress={() => setQty(qty + 1)}>
+                    <Text style={{color:'#ffffff', fontWeight : 'bold'}}>Add Row</Text>
                 </TouchableOpacity>
                 <View style={{marginHorizontal:3}} />
-                <TouchableOpacity style={{backgroundColor :colors.danger, padding : 5, borderRadius : 5}} onPress={() => {setQty(1); props.resetImage()}}>
-                    <Text style={{color:'#ffffff', fontWeight : 'bold'}}>Reset</Text>
+                <TouchableOpacity style={{backgroundColor :colors.danger, padding : 5, borderRadius : 5}} onPress={() => {qty > 1 ? setQty(qty - 1) : alert('data tidak boleh dihapus'); props.deleteImage()}}>
+                    <Text style={{color:'#ffffff', fontWeight : 'bold'}}>Delete Row</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -160,36 +153,33 @@ const Proof =({navigation, route})=>{
         }
     }
 
-    const resetImage = () => {
-        if (responses.length > 0) {
-            setResponses([]);
-        }
-    }
-
 
     const handleTicket = () => {
-        let dataUpload=[];
-        let message = 'Mohon lengkapi data';
-        let send = false;
-        if(responses.length >= 2 && responses.length <= 3){
-             dataUpload =       
-            [
-                // name: image adalah nama properti dari api kita
-                {
-                    name: 'qtyImage',
-                    data : JSON.stringify(responses.length)
-                  },
-                  {
-                      name: 'form',
-                      data : JSON.stringify(form)
-                  },
-            ];
-            send = true;
-        }else if((responses.length > 0 && responses.length <=3) && video !== null){
-            if(video.fileSize <= 50000000){
-                dataUpload =       
+        let dataUploadImage=[];
+        let dataQtyImage = 1;
+        for (let index = 0; index < responses.length; index++) {
+            dataUploadImage[index] = {
+                'name' : 'image' + dataQtyImage,
+                'filename' : responses[index].fileName,
+                'data' : responses[index].base64
+            }
+            dataQtyImage++;
+        }
+        if(form.title != '' && form.category_id != '' && form.description != '' && responses.length >0 && video !==null ){
+            if(video.fileSize < 98000000){
+                setLoading(true)
+                RNFetchBlob.fetch(
+                    'POST',
+                    'https://simpletabadmin.ptab-vps.com/api/close/customer/ticket/store',
+                    {
+                      Authorization: `Bearer ${TOKEN}`,
+                      otherHeader: 'foo',
+                      'Accept' : 'application/json' ,
+                      'Content-Type': 'multipart/form-data',
+                    },
                     [
-                        // name: image adalah nama properti dari api kita
+                      // name: image adalah nama properti dari api kita
+                        dataUploadImage,
                         {
                             name: 'qtyImage',
                             data : JSON.stringify(responses.length)
@@ -203,42 +193,8 @@ const Proof =({navigation, route})=>{
                         {
                             name: 'form',
                             data : JSON.stringify(form)
-                        },
-                    ];
-                send = true
-            }else{
-                message = 'max video 5mb'
-            }
-            
-        }
-       
-        let dataQtyImage = 1;
-        for (let index = 0; index < responses.length; index++) {
-            dataUpload.push(
-                {
-                    'name' : 'image' + dataQtyImage,
-                    'filename' : responses[index].fileName,
-                    'data' : responses[index].base64
-                }
-            )
-            dataQtyImage++;
-        }
-       
-        if(form.title != '' && form.category_id != '' && form.description != '' ){
-
-             if(send){
-                setLoading(true)
-                RNFetchBlob.fetch(
-                    'POST',
-                    'https://simpletabadmin.ptab-vps.com/api/close/customer/ticket/store',
-                    {
-                      Authorization: `Bearer ${TOKEN}`,
-                      otherHeader: 'foo',
-                      'Accept' : 'application/json' ,
-                      'Content-Type': 'multipart/form-data',
-                    },
-                        dataUpload
-                    ,
+                        }
+                    ],
                 ).then((result) => {
                     setLoading(false)
                     let data = JSON.parse(result.data);
@@ -249,21 +205,11 @@ const Proof =({navigation, route})=>{
                     console.log(e);
                     setLoading(false)
                 })
-             }else{
-                 if(video != null && responses.length <1){
-                     message = 'mohon gambar diisi min 1'
-                 }
-                 if(video == null && responses.length <=2){
-                     message = 'Mohon isi gambar min 2 jika tidak tersedia video'
-                 }
-                 if(video == null && responses.length >= 3){
-                     message = 'Max upload 3 gambar'
-                 }
-
-                 alert(message)
-             }
-        }
- 
+            }else{
+                alert('Size video terlalu besar')
+            }
+           
+        };
     }
     return(
         <View style={styles.container}> 
@@ -284,7 +230,7 @@ const Proof =({navigation, route})=>{
                     
                         {/* image */}
 
-                        <ButtonImage Image ={getImage} dataImage = {responses} deleteImage={()=>deleteImage()} resetImage={() => resetImage()}/>
+                        <ButtonImage Image ={getImage} dataImage = {responses} deleteImage={()=>deleteImage()}/>
 
 
                     <View style={{paddingVertical:10, paddingHorizontal:30, height : 220}}>
