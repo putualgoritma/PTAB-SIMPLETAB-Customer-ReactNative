@@ -39,9 +39,8 @@ const HistoryComplaint=({navigation})=>{
                 })
                 
                 setTicket(data)
-                // setTicket(result.data)
+                setTicket(result)
                 setLoading(false)
-                console.log(data);
             }).catch((e) => {
                 console.log(e);
                 setLoading(false)

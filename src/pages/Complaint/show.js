@@ -9,8 +9,11 @@ const show = ({navigation, route}) => {
     const [onFullScreenImage, setOnFullScreenImage] = useState(false)
     const [loadingImage, setLoadingImage] = useState(true)
     const [loadingVideo, setLoadingVideo] = useState(false)
+    const [image, setImage] = useState(JSON.parse(data.ticket_image[0].image))
     useEffect(() => {
-       console.log(data);
+       image.map((item) => {
+           console.log(item);
+       })
     }, [])
     return (
         <View style={styles.container}> 
@@ -62,18 +65,31 @@ const show = ({navigation, route}) => {
                                                             style={{height: '28%', width: '100%', marginRight: 20}}
                                                         /> } */}
                                                         <TouchableOpacity style={{height : '28%'}}  onPress={() => setOnFullScreenImage(onFullScreenImage ? false : true, )} >
-                                                            {loadingImage && 
-                                                            <View style={{justifyContent:'center'}}>
-                                                                <Image source={require('../../assets/img/ImageFotoLoading.png')} style={{width:'100%', height:150}}/>
-                                                            </View>}
-                                                            <Image
-                                                                onLoadEnd={() => {setLoadingImage(false); console.log('end');}}
-                                                                source = {{uri : Config.REACT_APP_BASE_URL + `${String(data.image).replace('public/', '')}`}}
-                                                                style={{height: '100%', width: '100%', marginRight: 20, resizeMode : 'stretch'}}
-                                                                // loadingIndicatorSource={require('../../assets/img/ImageFoto.png')}
-                                                                onLoadEnd={() => setLoadingImage(false)}
-                                                                onLoadStart={() => setLoadingImage(true)}
-                                                            /> 
+                                                        {/* {JSON.parse(data.ticket_image[0].image).map((image, index) => {
+                                                            //     <Image
+                                                            //         key={index}
+                                                            //         onLoadEnd={() => {setLoadingImage(false); console.log('end');}}
+                                                            //         source = {{uri : Config.REACT_APP_BASE_URL + `${String(image).replace('public/', '')}`}}
+                                                            //         style={{height: '100%', width: '100%', marginRight: 20, resizeMode : 'stretch'}}
+                                                            //         // loadingIndicatorSource={require('../../assets/img/ImageFoto.png')}
+                                                            //         onLoadEnd={() => setLoadingImage(false)}
+                                                            //         onLoadStart={() => setLoadingImage(true)}
+                                                            //   /> 
+                                                        })} */}
+                                                        {image.map((item,index) => {
+                                                            return (
+                                                                <Image
+                                                                    key={index}
+                                                                    onLoadEnd={() => {setLoadingImage(false); console.log('end');}}
+                                                                    source = {{uri : Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}`}}
+                                                                    style={{height: '100%', width: '100%', marginRight: 20, resizeMode : 'stretch'}}
+                                                                    // loadingIndicatorSource={require('../../assets/img/ImageFoto.png')}
+                                                                    onLoadEnd={() => setLoadingImage(false)}
+                                                                    onLoadStart={() => setLoadingImage(true)}
+                                                              /> 
+                                                            )
+                                                        })}
+                                                          
                                                         </TouchableOpacity>
                                                         </>
                                                         <>
@@ -121,7 +137,7 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: "cover",
         width:'100%',
-        height: 1000
+        height: 'auto'
         
       },
    
