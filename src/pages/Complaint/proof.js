@@ -1,4 +1,4 @@
-import { faCamera,faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faCamera,faPlus,faPlusCircle,faTrash,faUndo,faVideo } from '@fortawesome/free-solid-svg-icons';
 import React,{useEffect,useState}from 'react';
 import {
     StyleSheet,
@@ -25,6 +25,8 @@ import { useSelector } from 'react-redux';
     } from '../../component';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { colors } from '../../utils/colors';
+import Distance from '../../utils/distance';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 const ButtonImage = (props) => {
     const [qty, setQty] = useState(1)
@@ -62,19 +64,24 @@ const ButtonImage = (props) => {
         
         <View >
            {myloop}
-            <View style={{flexDirection : 'row', marginHorizontal : 30}}>
-                {(props.dataImage[qty-1] != null) &&
-                <TouchableOpacity style={{backgroundColor :colors.primary, padding : 5, borderRadius : 5}} onPress={() => {setQty(qty + 1); setShow(true)}}>
-                    <Text style={{color:'#ffffff', fontWeight : 'bold'}}>Add</Text>
-                </TouchableOpacity>}
-                <View style={{marginHorizontal:3}} />
-                <TouchableOpacity style={{backgroundColor :colors.danger, padding : 5, borderRadius : 5}} onPress={() => {qty > 1 ? setQty(qty - 1) : alert('data tidak boleh dihapus'); props.deleteImage()}}>
-                    <Text style={{color:'#ffffff', fontWeight : 'bold'}}>Delete </Text>
-                </TouchableOpacity>
-                <View style={{marginHorizontal:3}} />
-                <TouchableOpacity style={{backgroundColor :colors.danger, padding : 5, borderRadius : 5}} onPress={() => {setQty(1); props.resetImage()}}>
-                    <Text style={{color:'#ffffff', fontWeight : 'bold'}}>Reset</Text>
-                </TouchableOpacity>
+           <View style={{alignItems:'center'}}>
+                <View style={{flexDirection : 'row',alignItems:'center', width:'80%'}}>
+                    {(props.dataImage[qty-1] != null) &&
+                    <TouchableOpacity style={{flexDirection:'row',height:40,justifyContent:'center',alignItems:'center',backgroundColor :colors.success,paddingHorizontal:10, borderRadius : 5}} onPress={() => {setQty(qty + 1); setShow(true)}}>
+                        <FontAwesomeIcon icon={faPlusCircle} size={20} color={'#FFFFFF'}/>
+                        <Text style={{color:'#ffffff', fontWeight : 'bold',fontSize:15,  marginLeft:3}}>Tambah</Text>
+                    </TouchableOpacity>}
+                    <View style={{marginHorizontal:3}} />
+                    <TouchableOpacity style={{backgroundColor :colors.danger,flexDirection:'row', paddingHorizontal:10,height:40,justifyContent:'center',alignItems:'center', borderRadius : 5}} onPress={() => {qty > 1 ? setQty(qty - 1) : alert('data tidak boleh dihapus'); props.deleteImage()}}>
+                        <FontAwesomeIcon icon={faTrash} size={17} color={'#FFFFFF'}/>
+                        <Text style={{color:'#ffffff', fontWeight : 'bold',fontSize:15,  marginLeft:3}}>Delete </Text>
+                    </TouchableOpacity>
+                    <View style={{marginHorizontal:3}} />
+                    <TouchableOpacity style={{backgroundColor :colors.detail,flexDirection:'row', paddingHorizontal:10,height:40,justifyContent:'center',alignItems:'center', borderRadius : 5}} onPress={() => {setQty(1); props.resetImage()}}>
+                        <FontAwesomeIcon icon={faUndo} size={17} color={'#FFFFFF'}/>
+                        <Text style={{color:'#ffffff',fontWeight : 'bold',fontSize:15,  marginLeft:3}}>Reset</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     )
@@ -171,21 +178,7 @@ const Proof =({navigation, route})=>{
         let dataUpload=[];
         let message = 'Mohon lengkapi data';
         let send = false;
-        if(responses.length >= 2 && responses.length <= 3){
-             dataUpload =       
-            [
-                // name: image adalah nama properti dari api kita
-                {
-                    name: 'qtyImage',
-                    data : JSON.stringify(responses.length)
-                  },
-                  {
-                      name: 'form',
-                      data : JSON.stringify(form)
-                  },
-            ];
-            send = true;
-        }else if((responses.length > 0 && responses.length <=3) && video !== null){
+        if((responses.length > 0 || responses.length <=3) && video !== null){
             if(video.fileSize <= 50000000){
                 dataUpload =       
                     [
@@ -209,6 +202,21 @@ const Proof =({navigation, route})=>{
             }else{
                 message = 'max video 5mb'
             }
+       
+        }else  if(responses.length >= 2 && responses.length <= 3){
+            dataUpload =       
+            [
+                // name: image adalah nama properti dari api kita
+                {
+                    name: 'qtyImage',
+                    data : JSON.stringify(responses.length)
+                    },
+                    {
+                        name: 'form',
+                        data : JSON.stringify(form)
+                    },
+            ];
+            send = true;
             
         }
        
@@ -262,6 +270,8 @@ const Proof =({navigation, route})=>{
 
                  alert(message)
              }
+        }else{
+            alert('Mohon Lengkapi data')
         }
  
     }
@@ -301,7 +311,7 @@ const Proof =({navigation, route})=>{
                                 src={{uri: video.uri}}
                             />
                         )}
-                        </View>
+                    </View>
                     <View style={{alignItems:'center',paddingVertical:10}}>
                         <ButtonIcon
                         backgroundColor='#1DA0E0'
@@ -354,6 +364,7 @@ const Proof =({navigation, route})=>{
                         
                         />
                     </View>
+                    <Distance distanceV={20}/>
                 </View>
                 </View>
                 </ImageBackground>

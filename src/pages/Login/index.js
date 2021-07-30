@@ -1,11 +1,10 @@
-import { faQrcode, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View,Image, TouchableOpacity } from 'react-native';
-import { ButtonIcon, Header, In, Input, Spinner, TextInput } from '../../component';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { copilot, CopilotStep, walkthroughable } from "react-native-copilot";
+import { Header, In, Input, Spinner, TextInput } from '../../component';
 import API from '../../service';
 import Distance from '../../utils/distance';
-import { copilot, walkthroughable, CopilotStep,Button} from "react-native-copilot";
 
 const CustomCopilot = (props) => {
     const {copilot} =props;
@@ -160,11 +159,25 @@ const Login =(props)=>{
                                     keyboardType='number-pad'
                                 />
                          </View>
+                         <Distance distanceV={5}/>
+                         <View style={{width:'100%', alignItems:'center'}}>
+                            <CopilotStep
+                                    text="Permohonan ganti telepon digunakan jika no telepon yang terdaftar sudah diganti dengan yang baru"
+                                    order={3}
+                                    name="TigaUnique"
+                                    >
+                                    <CustomCopilot marginTop={27} width={'70%'} height={38}/>
+                            </CopilotStep>
+                            <TouchableOpacity onPress={()=> navigation.navigate('ChangePhone')}>
+                                 <Text style={styles.ChangePhone}>Permohonan Ganti No Telepon</Text>
+                            </TouchableOpacity>
+                         </View>
+                         <Distance distanceV={5}/>
                          <View style={{width:'100%', alignItems:'center'}}>
                             <CopilotStep
                                 text="Masukan Password, untuk pertama kali gunakan password = 123456, untuk selanjutnya dapat disesuaikan"
-                                order={3}
-                                name="TigaUnique"
+                                order={4}
+                                name="EmpatUnique"
                                 >
                                 <CustomCopilot marginTop={38}/>
                             </CopilotStep>
@@ -179,8 +192,8 @@ const Login =(props)=>{
                         <View style={{width:'80%', flexDirection:'row', justifyContent:'flex-end'}}>
                             <CopilotStep
                                 text="Klik tombol Login dan pastikan no handphone dan password sudah benar"
-                                order={4}
-                                name="EmpatUnique"
+                                order={5}
+                                name="LimaUnique"
                                 >
                                 <CustomCopilot marginTop={38} width={'35%'} height={40}/>
                             </CopilotStep>
@@ -198,8 +211,8 @@ const Login =(props)=>{
                         <View style={{width:'80%', alignItems:'center'}}>
                             <CopilotStep
                                 text="Bagi yang bukan pelanggan dapat mengakses menu ini"
-                                order={5}
-                                name="LimaUnique"
+                                order={6}
+                                name="EnamUnique"
                                 >
                                 <CustomCopilot marginTop={18} width={181} height={151}/>
                                 </CopilotStep>
@@ -244,6 +257,11 @@ const styles = StyleSheet.create({
     text:{
         fontSize:16, 
         color:'#696969', 
+    },
+    ChangePhone:{
+        fontSize:16,
+        color:'#F11F1F',
+        textDecorationLine: 'underline',
     }
     
 });

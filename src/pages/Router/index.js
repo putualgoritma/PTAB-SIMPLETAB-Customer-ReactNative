@@ -18,7 +18,9 @@ import AddMeter from '../Meter/add'
 import Profile from '../Profile'
 import Scan from '../Login/Scan'
 import ShowComplaint from '../Complaint/show'
-import DetailMeter from '../Meter/detail';
+import DetailMeter from '../Meter/detail'
+import ChangePhone from '../ChangePhone'
+
 
 const Stack = createStackNavigator();
 const Router = () =>{
@@ -117,6 +119,11 @@ const Router = () =>{
              <Stack.Screen
                 name="DetailMeter"
                 component={DetailMeter}
+                options={{headerShown:false}}
+            />
+            <Stack.Screen
+                name="ChangePhone"
+                component={ChangePhone}
                 options={{headerShown:false}}
             />
         </Stack.Navigator>
