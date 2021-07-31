@@ -1,20 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {
-    Text,
-    StyleSheet,
-    View,
-    ScrollView,
-    ImageBackground
-  } from 'react-native';
-  import {Footer,Button,Title,Input,TextInput, TextArea} from '../../component';
-  import Background from '../../assets/img/background.svg'
-  import { faQrcode } from '@fortawesome/free-solid-svg-icons';
-import API from '../../service';
-import { useDispatch } from 'react-redux';
-import { SET_DATA_USER, SET_DATA_TOKEN } from '../../redux/action';
-import Spinner from '../../component/spinner';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { useIsFocused } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import {ImageBackground, ScrollView, StyleSheet, Text, View} from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { useDispatch } from 'react-redux';
+import { Button, Input, TextArea, TextInput, Title } from '../../component';
+import Spinner from '../../component/spinner';
+import API from '../../service';
 
 const Public =({navigation})=>{
     const dispatch = useDispatch();

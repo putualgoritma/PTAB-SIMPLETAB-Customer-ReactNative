@@ -1,7 +1,8 @@
 import { faCamera, faImages} from '@fortawesome/free-solid-svg-icons';
 import React,{useEffect,useState} from 'react';
-import {StyleSheet,View,ScrollView,ImageBackground,PermissionsAndroid,Image,} from 'react-native';
-import {launchCamera} from 'react-native-image-picker';import {Footer,Button,Title,Input,TextInput,TextArea,ButtonIcon,ImageFoto} from '../../component';
+import {StyleSheet,View,ScrollView,ImageBackground,PermissionsAndroid,Image,Text} from 'react-native';
+import {launchCamera} from 'react-native-image-picker';
+import {Footer,Button,Title,Input,TextInput,TextArea,ButtonIcon,ImageFoto} from '../../component';
 import Distance from '../../utils/distance'
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
