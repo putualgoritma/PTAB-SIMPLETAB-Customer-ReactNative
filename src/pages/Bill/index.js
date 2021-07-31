@@ -1,9 +1,7 @@
 import React from 'react';
-import {
-    ScrollView, StyleSheet,
-    View
-} from 'react-native';
+import {ScrollView, StyleSheet,View, TouchableOpacity,Image} from 'react-native';
 import { Footer1, Header1, In, Input, Out, TextInput, Title } from '../../component';
+import Distance from '../../utils/distance';
 const Bill=({navigation})=>{
     return(
         <View style={styles.container}>
@@ -13,29 +11,26 @@ const Bill=({navigation})=>{
             <Title
                 title="Cek Tagihan"
             />
+            <Distance distanceV={10}/>
+             <TouchableOpacity onPress={()=>navigation.navigate('Scan')}>
+                <Image source={require('../../assets/icon/iconQR.png')} style={{width:113, height:129}} />
+            </TouchableOpacity>
             <TextInput
                 title="ID Pelanggan"
             />
             <Input
                 placeholder="Masukan ID Pelanggan"
             />
-            <View style={{flexDirection:'row'}}>
-                <View style={{flex:1}}>
-                    <Out
-                        title="Kembali"
-                        navigation={()=>navigation.navigate('Menu')}
-                    />
-                </View>   
-                <View style={{flex:1}}>
+                <Distance distanceV={5}/>
+                <View style={{flex:1, alignItems:'center'}}>
                     <In
                         title="Masuk"
-                        navigation={()=>navigation.navigate('BillList')}
+                        onPress={()=>navigation.navigate('BillList')}
                     />
                 </View>
             </View>
-            </View>
             </ScrollView>
-            <Footer1/>
+         
         </View>
     )
 }
