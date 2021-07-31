@@ -25,6 +25,7 @@ import Select  from './Select2'
 import IconDetail from './Action/Detail'
 import IconEdit from './Action/Edit'
 import IconDelete from './Action/Delete'
+import DataView from './DataView'
 
 
 export {
@@ -54,5 +55,6 @@ export {
     IconDetail,
     IconEdit,
     IconDelete,
-    ButtonAdd
+    ButtonAdd,
+    DataView
 }
