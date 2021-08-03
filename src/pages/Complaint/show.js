@@ -44,15 +44,23 @@ const Show =({navigation,route})=>{
                                 <Distance distanceV={5}/>
                                 <View style={{flexDirection:'row', width:'80%'}}>
                                     <View >
-                                        <TextInput title="Code "/>
+                                        <TextInput title="Tanggal " fontWeight='bold'/>
                                     </View>
                                     <View style={{width:'60%'}}>
-                                        <Text style={styles.text} >: {data.code}</Text>
+                                        <Text style={styles.text} >: {data.created_at}</Text>
                                     </View>
                                 </View>
                                 <View style={{flexDirection:'row', width:'80%'}}>
                                     <View >
-                                        <TextInput title="Keluhan"/>
+                                        <TextInput title="Nama Pelanggan " fontWeight='bold'/>
+                                    </View>
+                                    <View style={{width:'60%'}}>
+                                        <Text style={styles.text} >: {data.customer.namapelanggan}</Text>
+                                    </View>
+                                </View>
+                                <View style={{flexDirection:'row', width:'80%'}}>
+                                    <View >
+                                        <TextInput title="Keluhan" fontWeight='bold'/>
                                     </View>
                                     <View style={{width:'60%'}}>
                                         <Text style={styles.text} >: {data.title}</Text>
@@ -60,12 +68,20 @@ const Show =({navigation,route})=>{
                                 </View>
                                 <View style={{flexDirection:'row', width:'80%'}}>
                                     <View >
-                                        <TextInput title="Kategory"/>
+                                        <TextInput title="Kategori" fontWeight='bold'/>
                                     </View>
                                     <View style={{width:'60%'}}>
                                         <Text style={styles.text}>: {data.category.name}</Text>
                                     </View>
                                 </View>
+                                <View style={{flexDirection:'row', width:'80%'}}>
+                                        <View>
+                                            <TextInput title="Keterangan" fontWeight='bold'/>
+                                        </View>
+                                        <View style={{width:'60%'}}>
+                                            <Text style={styles.text} >: {data.description}</Text>
+                                        </View>
+                                    </View>
                                     <TextInput title="Foto :"/>
                                     <Modal visible={showImage} transparent={true} enablePreload={true}
                                         onRequestClose={() => setShowImage(false)}
@@ -76,7 +92,7 @@ const Show =({navigation,route})=>{
                                     <View style={{width:'80%'}}>
                                     <TouchableHighlight onPress ={() =>{ setShowImage(true);console.log(images);}}>
                                     <ScrollView style={{flexDirection:'row',}}horizontal={true}>
-                                    {loadingImage && <Text style={{textAlign : 'center', fontSize : 17}}>Image Is Loading...</Text>}
+                                    {loadingImage &&<Image source={require('../../assets/img/ImageFotoLoading.png')} style={{width:150, height:200}}/>}
                                         {image.map((item,index) => {
                                                 return (
                                                    
@@ -86,7 +102,7 @@ const Show =({navigation,route})=>{
                                                             onLoadEnd={() => {setLoadingImage(false); console.log('end');}}
                                                             source = {{uri : Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}`}}
                                                             style={{height: 220, width: 260, marginRight: 10, resizeMode : 'stretch'}}
-                                                            loadingIndicatorSource={require('../../assets/img/ImageFotoLoading.png')}
+                                                            // loadingIndicatorSource={require('../../assets/img/ImageFotoLoading.png')}
                                                             onLoadEnd={() => setLoadingImage(false)}
                                                             onLoadStart={() => setLoadingImage(true)}
                                                         /> 
@@ -109,14 +125,7 @@ const Show =({navigation,route})=>{
                                         />
                                     </View>
                                     <Distance distanceV={5}/>
-                                    <View style={{flexDirection:'row', width:'80%'}}>
-                                        <View>
-                                            <TextInput title="Keterangan"/>
-                                        </View>
-                                        <View style={{width:'60%'}}>
-                                            <Text style={styles.text} >: {data.description}</Text>
-                                        </View>
-                                    </View>
+                                    
                                 <Distance distanceV={20}/>
                             </View>
                         </View>
