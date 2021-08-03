@@ -1,15 +1,14 @@
 import { faPlusCircle, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
-import {
-    StyleSheet,
-    View,
-    ScrollView,
-  } from 'react-native';
+import {StyleSheet,View,ScrollView,Text, TouchableOpacity} from 'react-native';
 import { useSelector } from 'react-redux';
 import {Footer,Header2,Title,ButtonIcon,Table, Spinner, Button,IconDetail,ButtonAdd} from '../../component';
+import { PageTicket } from '../../component/Page';
 import API from '../../service';
 import {colors} from '../../utils/colors';
 import Distance from '../../utils/distance';
+
+
 
 
 const HistoryComplaint=({navigation})=>{
@@ -38,8 +37,9 @@ const HistoryComplaint=({navigation})=>{
                    ]
                 })
                 
-                setTicket(data)
-                setTicket(result)
+                // setTicket(data)
+                setTicket(result.data)
+                console.log(result.data);
                 setLoading(false)
             }).catch((e) => {
                 console.log(e);
@@ -71,13 +71,17 @@ const HistoryComplaint=({navigation})=>{
                         onPress={()=>navigation.navigate('Complaint')}
                     />
                      </View>
-                  {ticket &&   <Table
-                    tbhead={['No','Tanggal','Keterangan','Status', 'Show']}
-                    tbdata={ticket}
-                    cellindex={5}
-                  />}
-                    
-                
+
+                     {ticket && 
+                        ticket.map((item, index) => {
+                            return (
+                                <PageTicket 
+                                    data = {item} 
+                                    detail ={<IconDetail onPress={() => (navigation.navigate('ShowComplaint', {item : item}))}/>}
+                                />
+                            )
+                        })
+                     }
             </ScrollView>
             <Footer
                 focus="Complaint"
@@ -89,7 +93,7 @@ const HistoryComplaint=({navigation})=>{
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'#FFFFFF',
+        backgroundColor:'#F4F4F4',
     },
 });
 export default HistoryComplaint
