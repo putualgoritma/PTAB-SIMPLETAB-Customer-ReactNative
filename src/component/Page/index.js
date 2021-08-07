@@ -56,7 +56,7 @@ const PageTicket = (props) => {
                         </View>
                         <View style={{flexDirection:'row',justifyContent:'flex-end',height:'auto',paddingTop:15}}>
                              <IconDetail/>
-                             {props.detail}
+                           
                         </View>
                     </View>
                 </View>

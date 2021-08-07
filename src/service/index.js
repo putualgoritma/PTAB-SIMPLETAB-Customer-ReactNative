@@ -9,6 +9,7 @@ const categories = (token) => Get('/api/close/customer/categories', false, token
 const tickets = (id, token) => Get(Config.REACT_APP_TICKET + id, false, token)
 const logout = (token) => Get('/api/open/customer/logout/', false, token) ;
 
+
 //POST
 const login = (data) => Post('/api/open/customer/login', false, data);
 const registerCustomerPublic =(data) => Post(Config.REACT_APP_REGISTER_PUBLIC, false, data);
@@ -25,7 +26,7 @@ const API = {
       login,
       OTP, 
       logout,
-      scanCode
+      scanCode,
 }
 
 export default API;

@@ -24,7 +24,9 @@ const DetailMeter =({navigation})=>{
                                             <TextInput title="Pemakaian" width='90%'/>
                                             <Text style={styles.text} >Pemakaian</Text>
                                             <TextInput title="Status" width='90%'/>
-                                            <Text style={styles.text} >Status</Text>                                        
+                                            <Text style={styles.text} >Status</Text>
+                                            <TextInput title="Foto" width='90%'/> 
+                                            <Image source={require('../../assets/img/ImageFotoLoading.png')} style={{width:150, height:150}}/>                                        
                                          </View>
                                     </View>
                                 </View>

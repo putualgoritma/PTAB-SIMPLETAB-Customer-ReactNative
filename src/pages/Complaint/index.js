@@ -1,61 +1,78 @@
 import { faPlusCircle, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
-import {StyleSheet,View,ScrollView,Text, TouchableOpacity} from 'react-native';
+import {StyleSheet,View,ScrollView,Text, TouchableOpacity,Dimensions,Image} from 'react-native';
 import { useSelector } from 'react-redux';
 import {Footer,Header2,Title,ButtonIcon,Table, Spinner, Button,IconDetail,ButtonAdd} from '../../component';
 import { PageTicket } from '../../component/Page';
 import API from '../../service';
 import {colors} from '../../utils/colors';
 import Distance from '../../utils/distance';
+import { useIsFocused } from '@react-navigation/native';
+import Config from 'react-native-config';
 
-
-
+const TextInfo = (props) => {
+    return (
+    <View style={{paddingBottom:5}}>
+        <View style={{flexDirection:'column',height:'auto'}}>
+            <View style={{flexDirection:'row'}}>
+                <View style={{flex:1, }}>
+                    <Text style={styles.textTiltle}>{props.title}</Text>
+                </View>
+                <View style={{flex:1}}>
+                    <Text style={styles.textTiltle}>:</Text>
+                </View>
+            </View>
+            <View style={{flex:1,flexDirection:'row'}}>
+                <Text style={styles.textItem}>{props.item}</Text>
+            </View>
+        </View>
+    </View>
+    )
+}
 
 const HistoryComplaint=({navigation})=>{
+    const Permission = useSelector((state) => state.PermissionReducer);
     const TOKEN = useSelector((state) => state.TokenReducer);
     const USER = useSelector((state) => state.UserReducer);
     const [ticket, setTicket] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [page, setPage] = useState(1)
+    const [cari, setCari] = useState()
+    const [lastPage, setLastPage] = useState()
+    const isFocused = useIsFocused();
+    const [loadingImage, setLoadingImage] = useState(true)
+
+
     useEffect(() => {
         let isAmounted = true
         if(isAmounted){
-            console.log(USER.id);
-            API.tickets(USER.id, TOKEN).then((result) => {
-                let data = []
-                let no = 1
-                result.data.map((item, index) => {
-                    // console.log(Object.keys(result.data[index]));
-                   data[index] = [
-                       no++,
-                       item.created_at,
-                       item.description,
-                       item.status,
-                       <View style={{alignItems:'center', justifyContent:'center'}} >
-                            <IconDetail onPress={() => (navigation.navigate('ShowComplaint', {item : item}))}/>
-                            {/* <Button title='Show' height ={40} text = {13} onPress={() => (navigation.navigate('ShowComplaint', {item : item}))}/> */}
-                        </View>
-                   ]
-                })
-                
-                // setTicket(data)
-                setTicket(result.data)
-                console.log(result.data);
-                setLoading(false)
-            }).catch((e) => {
-                console.log(e);
-                setLoading(false)
-            })
+            ticketsAPi();
         }
 
         return () => {
             isAmounted = false;
         }
-    }, [])
+    }, [isFocused])
+
+    
+    const ticketsAPi = () => {
+        API.tickets(USER.id, TOKEN).then((result) => {
+            setTicket( result.data)
+            setLoading(false)
+            console.log('nilai ticket', result.data)
+        }).catch((e) => {
+            console.log(e.request);
+            setLoading(false)
+        })
+    }
+
+    
+
 
     return(
         <View style={styles.container}>
             {loading && <Spinner/>}
-            <ScrollView>
+            <ScrollView >
                 <Header2/>
                 <View style={{paddingLeft:10}}>
                     <Title
@@ -69,19 +86,60 @@ const HistoryComplaint=({navigation})=>{
                         width='60%'
                         icon={faPlusCircle}
                         onPress={()=>navigation.navigate('Complaint')}
+                        // onPress={()=>console.log('data ini', ticket)}
                     />
+                     <Distance distanceV={10}/>
                      </View>
+                     {ticket && ticket.map((item, index) => {
+                        const imagefoto = (JSON.parse(item.ticket_image[0].image)[0])
+                         var colorStatus = '';
+                         var borderStatus ='';
+                         if(item.status == 'active'){
+                             var colorStatus = '#7DE74B';
+                             var borderStatus = '#CAFEC0'
+                             
+                         }else if(item.status == 'pending'){
+                             var colorStatus = '#F0D63C';
+                             var borderStatus = '#FFF6C2'
+                         }else{
+                             var colorStatus = '#2392D7';
+                             var borderStatus ='#CFEDFF'
+                         }
+                    return(
+                        
+                        <View style={{alignItems:'center'}}>
+                        <View style={{backgroundColor:colorStatus, width:200, height:35,borderTopRightRadius:15,borderTopLeftRadius:15,alignItems:'center'}}>
+                            <Text style={styles.textStatus}>{item.status}</Text>
+                        </View>
+                           <View style={[styles.content,{borderColor:borderStatus}]}>
+                               <View style={{flexDirection:'row'}}>
+                                   <View style={{flex:1,height:200, paddingTop:3}}>
+                                       {loadingImage && <Image source={require('../../assets/img/ImageFotoLoading.png')} style={{width:150, height:200}}/>}
+                                       <Image 
+                                           source={{uri : Config.REACT_APP_BASE_URL + `${String(imagefoto).replace('public/', '')}`}} 
+                                           style={{flex:1}}
+                                           onLoadEnd={() => setLoadingImage(false)}
+                                           onLoadStart={() => setLoadingImage(true)}
+                                       />
+                                   </View>
+                                   <View style={[styles.textnfo, {flex:1}]}>
+                                       <TextInfo title = 'Tanggal' item={item.created_at}/>
+                                       <TextInfo title = 'Nama' item ={item.customer.namapelanggan}/>
+                                       <TextInfo title = 'Code' item={item.code}/>
+                                       <TextInfo title = 'Kategori' item={item.category.name}/>
+                                       <TextInfo title = 'Deskripsi' item={item.description}/>
+                                   </View>
+                               </View>
+                               <View style={{flex:1, flexDirection:'row', justifyContent:'flex-end'}}>
+                                   <View style={{flexDirection:'row',width:'15%',height:'auto',paddingTop:5}}>
+                                     <IconDetail onPress={() => (navigation.navigate('ShowComplaint', {item : item}))}/>
+                                  </View>
+                               </View>
+                           </View>
+                           <Distance distanceV={10}/>
+                   </View>
+                    )})} 
 
-                     {ticket && 
-                        ticket.map((item, index) => {
-                            return (
-                                <PageTicket 
-                                    data = {item} 
-                                    detail ={<IconDetail onPress={() => (navigation.navigate('ShowComplaint', {item : item}))}/>}
-                                />
-                            )
-                        })
-                     }
             </ScrollView>
             <Footer
                 focus="Complaint"
@@ -91,9 +149,46 @@ const HistoryComplaint=({navigation})=>{
     )
 }
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:'#F4F4F4',
+    container: {
+        justifyContent: 'center',
+        flex: 1,
+        backgroundColor:'#f4f4f4'
+    },
+    content : {
+        borderWidth : 3,
+        width : Dimensions.get('screen').width - 45,
+        borderRadius : 10,
+        padding:10,
+        backgroundColor:'#ffffff'
+        // marginVertical : 20
+    },
+    search : {
+        backgroundColor:'#ffffff',
+        width : '60%',
+        borderRadius : 4,
+        borderWidth : 1,
+        borderColor : colors.border,
+        paddingHorizontal:20
+    },
+    textnfo : {
+        paddingHorizontal : 10,   
+    },
+    textTiltle : {
+        fontWeight : 'bold',
+        fontSize : 15,
+        color:'#696969'
+    },
+    textItem : {
+        fontSize : 15,
+        color:'#696969'
+    },
+    textStatus:{
+        color:'#FFFFFF', 
+        fontSize:20, 
+        alignItems:'center', 
+        justifyContent:'center', 
+        fontWeight:'bold',
+        paddingTop:5
     },
 });
 export default HistoryComplaint
