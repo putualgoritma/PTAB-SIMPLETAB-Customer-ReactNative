@@ -47,6 +47,8 @@ const Complaint =({navigation})=>{
 
 
     const [form, setForm] = useState({
+        title : '',
+        category_id : '',
         description : '',
         lat : '',
         lng : ''
@@ -146,8 +148,8 @@ console.log(TOKEN)
     }
 
     const handleAction = () => {
-        if(form.description != '' && form.lat != '' && form.lng !=''){
-            navigation.navigate('Proof', {form : form})
+        if(form.category_id!= '' && form.description != '' && form.title !='' && form.lat != '' && form.lng !=''){
+            navigation.navigate('Proof', {form : form, category : form.category_id})
         }else{
             alert ('data belum lengkap')
         }
@@ -167,10 +169,37 @@ console.log(TOKEN)
                         <View style={{alignItems:'center',paddingVertical:10}}>
                             <Title
                                 title="Pengaduan"
-                            />                            
+                            />
+                            <TextInput
+                                title="Kategori Pengaduan"
+                            />
+                            <View style={{width:'80%'}}>
+                            {categories &&   
+                            <Select
+                                searchPlaceHolderText='Cari Kategori'
+                                title='Kategori'
+                                popupTitle='Select Kategori'
+                                data={categories}
+                                onSelect={data => {
+                                    handleFrom('category_id', data[0])
+                                }}
+                                onRemoveItem={data => {
+                                    handleFrom('category_id', data[0])
+                                }} 
+                                
+                            />
+                            }   
+                            </View>
 
                             <ScrollView style={{width : '100%'}} >
                                 <View style={{alignItems : 'center'}}>
+                                    <TextInput
+                                        title="Judul"
+                                    />
+                                    <Input
+                                        placeholder="Judul"
+                                        onChangeText = {value => handleFrom('title', value)}
+                                    />
                                     <TextInput
                                         title="Keterangan"
                                     />

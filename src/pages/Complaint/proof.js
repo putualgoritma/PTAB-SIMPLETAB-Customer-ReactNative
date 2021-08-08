@@ -119,10 +119,8 @@ const Proof = ({ navigation, route }) => {
     const [responses, setResponses] = useState([]);
     const [loading, setLoading] = useState(false)
     const data = route.params.form
-    const category = route.params.category
+    // const category = route.params.category
     const [form, setForm] = useState({
-        title: data.title,
-        category_id: category,
         description: data.description,
         lat: data.lat,
         lng: data.lng,
@@ -232,7 +230,7 @@ const Proof = ({ navigation, route }) => {
             dataQtyImage++;
         }
 
-        if (form.title != '' && form.category_id != '' && form.description != '') {
+        if (form.description != '') {
 
             if (send) {
                 setLoading(true)
