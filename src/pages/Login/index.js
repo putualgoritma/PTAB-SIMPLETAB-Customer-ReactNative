@@ -5,6 +5,7 @@ import { copilot, CopilotStep, walkthroughable } from "react-native-copilot";
 import { Header, In, Input, Spinner, TextInput } from '../../component';
 import API from '../../service';
 import Distance from '../../utils/distance';
+import OneSignal from 'react-native-onesignal';
 
 const CustomCopilot = (props) => {
     const {copilot} =props;
@@ -38,30 +39,51 @@ const Login =(props)=>{
     const [form, setForm] = useState({
         phone : null,
         password : null,
-        OTP : null
+        OTP : null,
+        _id_onesignal : null
     })
 
-    useEffect(() => {
-        var digits = '0123456789'; 
-        let OTP = ''; 
-        for (let i = 0; i <=4; i++ ) { 
-              OTP += digits[Math.floor(Math.random() * 10)]; 
-        } 
-        handleForm('OTP', OTP);
 
-        let code = route.params ? (route.params.code ? route.params.code : null) : null;
-        if(code !== null){
-            setLoading(true)
-            API.scanCode({code : code}).then((result)=> {
-                console.log(result);
-                handleForm('phone' , result.data.phone)
-                setLoading(false)
-            }).catch((e) => {
-                console.log(e.request);
-                alert('data tidak ada')
-                setLoading(false)
-            })
+    const notif = async () => {
+        try{
+          OneSignal.setAppId("282dff1a-c5b2-4c3d-81dd-9e0c2b82114b");
+          OneSignal.setLogLevel(6, 0);
+          OneSignal.setRequiresUserPrivacyConsent(false);
+          // dispatch(token_api_one_signal(device['userId']))
+          const device = await OneSignal.getDeviceState()
+
+
+          var digits = '0123456789'; 
+          let OTP = ''; 
+          for (let i = 0; i <=4; i++ ) { 
+                OTP += digits[Math.floor(Math.random() * 10)]; 
+          } 
+          setForm({...form, _id_onesignal : device.userId, OTP : OTP})
+  
+          let code = route.params ? (route.params.code ? route.params.code : null) : null;
+          if(code !== null){
+              setLoading(true)
+              API.scanCode({code : code}).then((result)=> {
+                  console.log(result);
+                  handleForm('phone' , result.data.phone)
+                  setLoading(false)
+              }).catch((e) => {
+                  console.log(e.request);
+                  alert('data tidak ada')
+                  setLoading(false)
+              })
+          }
+        } catch(e){
+          console.log(e);
+            return null;
         }
+      }
+
+    
+
+
+    useEffect( () => {
+       notif()
     }, [isFocused])
 
     useEffect(()=>{
