@@ -91,7 +91,7 @@ const HistoryComplaint=({navigation})=>{
                      <Distance distanceV={10}/>
                      </View>
                      {ticket && ticket.map((item, index) => {
-                        const imagefoto = (JSON.parse(item.ticket_image[0].image)[0])
+                        const imagefoto = item.ticket_image.length > 0 ? (JSON.parse(item.ticket_image[0].image)[0]) : null
                          var colorStatus = '';
                          var borderStatus ='';
                          if(item.status == 'active'){
@@ -107,7 +107,7 @@ const HistoryComplaint=({navigation})=>{
                          }
                     return(
                         
-                        <View style={{alignItems:'center'}}>
+                        <View style={{alignItems:'center'}} key={index}>
                         <View style={{backgroundColor:colorStatus, width:200, height:35,borderTopRightRadius:15,borderTopLeftRadius:15,alignItems:'center'}}>
                             <Text style={styles.textStatus}>{item.status}</Text>
                         </View>

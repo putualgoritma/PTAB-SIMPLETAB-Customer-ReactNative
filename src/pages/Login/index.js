@@ -112,11 +112,13 @@ const Login =(props)=>{
                     setLoading(false)
                 }).catch((e) => {
                     console.log(e);
+                    alert('OTP Gagal dikirim')
                     setLoading(false)
                 })
                 console.log(result);
             }).catch((e) => {
                 console.log(e);
+                alert('Email atau password salah')
                 setLoading(false)
             })
         }else{
