@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { Dimensions, Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity,Touchable, View,Modal, TouchableHighlight } from 'react-native'
-import Config from 'react-native-config'
-import { Footer, Spinner, TextInput, Title, VideoPlayer,Input } from '../../component'
-import Distance from '../../utils/distance';
+import React, { useEffect, useState } from 'react';
+import { Image, ImageBackground, Modal, ScrollView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import Config from 'react-native-config';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import { Spinner, TextInput, Title, VideoPlayer } from '../../component';
+import Distance from '../../utils/distance';
 
 
 
@@ -18,6 +18,7 @@ const Show =({navigation,route})=>{
     const [image, setImage] = useState( data.ticket_image.length > 0 ? JSON.parse(data.ticket_image[0].image) : null)
     const [showImage, setShowImage] = useState(false)
     const [images, setImages] = useState([]);
+    
     useEffect(() => {
       if(image != null){
         image.map((item, index) => {
@@ -84,7 +85,7 @@ const Show =({navigation,route})=>{
                                             <Text style={styles.text} >: {data.description}</Text>
                                         </View>
                                     </View>
-                                    <TextInput title="Foto :"/>
+                                    <TextInput title="Foto :" fontWeight='bold'/>
                                     <Modal visible={showImage} transparent={true} enablePreload={true}
                                         onRequestClose={() => setShowImage(false)}
                                         onDoubleClick={() => setShowImage(true)}
@@ -115,7 +116,7 @@ const Show =({navigation,route})=>{
                                     </TouchableHighlight>
                                     </View>
                                   
-                                    <TextInput title="Video :" />
+                                    <TextInput title="Video :" fontWeight='bold'/>
                                     <View style={{width:'80%', height:220}}>
                                         {!loadingVideo && <Text style={{fontSize : 17}}>Video is Loading...</Text>}
                                         <VideoPlayer

@@ -64,23 +64,26 @@ const ButtonImage = (props) => {
 
         <View >
             {myloop}
-            <View style={{ alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', width: '80%' }}>
-                    {(props.dataImage[qty - 1] != null) &&
-                        <TouchableOpacity style={{ flexDirection: 'row', height: 40, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.success, paddingHorizontal: 10, borderRadius: 5 }} onPress={() => { setQty(qty + 1); setShow(true) }}>
-                            <FontAwesomeIcon icon={faPlusCircle} size={20} color={'#FFFFFF'} />
-                            <Text style={{ color: '#ffffff', fontWeight: 'bold', fontSize: 15, marginLeft: 3 }}>Tambah</Text>
-                        </TouchableOpacity>}
-                    <View style={{ marginHorizontal: 3 }} />
-                    <TouchableOpacity style={{ backgroundColor: colors.danger, flexDirection: 'row', paddingHorizontal: 10, height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 5 }} onPress={() => { qty > 1 ? setQty(qty - 1) : alert('data tidak boleh dihapus'); props.deleteImage() }}>
-                        <FontAwesomeIcon icon={faTrash} size={17} color={'#FFFFFF'} />
-                        <Text style={{ color: '#ffffff', fontWeight: 'bold', fontSize: 15, marginLeft: 3 }}>Delete </Text>
-                    </TouchableOpacity>
-                    <View style={{ marginHorizontal: 3 }} />
-                    <TouchableOpacity style={{ backgroundColor: colors.detail, flexDirection: 'row', paddingHorizontal: 10, height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 5 }} onPress={() => { setQty(1); props.resetImage() }}>
-                        <FontAwesomeIcon icon={faUndo} size={17} color={'#FFFFFF'} />
-                        <Text style={{ color: '#ffffff', fontWeight: 'bold', fontSize: 15, marginLeft: 3 }}>Reset</Text>
-                    </TouchableOpacity>
+            <View style={{alignItems:'center'}}>
+                <View style={{width:'80%' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', flex:1}}>
+                        {(props.dataImage[qty - 1] != null) &&
+                        
+                            <TouchableOpacity style={{ flexDirection: 'row', height: 40, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.success, paddingHorizontal: 10, borderRadius: 5 }} onPress={() => { setQty(qty + 1); setShow(true) }}>
+                                <FontAwesomeIcon icon={faPlusCircle} size={20} color={'#FFFFFF'} />
+                                <Text style={{ color: '#ffffff', fontWeight: 'bold', fontSize: 15, marginLeft: 3 }}>Tambah</Text>
+                            </TouchableOpacity>}
+                        <View style={{ marginHorizontal: 3 }} />
+                        <TouchableOpacity style={{ backgroundColor: colors.danger, flexDirection: 'row', paddingHorizontal: 10, height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 5 }} onPress={() => { qty > 1 ? setQty(qty - 1) : alert('data tidak boleh dihapus'); props.deleteImage() }}>
+                            <FontAwesomeIcon icon={faTrash} size={17} color={'#FFFFFF'} />
+                            <Text style={{ color: '#ffffff', fontWeight: 'bold', fontSize: 15, marginLeft: 3 }}>Delete </Text>
+                        </TouchableOpacity>
+                        <View style={{ marginHorizontal: 3 }} />
+                        <TouchableOpacity style={{ backgroundColor: colors.detail, flexDirection: 'row', paddingHorizontal: 10, height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 5 }} onPress={() => { setQty(1); props.resetImage() }}>
+                            <FontAwesomeIcon icon={faUndo} size={17} color={'#FFFFFF'} />
+                            <Text style={{ color: '#ffffff', fontWeight: 'bold', fontSize: 15, marginLeft: 3 }}>Reset</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         </View>

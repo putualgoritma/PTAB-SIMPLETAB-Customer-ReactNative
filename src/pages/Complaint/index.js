@@ -1,14 +1,13 @@
-import { faPlusCircle, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
-import React, { useEffect, useState } from 'react';
-import {StyleSheet,View,ScrollView,Text, TouchableOpacity,Dimensions,Image} from 'react-native';
-import { useSelector } from 'react-redux';
-import {Footer,Header2,Title,ButtonIcon,Table, Spinner, Button,IconDetail,ButtonAdd} from '../../component';
-import { PageTicket } from '../../component/Page';
-import API from '../../service';
-import {colors} from '../../utils/colors';
-import Distance from '../../utils/distance';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { useIsFocused } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, Image, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Config from 'react-native-config';
+import { useSelector } from 'react-redux';
+import { ButtonAdd, Footer, Header2, IconDetail, Spinner, Title } from '../../component';
+import API from '../../service';
+import { colors } from '../../utils/colors';
+import Distance from '../../utils/distance';
 
 const TextInfo = (props) => {
     return (
@@ -29,18 +28,30 @@ const TextInfo = (props) => {
     </View>
     )
 }
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
 
 const HistoryComplaint=({navigation})=>{
-    const Permission = useSelector((state) => state.PermissionReducer);
     const TOKEN = useSelector((state) => state.TokenReducer);
     const USER = useSelector((state) => state.UserReducer);
     const [ticket, setTicket] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [page, setPage] = useState(1)
-    const [cari, setCari] = useState()
-    const [lastPage, setLastPage] = useState()
     const isFocused = useIsFocused();
     const [loadingImage, setLoadingImage] = useState(true)
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+            // wait(2000).then(() => setRefreshing(false));
+            API.tickets(USER.id, TOKEN).then((result) => {
+                setTicket( result.data)
+                console.log('nilai ticket', result.data)
+            }).catch((e) => {
+                console.log(e.request);
+            }).finally(() => setRefreshing(false))
+        
+      }, []);
 
 
     useEffect(() => {
@@ -64,15 +75,23 @@ const HistoryComplaint=({navigation})=>{
             console.log(e.request);
             setLoading(false)
         })
-    }
-
+       
+    };
     
+
+   
 
 
     return(
         <View style={styles.container}>
             {loading && <Spinner/>}
-            <ScrollView >
+            <ScrollView 
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+            }>
                 <Header2/>
                 <View style={{paddingLeft:10}}>
                     <Title
