@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import {
     ScrollView, StyleSheet,
     View,
-    Text
+    Text,
+    TouchableOpacity
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Button, Header1, In, Input, Out, Spinner, TextInput, Title } from '../../component';
@@ -75,7 +76,7 @@ const SMS=({navigation,route})=>{
             createOTP += digits[Math.floor(Math.random() * 10)]; 
         } 
 
-        console.log(createOTP);
+        console.log('create OTP', createOTP);
         API.OTP({phone : user.phone, OTP:createOTP}).then((result) => {
             setSend(false)
             console.log(result);
@@ -128,11 +129,11 @@ const SMS=({navigation,route})=>{
                             />
                         </View>
                         <Distance distanceV={5}/>
-                        <View style={{width:'80%'}}>
-                                <Text style={{color:'#FC7979', fontSize:18,textDecorationLine: 'underline'}} onPress={() => {send ? sendOTP() : alert('Mohon Tunggu SMS OTP Anda')}}>{send ? 'Kirim Ulang OTP' : 'Mohon Tunggu Max 3 Menit SMS OTP'}</Text>
+                        <TouchableOpacity  onPress={() => {send ? sendOTP() : alert('Mohon Tunggu SMS OTP Anda')}} style={{width:'80%'}}>
+                                <Text style={{color:'#FC7979', fontSize:18,textDecorationLine: 'underline'}}>{send ? 'Kirim Ulang OTP' : 'Mohon Tunggu Max 3 Menit SMS OTP'}</Text>
                             {/* <Distance distanceV={2}/>
                             <View style={{backgroundColor:'#0C5CBF', width:80, height:3}}></View>  */}
-                         </View>                     
+                         </TouchableOpacity>                     
                     </View>
                    
                 </View>

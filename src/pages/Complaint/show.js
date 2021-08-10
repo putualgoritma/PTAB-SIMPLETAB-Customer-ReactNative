@@ -15,16 +15,18 @@ const Show =({navigation,route})=>{
     const [onFullScreenImage, setOnFullScreenImage] = useState(false)
     const [loadingImage, setLoadingImage] = useState(true)
     const [loadingVideo, setLoadingVideo] = useState(false)
-    const [image, setImage] = useState(JSON.parse(data.ticket_image[0].image))
+    const [image, setImage] = useState( data.ticket_image.length > 0 ? JSON.parse(data.ticket_image[0].image) : null)
     const [showImage, setShowImage] = useState(false)
     const [images, setImages] = useState([]);
     useEffect(() => {
-       image.map((item, index) => {
-           images.push({
-            url: Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}`,
-           })
-       })
-
+      if(image != null){
+        image.map((item, index) => {
+            images.push({
+             url: Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}`,
+            })
+        })
+ 
+      }
     console.log('images looping', images);
        setLoading(false)
        
@@ -90,10 +92,10 @@ const Show =({navigation,route})=>{
                                         <ImageViewer imageUrls={images}/>
                                     </Modal>
                                     <View style={{width:'80%'}}>
-                                    <TouchableHighlight onPress ={() =>{ setShowImage(true);console.log(images);}}>
+                                    <TouchableHighlight onPress ={image != null ? () =>{ setShowImage(true);console.log(images);} : null}>
                                     <ScrollView style={{flexDirection:'row',}}horizontal={true}>
                                     {loadingImage &&<Image source={require('../../assets/img/ImageFotoLoading.png')} style={{width:150, height:200}}/>}
-                                        {image.map((item,index) => {
+                                        {image && image.map((item,index) => {
                                                 return (
                                                    
                                                     <View style={{marginVertical:5}}>

@@ -2,6 +2,7 @@ import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import {ImageBackground, ScrollView, StyleSheet, Text, View} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import OneSignal from 'react-native-onesignal';
 import { useDispatch } from 'react-redux';
 import { Button, Input, TextArea, TextInput, Title } from '../../component';
 import Spinner from '../../component/spinner';
@@ -9,7 +10,7 @@ import API from '../../service';
 
 const Public =({navigation})=>{
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [OTP, setOTP] = useState(null)
     const [form, setForm] = useState({
         name : '',
@@ -17,7 +18,8 @@ const Public =({navigation})=>{
         phone :'',
         email : '',
         passwordNew : '',
-        gender : ''
+        gender : '',
+        _id_onesignal : ''
     })
     const isFocused = useIsFocused();
     const [open, setOpen] = useState(false);
@@ -42,54 +44,55 @@ const Public =({navigation})=>{
 
 
     useEffect(() => {
-        var digits = '0123456789'; 
-        let OTP = ''; 
-        for (let i = 0; i <=4; i++ ) { 
-              OTP += digits[Math.floor(Math.random() * 10)]; 
-        } 
-        setOTP(OTP)
+        if(isFocused){
+            var digits = '0123456789'; 
+            let OTP = ''; 
+            for (let i = 0; i <=4; i++ ) { 
+                OTP += digits[Math.floor(Math.random() * 10)]; 
+            } 
+            setOTP(OTP)
+
+            signupOnesignal().then((result) => {
+                // console.log(result);
+                setForm({...form, _id_onesignal : result})
+           }).catch(e => {
+               console.log(e);
+           }).finally(() => setLoading(false))
+        }
     }, [isFocused])
 
 
+    const signupOnesignal = async () => {
+        OneSignal.setAppId("282dff1a-c5b2-4c3d-81dd-9e0c2b82114b");
+        OneSignal.setLogLevel(6, 0);
+        OneSignal.setRequiresUserPrivacyConsent(false);
+        // dispatch(token_api_one_signal(device['userId']))
+        const device = await OneSignal.getDeviceState();
+        return device.userId;
+    }
+
 
     const handleRegister = () => {
-        if(form.name != '' && form.passwordNew !='' && form.address !='' && form.phone != '' && form.gender !=''){
+        if(form.name != '' && form.passwordNew !='' && form.address !='' && form.phone != '' && form.gender !='' && form._id_onesignal !=''){
             setLoading(true)
-        var mes = ''
+            var mes = ''
 
-
-        
-        API.registerCustomerPublic(form).then((result) => {
-            mes = result.data.errorInfo ? result.data.errorInfo[2] : '';
-            // dispatch(SET_DATA_USER(result.data))
-            // dispatch(SET_DATA_TOKEN(result.token))
-            // setLoading(false)
-            // navigation.navigate('Menu')
-            // console.log('asdasd',result);
-
-
-            setLoading(false)
-            API.OTP({phone:result.data.phone, OTP : OTP}).then((res) => {
-                // console.log('api',res);
-                navigation.navigate('SMS', {user : result.data, OTP : OTP, TOKEN : result.token})
+            API.registerCustomerPublic(form).then((result) => {
+                mes = result.data.errorInfo ? result.data.errorInfo[2] : '';
                 setLoading(false)
+                API.OTP({phone:result.data.phone, OTP : OTP}).then((res) => {
+                    // console.log('api',res);
+                    navigation.navigate('SMS', {user : result.data, OTP : OTP, TOKEN : result.token})
+                    setLoading(false)
+                }).catch((e) => {
+                    // console.log('api',e.request);
+                    setLoading(false)
+                })
             }).catch((e) => {
-                // console.log('api',e.request);
+                console.log('eadad',e.request);
                 setLoading(false)
+                alert('Email atau No Hp sudah terdaftar')
             })
-
-
-            // storeDataToken(result.token.token)
-            // storeDataUser(result.user)
-        }).catch((e) => {
-            console.log('eadad',e.request);
-            setLoading(false)
-            alert('Email atau No Hp sudah terdaftar')
-            
-            // let mes = JSON.parse(e.request._response)
-            //     alert(mes.message)
-            //     // setLoading(false)
-        })
         }else{
             alert('mohon lengkapi data anda')
         }
