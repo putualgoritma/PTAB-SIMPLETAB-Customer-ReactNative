@@ -7,7 +7,7 @@ import {
   import IconOut from '../../assets/icon/iconOut.svg'
   const Out =(props)=>{
       return(
-        <TouchableOpacity style={styles.section} onPress={props.navigation}>
+        <TouchableOpacity style={styles.section} onPress={props.onPress}>
             <IconOut/>
             <Text style={styles.text}>{props.title}</Text>
         </TouchableOpacity>

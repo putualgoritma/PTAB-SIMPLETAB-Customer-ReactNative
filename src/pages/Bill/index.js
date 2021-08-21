@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
-import { Footer1, Header1, In, Input, Out, TextInput, Title } from '../../component';
+import { Footer1, Header1, In, Input, Out, Spinner, TextInput, Title } from '../../component';
 import Distance from '../../utils/distance';
 import { useSelector } from 'react-redux';
 import API from '../../service';

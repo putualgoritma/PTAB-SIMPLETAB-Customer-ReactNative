@@ -25,7 +25,7 @@ const Profile =({navigation})=>{
             AsyncStorage.clear()
             setTimeout(function () {
                 setLoading(false)
-                navigation.navigate('Login')
+                navigation.replace('SplashScreen')
             }, 2000); 
         }).catch((e) => {
             console.log(e.request);
