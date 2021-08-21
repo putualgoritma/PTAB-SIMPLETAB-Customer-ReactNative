@@ -122,11 +122,20 @@ const SMS=({navigation,route})=>{
                             onPress={() => {send ? sendOTP() : alert('Mohon tunggu sms otp anda')}}
                         /> */}
                         <Distance distanceV={5}/>
+                       
                         <View style={{flexDirection:'row',width:'100%',justifyContent:'center'}}>
-                            <In
-                                title="Masuk"
-                                onPress={checkOTP}
-                            />
+                            <View style={{flex:1}}>
+                                <Out
+                                        title="Kembali"
+                                        onPress={()=>navigation.navigate('Login')}
+                                    />
+                            </View>
+                            <View style={{flex:1}}>
+                                <In
+                                    title="Masuk"
+                                    onPress={checkOTP}
+                                />
+                              </View>
                         </View>
                         <Distance distanceV={5}/>
                         <TouchableOpacity  onPress={() => {send ? sendOTP() : alert('Mohon Tunggu SMS OTP Anda')}} style={{width:'80%'}}>

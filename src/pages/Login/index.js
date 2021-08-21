@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View,BackHandler, Alert } from 'react-native';
 import { copilot, CopilotStep, walkthroughable } from "react-native-copilot";
 import { Header, In, Input, Spinner, TextInput } from '../../component';
 import API from '../../service';
@@ -83,7 +83,27 @@ const Login =(props)=>{
 
 
     useEffect( () => {
-       notif()
+        notif()
+        const backAction = () => {
+            Alert.alert("Peringatan", "Apakah anda yakin keluar dari Applikasi?", [
+              {
+                text: "Tidak",
+                onPress: () => null,
+                style: "cancel"
+              },
+              { text: "Ya", onPress: () => BackHandler.exitApp() }
+            ]);
+            return true;
+          };
+      
+          const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+          );
+      
+          return () => backHandler.remove();
+
+      
     }, [isFocused])
 
     useEffect(()=>{
@@ -108,7 +128,7 @@ const Login =(props)=>{
                 // setLoading(false)
                 API.OTP({phone:result.data.phone, OTP : form.OTP}).then((res) => {
                     console.log(res);
-                    navigation.navigate('SMS', {user : result.data, OTP : form.OTP, TOKEN : result.token})
+                    navigation.replace('SMS', {user : result.data, OTP : form.OTP, TOKEN : result.token})
                     setLoading(false)
                 }).catch((e) => {
                     console.log(e);
@@ -174,10 +194,10 @@ const Login =(props)=>{
                                 <CustomCopilot marginTop={38}/>
                             </CopilotStep>
 
-                            <TextInput title='Phone' />
+                            <TextInput title='No Telepon' />
                                 <Input
                                     value = {form.phone !== null ? form.phone : null}
-                                    placeholder="Phone"
+                                    placeholder="No Telepon"
                                     onChangeText = {(value) => handleForm('phone', value)}
                                     // value={route.params ? route.params.dataId:''}
                                     keyboardType='number-pad'
@@ -207,7 +227,7 @@ const Login =(props)=>{
                             </CopilotStep>
                             <TextInput title='Password' />
                             <Input
-                                placeholder="Pasaword"
+                                placeholder="Password"
                                 onChangeText = {(value) => handleForm('password', value)}
                                 // value={route.params ? route.params.dataId:''}
                                 secureTextEntry = {true}
