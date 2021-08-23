@@ -84,7 +84,7 @@ const ChangePhone = ({ navigation }) => {
             setLoading(true)
             RNFetchBlob.fetch(
                 'POST',
-                'https://simpletabadmin.ptab-vps.com/api/close/customer/ctm/prev',
+                'https://simpletabadmin.ptab-vps.com/api/close/customer/customerrequests',
                 {
                     Authorization: `Bearer ${TOKEN}`,
                     otherHeader: 'foo',
