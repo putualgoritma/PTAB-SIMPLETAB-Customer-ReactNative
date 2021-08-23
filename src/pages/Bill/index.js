@@ -25,7 +25,7 @@ const Bill = ({ navigation, route }) => {
         let isAmounted = true
         if (isAmounted) {
             let code = route.params ? (route.params.code ? route.params.code : null) : null;
-            alert(code)
+            // alert(code)
             if (code !== null) {
                 setLoading(true)
                 API.scanCode({ code: code }).then((result) => {
@@ -34,7 +34,7 @@ const Bill = ({ navigation, route }) => {
                     setLoading(false)
                 }).catch((e) => {
                     console.log(e.request);
-                    alert('data tidak ada')
+                    // alert('data tidak ada')
                     setLoading(false)
                 })
             }
