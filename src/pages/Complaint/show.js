@@ -18,7 +18,10 @@ const Show =({navigation,route})=>{
     const [image, setImage] = useState( data.ticket_image.length > 0 ? JSON.parse(data.ticket_image[0].image) : null)
     const [showImage, setShowImage] = useState(false)
     const [images, setImages] = useState([]);
-    
+    // const imagepengerjaan = data.action.length > 0 ? (JSON.parse(data.action[0].image)[0]) : null
+
+    const imagepengerjaan = data.action.length >0 ? (JSON.parse(data.action[1].image)[0]): null
+
     useEffect(() => {
       if(image != null){
         image.map((item, index) => {
@@ -85,7 +88,7 @@ const Show =({navigation,route})=>{
                                             <Text style={styles.text} >: {data.description}</Text>
                                         </View>
                                     </View>
-                                    <TextInput title="Foto :" fontWeight='bold'/>
+                                    <TextInput title="Foto Keluhan :" fontWeight='bold'/>
                                     <Modal visible={showImage} transparent={true} enablePreload={true}
                                         onRequestClose={() => setShowImage(false)}
                                         onDoubleClick={() => setShowImage(true)}
@@ -95,7 +98,8 @@ const Show =({navigation,route})=>{
                                     <View style={{width:'80%'}}>
                                     <TouchableHighlight onPress ={image != null ? () =>{ setShowImage(true);console.log(images);} : null}>
                                     <ScrollView style={{flexDirection:'row',}}horizontal={true}>
-                                    {loadingImage &&<Image source={require('../../assets/img/ImageFotoLoading.png')} style={{width:150, height:200}}/>}
+                                    {/* {loadingImage &&<Image source={require('../../assets/img/ImageFotoLoading.png')} style={{width:150, height:200}}/>} */}
+                                    <ImageBackground source={require('../../assets/img/ImageFotoLoading.png') } style={{ height : 220, width : 280}} >
                                         {image && image.map((item,index) => {
                                                 return (
                                                    
@@ -106,19 +110,20 @@ const Show =({navigation,route})=>{
                                                             source = {{uri : Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}`}}
                                                             style={{height: 220, width: 260, marginRight: 10, resizeMode : 'stretch'}}
                                                             // loadingIndicatorSource={require('../../assets/img/ImageFotoLoading.png')}
-                                                            onLoadEnd={() => setLoadingImage(false)}
-                                                            onLoadStart={() => setLoadingImage(true)}
+                                                            // onLoadEnd={() => setLoadingImage(false)}
+                                                            // onLoadStart={() => setLoadingImage(true)}
                                                         /> 
                                                     </View>
                                                 )
                                             })} 
+                                    </ImageBackground>
                                      </ScrollView>  
                                     </TouchableHighlight>
                                     </View>
                                   
-                                    <TextInput title="Video :" fontWeight='bold'/>
+                                    <TextInput title="Video Keluhan:" fontWeight='bold'/>
                                     <View style={{width:'80%', height:220}}>
-                                        {!loadingVideo && <Text style={{fontSize : 17}}>Video is Loading...</Text>}
+                                        {!loadingVideo && <Text style={{fontSize : 17}}>Video Loading...</Text>}
                                         <VideoPlayer
                                             src={{uri :  Config.REACT_APP_BASE_URL + `${String(data.video).replace('public/', '')}` }}
                                             onFullScreen = {() => setOnFullScreen (true)}
@@ -127,6 +132,15 @@ const Show =({navigation,route})=>{
                                             
                                         />
                                     </View>
+                                    <TextInput title="Foto Pengerjaan :" fontWeight='bold'/>
+                                    {/* <ImageBackground source={require('../../assets/img/ImageFotoLoading.png') } style={{ height : 220, width : 280}} > */}
+                                        <Image
+                                        key={ data.action.length >0? Config.REACT_APP_BASE_URL + `${String(imagepengerjaan).replace('public/', '')}` : require('../../assets/img/ImageFoto.png')}
+                                            source={ data.action.length >0?{ uri: Config.REACT_APP_BASE_URL + `${String(imagepengerjaan).replace('public/', '')}`} : require('../../assets/img/ImageFoto.png') }
+                                            style={{ height : 220, width : 280 }} 
+                                        />
+                                      {/* </ImageBackground> */}
+                                    {/* <Text onPress={()=>console.log('pengerjaan',imagepengerjaan)}>Test</Text> */}
                                     <Distance distanceV={5}/>
                                     
                                 <Distance distanceV={20}/>
