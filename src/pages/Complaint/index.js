@@ -1,7 +1,7 @@
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Image, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, ImageBackground, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Config from 'react-native-config';
 import { useSelector } from 'react-redux';
 import { ButtonAdd, Footer, Header2, IconDetail, Spinner, Title } from '../../component';
@@ -132,14 +132,16 @@ const HistoryComplaint=({navigation})=>{
                         </View>
                            <View style={[styles.content,{borderColor:borderStatus}]}>
                                <View style={{flexDirection:'row'}}>
-                                   <View style={{flex:1,height:200, paddingTop:3}}>
-                                       {loadingImage && <Image source={require('../../assets/img/ImageFotoLoading.png')} style={{width:150, height:200}}/>}
+                                   <View style={{flex:1,height:200, justifyContent:'center'}}>
+                                   <ImageBackground source={require('../../assets/img/ImageFotoLoading.png') } style={{ flex:1, height: 200}} >
+                                       {/* {loadingImage && <Image source={require('../../assets/img/ImageFotoLoading.png')} style={{width:150, height:200}}/>} */}
                                        <Image 
                                            source={{uri : Config.REACT_APP_BASE_URL + `${String(imagefoto).replace('public/', '')}`}} 
                                            style={{flex:1}}
                                            onLoadEnd={() => setLoadingImage(false)}
                                            onLoadStart={() => setLoadingImage(true)}
                                        />
+                                    </ImageBackground>
                                    </View>
                                    <View style={[styles.textnfo, {flex:1}]}>
                                        <TextInfo title = 'Tanggal' item={item.created_at}/>
@@ -149,8 +151,9 @@ const HistoryComplaint=({navigation})=>{
                                        <TextInfo title = 'Deskripsi' item={item.description}/>
                                    </View>
                                </View>
+                               <View style={{backgroundColor:'#f4f4f4', width:'100%', height:2, marginVertical:5}}></View>
                                <View style={{flex:1, flexDirection:'row', justifyContent:'flex-end'}}>
-                                   <View style={{flexDirection:'row',width:'15%',height:'auto',paddingTop:5}}>
+                                   <View style={{flexDirection:'row',width:'15%',height:'auto'}}>
                                      <IconDetail onPress={() => (navigation.navigate('ShowComplaint', {item : item}))}/>
                                   </View>
                                </View>
