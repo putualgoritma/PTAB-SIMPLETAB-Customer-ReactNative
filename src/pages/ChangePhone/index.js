@@ -5,6 +5,7 @@ import { Button, ButtonIcon, Input, TextArea, TextInput, Title, Spinner } from '
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { launchCamera } from 'react-native-image-picker';
 import { useSelector } from 'react-redux';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 const requestCameraPermission = async () => {
     try {
@@ -84,7 +85,7 @@ const ChangePhone = ({ navigation }) => {
             setLoading(true)
             RNFetchBlob.fetch(
                 'POST',
-                'https://simpletabadmin.ptab-vps.com/api/close/customer/customerrequests',
+                'https://simpletabadmin.ptab-vps.com/api/open/customer/customerrequests',
                 {
                     Authorization: `Bearer ${TOKEN}`,
                     otherHeader: 'foo',
@@ -98,7 +99,7 @@ const ChangePhone = ({ navigation }) => {
                 let data = JSON.parse(result.data);
                 console.log(result);
                 alert(data.message)
-                navigation.navigate('Menu')
+                navigation.navigate('Login')
             }).catch((e) => {
                 console.log(e);
                 setLoading(false)

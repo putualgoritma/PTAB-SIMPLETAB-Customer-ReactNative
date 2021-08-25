@@ -20,7 +20,7 @@ const Show =({navigation,route})=>{
     const [images, setImages] = useState([]);
     // const imagepengerjaan = data.action.length > 0 ? (JSON.parse(data.action[0].image)[0]) : null
 
-    const imagepengerjaan = data.action.length >0 ? (JSON.parse(data.action[1].image)[0]): null
+    const imagepengerjaan = data.action.length >0 ? (JSON.parse(data.action[0].image)[0]): null
 
     useEffect(() => {
       if(image != null){
