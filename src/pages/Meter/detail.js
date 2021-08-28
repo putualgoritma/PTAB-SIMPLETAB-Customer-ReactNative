@@ -35,13 +35,14 @@ const DetailMeter =({navigation,route})=>{
                                             <Text style={styles.text} >{data.pencatatanmeter}</Text>                                            
                                             <TextInput title="Foto" width='90%'/> 
                                             <View style={{marginVertical:5}}>
-                                            {loadingImage && <Image source={require('../../assets/img/ImageFotoLoading.png')} style={{ width: 150, height: 150 }} />}                                            
-                                            <Image
-                                                source={{ uri: Config.REACT_APP_BASE_CTM + `${String(data.filegambar).replace('public/', '')}` }}
-                                                style={{ width:200, height:200 }}
-                                                onLoadEnd={() => setLoadingImage(false)}
-                                                onLoadStart={() => setLoadingImage(true)}
-                                            />      
+                                            <ImageBackground source={require('../../assets/img/ImageFotoLoading.png') } style={{ height : 220, width : 280}} >
+                                                <Image
+                                                    source={{ uri: Config.REACT_APP_BASE_CTM + `${String(data.filegambar).replace('public/', '')}` }}
+                                                    style={{ width:200, height:200 }}
+                                                    onLoadEnd={() => setLoadingImage(false)}
+                                                    onLoadStart={() => setLoadingImage(true)}
+                                                />
+                                            </ImageBackground>      
                                             </View>                                  
                                          </View>
                                     </View>

@@ -19,11 +19,13 @@ const BillList = ({ navigation, route }) => {
 
     const [customer, setCustomer] = useState({})
     const [recap, setRecap] = useState({
-        tagihan : 0,
-        denda : 0,
-        total : 0,
-        tunggakan: 0
+        tagihan :0,
+        denda :  0,
+        total :  0,
+        tunggakan: 0 
     })
+   
+    const num = 1000; 
 
     useEffect(() => {
         let isAmounted = true
@@ -73,7 +75,7 @@ const BillList = ({ navigation, route }) => {
                 denda = new Number(denda).toLocaleString("id-ID");
             }
             if(tunggakan>3){
-                denda = 'SSB'
+                denda = 'SSB (Sanksi Denda Setara Sambungan Baru)'
                 total = tagihan
             }
             
@@ -82,9 +84,9 @@ const BillList = ({ navigation, route }) => {
             setTableData(data)
             setCustomer(result[1].data)
             setRecap({
-                tagihan:tagihan,
-                denda:denda,
-                total:total,
+                tagihan:'Rp.'+tagihan,
+                denda:'Rp.'+denda,
+                total:'Rp.'+total,
                 tunggakan:tunggakan
             })
             setLoading(false)
@@ -147,6 +149,7 @@ const BillList = ({ navigation, route }) => {
                     <DataView title='2. Denda' txt={recap.denda} />
                     <DataView title='Total' txt={recap.total} />
                 </View>
+              
                 <Distance distanceV={10} />
             </ScrollView>
             <Footer
