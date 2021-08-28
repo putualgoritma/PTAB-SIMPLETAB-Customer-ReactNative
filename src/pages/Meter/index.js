@@ -1,6 +1,6 @@
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View, Text, Image } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, Image,ImageBackground } from 'react-native';
 import { ButtonAdd, Footer, Header2, IconDetail, Table, Title, Spinner } from '../../component';
 import Distance from '../../utils/distance';
 import { useIsFocused } from '@react-navigation/native';
@@ -85,13 +85,15 @@ const Meter = ({ navigation }) => {
                                 <View style={{ backgroundColor: '#FFFFFF', width: '90%', borderRadius: 9, borderWidth: 3, borderColor: '#CAFEC0', height: 'auto', padding: 7 }}>
                                     <View style={{ height: 'auto', flexDirection: 'row' }}>
                                         <View style={{ flex: 1 }}>
-                                            {loadingImage && <Image source={require('../../assets/img/ImageFotoLoading.png')} style={{ width: 150, height: 150 }} />}
-                                            <Image
-                                                source={{ uri: Config.REACT_APP_BASE_CTM + `${String(item.filegambar).replace('public/', '')}` }}
-                                                style={{ flex: 1 }}
-                                                onLoadEnd={() => setLoadingImage(false)}
-                                                onLoadStart={() => setLoadingImage(true)}
-                                            />
+                                            {/* {loadingImage && <Image source={require('../../assets/img/ImageFotoLoading.png')} style={{ width: 150, height: 150 }} />} */}
+                                            <ImageBackground source={require('../../assets/img/ImageFotoLoading.png') } style={{ flex:1, height: 200}} >
+                                                <Image
+                                                    source={{ uri: Config.REACT_APP_BASE_CTM + `${String(item.filegambar).replace('public/', '')}` }}
+                                                    style={{ flex: 1 }}
+                                                    onLoadEnd={() => setLoadingImage(false)}
+                                                    onLoadStart={() => setLoadingImage(true)}
+                                                />
+                                            </ImageBackground>
                                         </View>
                                         <View style={{ paddingLeft: 8, flex: 1.2, height: 'auto' }}>
                                             <Text style={styles.title}>ID Pelanggan : </Text>
