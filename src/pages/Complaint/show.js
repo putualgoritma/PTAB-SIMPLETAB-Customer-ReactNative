@@ -23,7 +23,8 @@ const Show =({navigation,route})=>{
 
     const [imagesPengerjaan, setImagesPengerjaan] = useState([]);
     const [panjang,setPanjang]= useState(data.action.length) ;
-    const [imagePengerjaan,setimagePengerjaan] = useState(data.action.length > 0 ? JSON.parse(data.action[panjang-1].image) : null )
+    // const [imagePengerjaan,setimagePengerjaan] = useState(data.action.length > 0 ? JSON.parse(data.action[panjang-1].image) : null )
+    const [imagePengerjaan,setimagePengerjaan] = useState(data.action.length > 0 ? (data.action[panjang-1].image != null && data.action[panjang-1].image !='' ?    JSON.parse(data.action[panjang-1].image) : null) : null )
 
 
 
