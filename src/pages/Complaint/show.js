@@ -194,7 +194,7 @@ const Show =({navigation,route})=>{
                                         </TouchableHighlight>
                                     </View>
 
-                                    <Text onPress={()=>console.log('data action',data.action)}>Test</Text>
+                                   
                                     {/* <TextInput title="Foto Pengerjaan" fontWeight='bold'/>
                                   
                                         <Image
