@@ -161,7 +161,7 @@ const Show =({navigation,route})=>{
                                             <TextInput title="Deskripsi Pengerjaan" fontWeight='bold'/>
                                         </View>
                                         <View style={{width:'60%'}}>
-                                            <Text style={styles.text} >: {data.action.length >0 ? data.action[0].description :null}</Text>
+                                            <Text style={styles.text} >: {data.action.length >0 ? data.action[panjang-1].description :null}</Text>
                                         </View>
                                     </View>
 
@@ -194,7 +194,7 @@ const Show =({navigation,route})=>{
                                         </TouchableHighlight>
                                     </View>
 
-
+                                    <Text onPress={()=>console.log('data action',data.action)}>Test</Text>
                                     {/* <TextInput title="Foto Pengerjaan" fontWeight='bold'/>
                                   
                                         <Image
