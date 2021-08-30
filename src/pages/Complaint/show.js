@@ -23,7 +23,8 @@ const Show =({navigation,route})=>{
 
     const [imagesPengerjaan, setImagesPengerjaan] = useState([]);
     const [panjang,setPanjang]= useState(data.action.length) ;
-    const [imagePengerjaan,setimagePengerjaan] = useState(data.action.length > 0 ? JSON.parse(data.action[panjang-1].image) : null )
+    // const [imagePengerjaan,setimagePengerjaan] = useState(data.action.length > 0 ? JSON.parse(data.action[panjang-1].image) : null )
+    const [imagePengerjaan,setimagePengerjaan] = useState(data.action.length > 0 ? (data.action[panjang-1].image != null && data.action[panjang-1].image !='' ?    JSON.parse(data.action[panjang-1].image) : null) : null )
 
 
 
@@ -160,7 +161,9 @@ const Show =({navigation,route})=>{
                                             <TextInput title="Deskripsi Pengerjaan" fontWeight='bold'/>
                                         </View>
                                         <View style={{width:'60%'}}>
-                                            <Text style={styles.text} >: {data.action.length >0 ? data.action[0].memo :null}</Text>
+
+                                            <Text style={styles.text} >: {data.action.length >0 ? data.action[panjang-1].memo :null}</Text>
+
                                         </View>
                                     </View>
 
@@ -193,7 +196,7 @@ const Show =({navigation,route})=>{
                                         </TouchableHighlight>
                                     </View>
 
-
+                                   
                                     {/* <TextInput title="Foto Pengerjaan" fontWeight='bold'/>
                                   
                                         <Image
