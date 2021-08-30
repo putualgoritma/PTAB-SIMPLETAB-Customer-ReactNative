@@ -160,7 +160,7 @@ const Show =({navigation,route})=>{
                                             <TextInput title="Deskripsi Pengerjaan" fontWeight='bold'/>
                                         </View>
                                         <View style={{width:'60%'}}>
-                                            <Text style={styles.text} >: {data.action.length >0 ? data.action[0].description :null}</Text>
+                                            <Text style={styles.text} >: {data.action.length >0 ? data.action[0].memo :null}</Text>
                                         </View>
                                     </View>
 
