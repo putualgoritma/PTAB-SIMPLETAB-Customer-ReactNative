@@ -17,7 +17,7 @@ const TextInfo = (props) => {
                 <View style={{flex:1, }}>
                     <Text style={styles.textTiltle}>{props.title}</Text>
                 </View>
-                <View style={{flex:1}}>
+                <View style={{flex:0.7}}>
                     <Text style={styles.textTiltle}>:</Text>
                 </View>
             </View>
@@ -149,6 +149,7 @@ const HistoryComplaint=({navigation})=>{
                                        <TextInfo title = 'Code' item={item.code}/>
                                        <TextInfo title = 'Kategori' item={item.category.name}/>
                                        <TextInfo title = 'Deskripsi' item={item.description}/>
+                                       <TextInfo title = 'Deskripsi Pengerjaan' item={item.action.length > 0 ?item.action[item.action.length-1].description :null}/>
                                    </View>
                                </View>
                                <View style={{backgroundColor:'#f4f4f4', width:'100%', height:2, marginVertical:5}}></View>
@@ -157,6 +158,7 @@ const HistoryComplaint=({navigation})=>{
                                      <IconDetail onPress={() => (navigation.navigate('ShowComplaint', {item : item}))}/>
                                   </View>
                                </View>
+                               <Text onPress={()=>console.log('item', item)}>test</Text>
                            </View>
                            <Distance distanceV={10}/>
                    </View>

@@ -336,7 +336,7 @@ const Proof = ({ navigation, route }) => {
                                                             {
                                                                 mediaType: 'video',
                                                                 quality: 1,
-                                                                videoQuality: 'law'
+                                                                videoQuality: 'high'
                                                                 // includeBase64: true 
                                                             },
                                                             (response) => {
