@@ -158,7 +158,7 @@ const Show =({navigation,route})=>{
                                     </View>
                                     <View style={{flexDirection:'row', width:'80%'}}>
                                         <View >
-                                            <TextInput title="Deskripsi Pengerjaan" fontWeight='bold'/>
+                                            <TextInput title="Memo Pengerjaan" fontWeight='bold'/>
                                         </View>
                                         <View style={{width:'60%'}}>
 
