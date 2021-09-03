@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, View, Text } from 'react-native';
 import { ButtonIcon, DateMonth, Footer, Header2, Title, DataView, Spinner } from '../../component';
 import { Table, TableWrapper, Row } from 'react-native-table-component';
 import Distance from '../../utils/distance';
+import Rp, { Rupiah } from '../../utils/Rp';
 import { useIsFocused } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import API from '../../service';
@@ -58,35 +59,35 @@ const BillList = ({ navigation, route }) => {
                     item.tahunrekening + '-' + item.bulanrekening,
                     item.tglbayarterakhir,
                     m3,
-                    item.wajibdibayar,
-                    item.sudahdibayar,
-                    item.denda,
-                    sisa,
+                    Rupiah(item.wajibdibayar),
+                    Rupiah(item.sudahdibayar),
+                    Rupiah(item.denda),
+                    Rupiah(sisa),
                 ]
             })
             if(tunggakan>0 && tunggakan<2){
                 denda = 10000
                 total = tagihan + denda
-                denda = new Number(denda).toLocaleString("id-ID");
+                denda = Rupiah(denda);
             }
             if(tunggakan>1 && tunggakan<4){
                 denda = 50000
                 total = tagihan + denda
-                denda = new Number(denda).toLocaleString("id-ID");
+                denda = Rupiah(denda);
             }
             if(tunggakan>3){
                 denda = 'SSB (Sanksi Denda Setara Sambungan Baru)'
                 total = tagihan
             }
             
-            tagihan = new Number(tagihan).toLocaleString("id-ID");            
-            total = new Number(total).toLocaleString("id-ID");
+            tagihan = Rupiah(tagihan);            
+            total = Rupiah(total);
             setTableData(data)
             setCustomer(result[1].data)
             setRecap({
-                tagihan:'Rp.'+tagihan,
-                denda:'Rp.'+denda,
-                total:'Rp.'+total,
+                tagihan:tagihan,
+                denda:denda,
+                total:total,
                 tunggakan:tunggakan
             })
             setLoading(false)
@@ -114,7 +115,7 @@ const BillList = ({ navigation, route }) => {
                     <DataView title='Alamat' txt={customer.alamat} />
                     <DataView title='Gol. Tarif' txt={customer.idgol} />
                     <DataView title='Areal' txt={customer.idareal} />
-                    <DataView title='Status' txt={customer.status} />
+                    <DataView title='Status' txt={customer.status = '1' ? 'Aktif' : 'Pasif'} />
                     <Distance distanceV={10} />
                 </View>
                 <View style={{ alignItems: 'center' }}>

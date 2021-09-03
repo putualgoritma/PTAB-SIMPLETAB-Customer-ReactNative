@@ -21,6 +21,7 @@ import ShowComplaint from '../Complaint/show'
 import DetailMeter from '../Meter/detail'
 import ChangePhone from '../ChangePhone'
 import BillScan from '../Bill/Scan'
+import PhoneScan from '../ChangePhone/Scan'
 
 
 const Stack = createStackNavigator();
@@ -130,6 +131,11 @@ const Router = () =>{
             <Stack.Screen
                 name="BillScan"
                 component={BillScan}
+                options={{headerShown:false}}
+            />
+            <Stack.Screen
+                name="PhoneScan"
+                component={PhoneScan}
                 options={{headerShown:false}}
             />
         </Stack.Navigator>

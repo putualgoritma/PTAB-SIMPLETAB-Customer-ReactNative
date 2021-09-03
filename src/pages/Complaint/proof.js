@@ -180,7 +180,7 @@ const Proof = ({ navigation, route }) => {
         let message = 'Mohon lengkapi data';
         let send = false;
         if ((responses.length > 0 && responses.length <= 3) && video !== null) {
-            if (video.fileSize <= 50000000) {
+            if (video.fileSize <= 20000000) {
                 dataUpload =
                     [
                         // name: image adalah nama properti dari api kita
@@ -201,7 +201,7 @@ const Proof = ({ navigation, route }) => {
                     ];
                 send = true
             } else {
-                message = 'max video 5mb'
+                message = 'Maksimal Size Bukti Video 20 Mb'
             }
 
         } else if (responses.length >= 2 && responses.length <= 3) {
@@ -322,7 +322,7 @@ const Proof = ({ navigation, route }) => {
                                     onPress={
                                         () => Alert.alert(
                                             'Peringatan',
-                                            `Video tidak boleh lebih besar dari 5mb ! `,
+                                            `Bukti Video sizenya tidak boleh lebih besar dari 20 Mb ! `,
                                             [
                                                 {
                                                     text: 'Tidak',
@@ -362,7 +362,8 @@ const Proof = ({ navigation, route }) => {
                                     // navigation={()=>navigation.navigate('Heandling')}
                                     // onPress={() => console.log(responses)}
                                     onPress={handleTicket}
-
+                                    //  onPress={()=>console.log('data token',TOKEN)}
+                                    
                                 />
                             </View>
                             <Distance distanceV={20} />

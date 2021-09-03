@@ -6,6 +6,8 @@ import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { launchCamera } from 'react-native-image-picker';
 import { useSelector } from 'react-redux';
 import RNFetchBlob from 'react-native-fetch-blob';
+import { useIsFocused } from '@react-navigation/native';
+import API from '../../service';
 
 const requestCameraPermission = async () => {
     try {
@@ -31,12 +33,12 @@ const requestCameraPermission = async () => {
     }
 };
 
-const ChangePhone = ({ navigation }) => {
+const ChangePhone = ({ navigation,route  }) => {
     const [response, setResponse] = React.useState(null);
     const TOKEN = useSelector((state) => state.TokenReducer);
     const USER = useSelector((state) => state.UserReducer);
     const [loading, setLoading] = useState(false)
-
+    const isFocused = useIsFocused();
     const [image, setImage] = useState({
         name: null,
         filename: null,
@@ -110,6 +112,30 @@ const ChangePhone = ({ navigation }) => {
 
     }
 
+    useEffect(() => {
+        let isAmounted = true
+        if (isAmounted) {
+            let code = route.params ? (route.params.code ? route.params.code : null) : null;
+            // alert(code)
+            if (code !== null) {
+                setLoading(true)
+                API.scanCode({ code: code }).then((result) => {
+                    console.log(result);
+                    handleForm('norek', result.data.code)
+                    setLoading(false)
+                }).catch((e) => {
+                    console.log(e.request);
+                    // alert('data tidak ada')
+                    setLoading(false)
+                })
+            }
+        }
+
+        return () => {
+            isAmounted = false;
+        }
+    }, [isFocused])
+
     return (
         <View style={styles.container}>
             {loading && <Spinner />}
@@ -121,7 +147,7 @@ const ChangePhone = ({ navigation }) => {
                             <View style={{ alignItems: 'center', paddingVertical: 10 }}>
                                 <Title title="Ganti Telepon" />
                                 <Distance distanceV={15} />
-                                <TouchableOpacity onPress={() => navigation.navigate('Scan')}>
+                                <TouchableOpacity onPress={() => navigation.navigate('PhoneScan')}>
                                     <Image source={require('../../assets/icon/iconQR.png')} style={{ width: 113, height: 129 }} />
                                 </TouchableOpacity>
                                 <TextInput title="Kode Pelanggan" />

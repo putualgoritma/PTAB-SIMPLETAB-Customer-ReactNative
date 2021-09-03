@@ -51,6 +51,7 @@ const Scan =({navigation}) => {
           }}
           onBarCodeRead={(item) => 
             navigation.navigate('Login', {code : item.data})
+           
           }
         >
           {({status}) => {

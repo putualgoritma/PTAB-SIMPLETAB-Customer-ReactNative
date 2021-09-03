@@ -17,20 +17,7 @@ const PendingView = () => (
 );
 
 
-const Scan =({navigation}) => {
-  
-    // const [barcode, setBarcode] = useState(null)
-
-
-    // const getDataUser = (code) => {
-    //   console.log(code);
-    //   return;
-    //   // API.scanCode({code : code}).then((result) => {
-    //   //   console.log(result);
-    //   // }).catch((e) => {
-    //   //   console.log(e.request);
-    //   // })
-    // }
+const PhoneScan =({navigation}) => {
     return (
       <View style={styles.container}>
         <RNCamera
@@ -50,10 +37,10 @@ const Scan =({navigation}) => {
             buttonNegative: 'Cancel',
           }}
           onBarCodeRead={(item) => 
-            navigation.navigate('Bill', {code : item.data})
-       
+            navigation.navigate('ChangePhone', {code : item.data})
           }
         >
+        
           {({status}) => {
             if (status !== 'READY') return <PendingView />;
           }}
@@ -86,4 +73,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Scan
+export default PhoneScan
