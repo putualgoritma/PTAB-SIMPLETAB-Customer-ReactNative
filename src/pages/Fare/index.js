@@ -1,71 +1,88 @@
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
-import {
-    ScrollView, StyleSheet,View, Dimensions,
-} from 'react-native';
-import { ButtonIcon, Dropdown, Footer, Header2, Table1, Title } from '../../component';
-const Fare=({navigation})=>{
-    return(
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import { Footer1, Header1, In, Input, Out, Spinner, TextInput, Title } from '../../component';
+import Distance from '../../utils/distance';
+import { useSelector } from 'react-redux';
+import API from '../../service';
+import { useIsFocused } from '@react-navigation/native';
+
+const Fare = ({ navigation, route }) => {
+    const USER = useSelector((state) => state.UserReducer);
+    const [form, setForm] = useState({
+        code: USER.code,
+    })
+    const [loading, setLoading]= useState(false)
+    const isFocused = useIsFocused();
+
+    const handleForm = (key, value) => {
+        setForm({
+            ...form,
+            [key]: value
+        })
+    }
+
+    useEffect(() => {
+        let isAmounted = true
+        if (isAmounted) {
+            let code = route.params ? (route.params.code ? route.params.code : null) : null;
+            // alert(code)
+            if (code !== null) {
+                setLoading(true)
+                API.scanCode({ code: code }).then((result) => {
+                    console.log(result);
+                    handleForm('code', result.data.code)
+                    setLoading(false)
+                }).catch((e) => {
+                    console.log(e.request);
+                    // alert('data tidak ada')
+                    setLoading(false)
+                })
+            }
+        }
+
+        return () => {
+            isAmounted = false;
+        }
+    }, [isFocused])
+
+    return (
         <View style={styles.container}>
-            <ScrollView keyboardShouldPersistTaps = 'always'>
-                <Header2/>
-                <View style={{paddingLeft:10}}>
+            {loading && <Spinner/>}
+            <ScrollView style={{ flex: 1 }}>
+                <Header1 />
+                <View style={{ alignItems: 'center' }}>
                     <Title
-                    title="Info Tarif"
+                        title="Cek Pemakaian Air"
                     />
-                    <View style={{flexDirection:'row', width:'70%'}}>
-                        <Dropdown
-                            data={[{id:1,name:'1'},
-                            {id:2,name:'2'},
-                            {id:3,name:'3'},
-                            {id:4,name:'4'}
-                            ]}
-                            placeholder="<--Pilih Kategori Golongan-->"
-                            />
-                        <View style={{width:5}}></View>
-                        <ButtonIcon
-                            title="Filter"
-                            width='40%'
-                            icon={faSearch}
-                            />
+                    <Distance distanceV={10} />
+                    <TouchableOpacity onPress={() => navigation.navigate('FareScan')}>
+                        <Image source={require('../../assets/icon/iconQR.png')} style={{ width: 113, height: 129 }} />
+                    </TouchableOpacity>
+                    <TextInput
+                        title="ID Pelanggan"
+                    />
+                    <Input
+                        placeholder="Masukan ID Pelanggan"
+                        value={form.code}
+                        onChangeText={(value) => handleForm('code', value)}
+                    />
+                    <Distance distanceV={5} />
+                    <View style={{ flex: 1, alignItems: 'center' }}>
+                        <In
+                            title="Masuk"
+                            onPress={() => navigation.navigate('FareList', { form: form })}
+                        />
                     </View>
                 </View>
-                <Table1
-                title="INDUSTRI"
-                tbhead={['Progresif','Kubikasi','Biaya']}
-                tbdata={[
-                        ['Blok1','0.0 m3 - 0.0 m3','Rp.27.500,-'],
-                        ['Blok2','0.0 m3 - 0.0 m3','Rp.3.950,-'],
-                        ['Blok3','0.0 m3 - 0.0 m3','Rp.13.250,-'],
-                        ['Blok4','0.0 m3 - 0.0 m3','Rp.24.150,-'],
-                        ['Blok5','0.0 m3 - 0.0 m3','Rp.33.020,-'],
-                            ]}
-                cellindex={3}
-                />
-                <Table1
-                title="INTANSI PEMERINTAH (IP)"
-                tbhead={['Progresif','Kubikasi','Biaya']}
-                tbdata={[
-                        ['Blok1','0.0 m3 - 0.0 m3','Rp.17.500,-'],
-                        ['Blok2','0.0 m3 - 0.0 m3','Rp.13.950,-'],
-                        ['Blok3','0.0 m3 - 0.0 m3','Rp.11.250,-'],
-                        ['Blok4','0.0 m3 - 0.0 m3','Rp.23.150,-'],
-                        ['Blok5','0.0 m3 - 0.0 m3','Rp.43.020,-'],
-                            ]}
-                cellindex={3}
-                />
             </ScrollView>
-            <Footer
-                focus="Menu"
-                navigation = {navigation}
-            />
+
         </View>
     )
 }
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:'#FFFFFF',
+    container: {
+        flex: 1,
+        backgroundColor: '#FFFFFF',
     },
 });
 export default Fare
