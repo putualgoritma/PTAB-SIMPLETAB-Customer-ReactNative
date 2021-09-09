@@ -233,11 +233,24 @@ const Login =(props)=>{
                                 secureTextEntry = {true}
                             />
                         </View>
+                        <Distance distanceV={5}/>
+                        <View style={{width:'100%', alignItems:'center'}}>
+                            <CopilotStep
+                                    text="Reset Password digunakan jika lupa dengan password yang sudah terdaftar"
+                                    order={5}
+                                    name="LimaUnique"
+                                    >
+                                    <CustomCopilot marginTop={27} width={'50%'} height={38}/>
+                            </CopilotStep>
+                            <TouchableOpacity onPress={()=> navigation.navigate('ResetPassword')}>
+                                 <Text style={styles.ChangePhone}>Reset Password</Text>
+                            </TouchableOpacity>
+                         </View>
                         <View style={{width:'80%', flexDirection:'row', justifyContent:'flex-end'}}>
                             <CopilotStep
                                 text="Klik tombol Login dan pastikan no handphone dan password sudah benar"
-                                order={5}
-                                name="LimaUnique"
+                                order={6}
+                                name="EnamUnique"
                                 >
                                 <CustomCopilot marginTop={38} width={'35%'} height={40}/>
                             </CopilotStep>
@@ -255,8 +268,8 @@ const Login =(props)=>{
                         <View style={{width:'80%', alignItems:'center'}}>
                             <CopilotStep
                                 text="Bagi yang bukan pelanggan dapat mengakses menu ini"
-                                order={6}
-                                name="EnamUnique"
+                                order={7}
+                                name="TujuUnique"
                                 >
                                 <CustomCopilot marginTop={18} width={181} height={151}/>
                                 </CopilotStep>
