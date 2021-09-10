@@ -5,7 +5,7 @@ const DataView =(props)=>{
     return(
         <View style={{paddingVertical:5}}>
             <View style={{flexDirection:'row',height:props.heigt ? props.height:'auto'}}>
-                <View style={{flex:1}}>
+                <View style={{flex: props.flex ? props.flex : 1 }}>
                     <Text style={styles.textStyle}>{props.title}</Text>
                 </View>
                 <View style={{flex:1.2,flexDirection:'row'}}>

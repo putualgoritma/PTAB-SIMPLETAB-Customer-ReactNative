@@ -22,6 +22,9 @@ import DetailMeter from '../Meter/detail'
 import ChangePhone from '../ChangePhone'
 import BillScan from '../Bill/Scan'
 import PhoneScan from '../ChangePhone/Scan'
+import FareList from '../Fare/FareList'
+import FareScan from '../Fare/Scan'
+import ResetPassword from '../ResetPassword'
 
 
 const Stack = createStackNavigator();
@@ -136,6 +139,21 @@ const Router = () =>{
             <Stack.Screen
                 name="PhoneScan"
                 component={PhoneScan}
+                options={{headerShown:false}}
+            />
+             <Stack.Screen
+                name="FareList"
+                component={FareList}
+                options={{headerShown:false}}
+            />
+            <Stack.Screen
+                name="FareScan"
+                component={FareScan}
+                options={{headerShown:false}}
+            />
+             <Stack.Screen
+                name="ResetPassword"
+                component={ResetPassword}
                 options={{headerShown:false}}
             />
         </Stack.Navigator>
