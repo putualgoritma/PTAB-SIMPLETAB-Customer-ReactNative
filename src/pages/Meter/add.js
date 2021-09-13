@@ -114,7 +114,7 @@ const AddMeter = ({ navigation }) => {
                     (error) => {
                         console.log(error);
                     },
-                    { enableHighAccuracy: true, timeout: 200000, maximumAge: 1000 },
+                    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
                 );
             })
         }).catch((error) => {
@@ -182,7 +182,7 @@ const AddMeter = ({ navigation }) => {
             setLoading(true)
             RNFetchBlob.fetch(
                 'POST',
-                'https://simpletabadmin.ptab-vps.com/api/close/customer/ctm/prev',
+                'https://simpletabadmin.ptab-vps.com/api/close/customer/ctm/request',
                 {
                     Authorization: `Bearer ${TOKEN}`,
                     otherHeader: 'foo',

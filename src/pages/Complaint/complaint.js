@@ -105,7 +105,7 @@ console.log(TOKEN)
                         (error) => {
                             console.log(error);    
                         },
-                            { enableHighAccuracy: true, timeout: 200000, maximumAge: 1000 },
+                            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
                         );
                 })
           }).catch((error) => {
