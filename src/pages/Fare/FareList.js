@@ -1,40 +1,120 @@
-import React,{useState} from 'react'
+import React, { useEffect,useState } from 'react';
 import { ScrollView, StyleSheet, View, TouchableOpacity, Image,Text } from 'react-native';
-import { Header2,Footer, Title,DataView } from '../../component';
+import { Header2, Footer, Title, DataView, Spinner } from '../../component';
 import Distance from '../../utils/distance';
 import { Table, TableWrapper, Row } from 'react-native-table-component';
+import Rp, { Rupiah } from '../../utils/Rp';
+import { useIsFocused } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import API from '../../service';
 
-const FareList=({navigation})=>{
-    const [tableData, setTableData] = useState([
-        ['1', 'Januari', '782', '18'],
-        ['2', 'Februari', '797', '15'],
-        ['3', 'Maret', '812', '15'],
-        ['4', 'April', '827', '15'],
-        ['5', 'Mei', '843', '16'],
-        ['6', 'Juni', '861', '18'],
-        ['7', 'Juli', '875', '14'],
-        ['8', 'Agustus', '890', '15'],
-        ['9', 'September', '903', '13'],
-        ['10', 'Oktober', '0', '0'],
-        ['11', 'November', '0', '0'],
-        ['12', 'Desember', '0', '0']
-      ])
+const FareList=({navigation, route})=>{
+    const data = route.params.form
+    const [loading, setLoading] = useState(true)
+    const isFocused = useIsFocused();
+    const TOKEN = useSelector((state) => state.TokenReducer);
+    const [tableData, setTableData] = useState([])
     const tableHead = ['No', 'BULAN', 'PENCATATAN METER', 'PEMAKAIAN AIR (M3)'];
     const widthArr = [40, 200, 170, 170]
+    const [customer, setCustomer] = useState({})
+    const [recap, setRecap] = useState({
+        tagihan :0,
+        denda :  0,
+        total :  0,
+        tunggakan: 0,
+        total_pemakaian :  0,
+        avg: 0,
+    })
+    
+    useEffect(() => {
+        let isAmounted = true
+        if (isAmounted) {
+            ctmPayAPi();
+        }
+
+        return () => {
+            isAmounted = false;
+        }
+    }, [isFocused])
+
+    const ctmPayAPi = () => {
+        Promise.all([API.ctmpay(data.code, TOKEN), API.ctmcustomer(data.code, TOKEN)]).then((result) => {
+            let data = []
+            var tunggakan = 0
+            var tagihan = 0
+            var denda = 0  
+            var total = 0 
+            var total_pemakaian = 0  
+            var count_num = 0       
+            result[0].data.map((item, index) => {
+                let m3 = item.bulanini - item.bulanlalu
+                let sisa = item.wajibdibayar - item.sudahdibayar
+                tagihan =tagihan + sisa
+                total_pemakaian += m3
+                count_num ++
+                if(sisa>0){
+                    tunggakan =tunggakan + 1
+                }
+                data[index] = [
+                    index + 1,
+                    item.tahunrekening + '-' + item.bulanrekening,
+                    item.bulanini,
+                    m3,                    
+                ]
+            })
+            var avg = total_pemakaian/count_num
+            if(tunggakan>0 && tunggakan<2){
+                denda = 10000
+                total = tagihan + denda
+                denda = Rupiah(denda);
+            }
+            if(tunggakan>1 && tunggakan<4){
+                denda = 50000
+                total = tagihan + denda
+                denda = Rupiah(denda);
+            }
+            if(tunggakan>3){
+                denda = 'SSB (Sanksi Denda Setara Sambungan Baru)'
+                total = tagihan
+            }
+            
+            tagihan = Rupiah(tagihan);            
+            total = Rupiah(total);
+            setTableData(data)
+            setCustomer(result[1].data)
+            setRecap({
+                tagihan:tagihan,
+                denda:denda,
+                total:total,
+                tunggakan:tunggakan,
+                total_pemakaian:total_pemakaian,
+                avg:avg,
+            })
+            setLoading(false)
+            console.log('result', result)
+            console.log('customer', result[1].data)
+        }).catch((e) => {
+            console.log('error', e);
+            setLoading(false)
+        })
+
+    };
+    
 
     return(
         <View style={styles.container}>
+            {loading && <Spinner />}
             <ScrollView>
                 <Header2/>
                 <View style={{ paddingLeft: 10, flex: 1 }}>
                     <Title title="Pemakaian Air"/>
-                    <DataView title='Tahun Pemakaian' txt='2021'/>
-                    <DataView title='Nomor Sambungan' txt='4906'/>
-                    <DataView title='Nama Pelanggan' txt='I WAYAN SURIANA'/>
-                    <DataView title='Alamat' txt='Jl. WARKUDARA 17'/>
-                    <DataView title='Gol. Tarif' txt='C6 - Non Niaga'/>
-                    <DataView title='Areal' txt='K010103 - DAERAH KOTA'/>
-                    <DataView title='Status' txt='Aktif'/>
+                    <DataView title='Tahun Pemakaian' txt={customer.year}/>
+                    <DataView title='Nomor Sambungan' txt={customer.nomorrekening}/>
+                    <DataView title='Nama Pelanggan' txt={customer.namapelanggan}/>
+                    <DataView title='Alamat' txt={customer.alamat}/>
+                    <DataView title='Gol. Tarif' txt={customer.idgol}/>
+                    <DataView title='Areal' txt={customer.idareal}/>
+                    <DataView title='Status' txt={customer.status = '1' ? 'Aktif' : 'Pasif'}/>
                 </View>
                 <Distance distanceV={10}/>
                 <View style={{ alignItems: 'center' }}>
@@ -63,8 +143,8 @@ const FareList=({navigation})=>{
                 </View>
                 <Distance distanceV={10}/>
                 <View style={{ paddingLeft: 10 }} >
-                    <DataView flex={1.6} title='Total Pemakaian Air' txt='139'/>
-                    <DataView flex={1.6} title='Rata-Rata Pemakaian Air' txt='15'/>
+                    <DataView flex={1.6} title='Total Pemakaian Air' txt={recap.total_pemakaian}/>
+                    <DataView flex={1.6} title='Rata-Rata Pemakaian Air' txt={recap.avg}/>
                 </View>
                 <Distance distanceV={10} />
             </ScrollView>

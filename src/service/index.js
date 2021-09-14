@@ -19,6 +19,7 @@ const registerCustomerPublic =(data) => Post(Config.REACT_APP_REGISTER_PUBLIC, f
 const tikcetStore = (data, token) => Post(Config.REACT_APP_TICKET_STORE, false, data, token);
 const OTP = (data) =>Post(Config.REACT_APP_OTP, false, data);
 const scanCode = (data) =>Post('/api/open/customer/code', false, data);
+const reset = (data) => Post('/api/open/customer/reset', false, data);
 // PUT
 
 const API = {
@@ -33,6 +34,7 @@ const API = {
       ctms,
       ctmpay,
       ctmcustomer,
+      reset,
 }
 
 export default API;
