@@ -34,7 +34,7 @@ const Show =({navigation,route})=>{
       if(image != null){
         image.map((item, index) => {
             images.push({
-             url: Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}`,
+             url: Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}?time="${new Date()}`,
             })
         })
  
@@ -134,7 +134,7 @@ const Show =({navigation,route})=>{
                                                             <Image
                                                                 key={index}
                                                                 onLoadEnd={() => {setLoadingImage(false); console.log('end');}}
-                                                                source = {{uri : Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}`}}
+                                                                source = {{uri : Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}?time="${new Date()}`}}
                                                                 style={{height: 220, width: 280, marginRight: 10, resizeMode : 'stretch'}}
                                                             /> 
                                                         </View>

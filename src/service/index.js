@@ -9,6 +9,7 @@ const categories = (token) => Get('/api/close/customer/categories', false, token
 const tickets = (id, token) => Get(Config.REACT_APP_TICKET + id, false, token)
 const ctms = (id, token) => Get(Config.REACT_APP_CTM + id, false, token)
 const ctmpay = (id, token) => Get(Config.REACT_APP_CTM_PAY + id, false, token)
+const ctmuse = (id, token) => Get(Config.REACT_APP_CTM_USE + id, false, token)
 const ctmcustomer = (id, token) => Get(Config.REACT_APP_CTM_CUSTOMER + id, false, token)
 const logout = (token) => Get('/api/open/customer/logout/', false, token) ;
 
@@ -35,6 +36,7 @@ const API = {
       ctmpay,
       ctmcustomer,
       reset,
+      ctmuse,
 }
 
 export default API;

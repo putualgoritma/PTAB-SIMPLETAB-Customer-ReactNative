@@ -18,10 +18,6 @@ const FareList=({navigation, route})=>{
     const widthArr = [40, 200, 170, 170]
     const [customer, setCustomer] = useState({})
     const [recap, setRecap] = useState({
-        tagihan :0,
-        denda :  0,
-        total :  0,
-        tunggakan: 0,
         total_pemakaian :  0,
         avg: 0,
     })
@@ -38,55 +34,24 @@ const FareList=({navigation, route})=>{
     }, [isFocused])
 
     const ctmPayAPi = () => {
-        Promise.all([API.ctmpay(data.code, TOKEN), API.ctmcustomer(data.code, TOKEN)]).then((result) => {
+        Promise.all([API.ctmuse(data.code, TOKEN), API.ctmcustomer(data.code, TOKEN)]).then((result) => {
             let data = []
-            var tunggakan = 0
-            var tagihan = 0
-            var denda = 0  
-            var total = 0 
             var total_pemakaian = 0  
             var count_num = 0       
             result[0].data.map((item, index) => {
-                let m3 = item.bulanini - item.bulanlalu
-                let sisa = item.wajibdibayar - item.sudahdibayar
-                tagihan =tagihan + sisa
-                total_pemakaian += m3
+                total_pemakaian += item.pemakaianair
                 count_num ++
-                if(sisa>0){
-                    tunggakan =tunggakan + 1
-                }
                 data[index] = [
                     index + 1,
                     item.tahunrekening + '-' + item.bulanrekening,
-                    item.bulanini,
-                    m3,                    
+                    item.pencatatanmeter,
+                    item.pemakaianair,                    
                 ]
             })
             var avg = total_pemakaian/count_num
-            if(tunggakan>0 && tunggakan<2){
-                denda = 10000
-                total = tagihan + denda
-                denda = Rupiah(denda);
-            }
-            if(tunggakan>1 && tunggakan<4){
-                denda = 50000
-                total = tagihan + denda
-                denda = Rupiah(denda);
-            }
-            if(tunggakan>3){
-                denda = 'SSB (Sanksi Denda Setara Sambungan Baru)'
-                total = tagihan
-            }
-            
-            tagihan = Rupiah(tagihan);            
-            total = Rupiah(total);
             setTableData(data)
             setCustomer(result[1].data)
             setRecap({
-                tagihan:tagihan,
-                denda:denda,
-                total:total,
-                tunggakan:tunggakan,
                 total_pemakaian:total_pemakaian,
                 avg:avg,
             })

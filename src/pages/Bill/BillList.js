@@ -50,7 +50,13 @@ const BillList = ({ navigation, route }) => {
                 let m3 = item.bulanini - item.bulanlalu
                 let sisa = item.wajibdibayar - item.sudahdibayar
                 tagihan =tagihan + sisa
-                if(sisa>0){
+                //check if == curent month
+                let month_now = result[0].month_next - 1
+                let ctm_lock = 0
+                if(month_now==item.bulanrekening && result[0].ctm_lock==1){
+                    ctm_lock = 1
+                }
+                if(sisa>0 && ctm_lock==0){
                     tunggakan =tunggakan + 1
                 }
                 data[index] = [
