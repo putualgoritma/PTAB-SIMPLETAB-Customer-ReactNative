@@ -1,49 +1,23 @@
+import Geolocation from 'react-native-geolocation-service';
 import React, { useEffect, useState } from 'react';
 import {
-    StyleSheet,
-    View,
-    ScrollView,
     ImageBackground,
-    PermissionsAndroid
-  } from 'react-native';
-import { useSelector } from 'react-redux';
-  import {
-    Footer,
-    Button,
-    Title,
-    Input,
-    TextInput,
-    TextArea,
-    Dropdown,
-    Spinner,
-    Select} from '../../component';
-import API from '../../service';
+    PermissionsAndroid, ScrollView, StyleSheet,
+    View
+} from 'react-native';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
-import Geolocation from '@react-native-community/geolocation';
-import SearchableDropDown from 'react-native-searchable-dropdown';
-import Select2 from "react-native-select-two"
-
-const mockData = [
-    { id: 1, name: "React Native Developer", checked: true },
-    { id: 2, name: "Android Developer" },
-    { id: 3, name: "iOS Developer" }
-  ]
-
+import { useSelector } from 'react-redux';
+import {
+    Button, Footer, Spinner, TextArea, TextInput, Title
+} from '../../component';
+import API from '../../service';
 
 
 const Complaint =({navigation})=>{
-    const [categories, setCategories] = useState(null)
     const TOKEN = useSelector((state) => state.TokenReducer);
     const [loading, setLoading] = useState(true)
     const [selectedItem, setSelectedItem] =useState('')
-    const [success, setSuccess] = useState(false)
-    const [location, setLocation] = useState({
-        latitude: 0.00000,
-        longitude: 0.0000
-    })
-    const LATITUDE = -8.3978769;
-    const LONGITUDE = 115.2141418;
-    var defaultLoc = {};
+    const [statusGps, setStatusGps] = useState('disabled')
 
 
     const [form, setForm] = useState({
@@ -58,17 +32,43 @@ const Complaint =({navigation})=>{
         let isAmounted = true
         if(isAmounted){
             setLoading(true)
-console.log(TOKEN)
-            Promise.all([API.categories(TOKEN), permissionGps()]).then((res) => {
-                console.log('corrrrrr',res);
-                setCategories(res[0].data)
-                // if(setSuccess){
-                //     setLoading(false)
-                // }
-            }).catch((e) => {
-                console.log(e.request);
+
+            LocationServicesDialogBox.checkLocationServicesIsEnabled({
+                message: "<h2 style='color: #0af13e'>Use Location ?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
+                ok: "YES",
+                cancel: "NO",
+            }).then(function(success) { 
+                Promise.all([requestLocationPermission()]).then((res) => {
+                    // setCategories(res[0].data)
+                    Geolocation.getCurrentPosition(
+                        (position) => {
+                            console.log('posisi',position);
+                            //  positionNew = position;
+                             setForm({
+                                 ...form,
+                                 lat : position.coords.latitude,
+                                 lng : position.coords.longitude 
+                             })
+                            console.log( typeof (position.coords.latitude));
+                        //    return position;
+                            // setSuccess(true)
+                            setLoading(false)
+                        },
+                        (error) => {
+                            console.log(error);    
+                            setLoading(false)
+                        },
+                            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+                        );
+                }).catch((e) => {
+                    console.log(e.request);
+                    setLoading(false)
+                })
+            }).catch((error) => {
+          
+                setStatusGps(error.message); 
                 setLoading(false)
-            })
+            });
        }
     }, [])
 
@@ -79,6 +79,7 @@ console.log(TOKEN)
             ok: "YES",
             cancel: "NO",
           }).then(function(success) {
+                setStatusGps(success.status)
                 requestLocationPermission().then(() => {
                     Geolocation.getCurrentPosition(
                         (position) => {
@@ -93,10 +94,6 @@ console.log(TOKEN)
                                 latitude: position.coords.latitude,
                                 longitude: position.coords.longitude, 
                             })
-                            defaultLoc ={
-                                latitude: position.coords.latitude,
-                                longitude: position.coords.longitude, 
-                            }
                             console.log( typeof (position.coords.latitude));
                         //    return position;
                             setSuccess(true)
@@ -110,6 +107,8 @@ console.log(TOKEN)
                 })
           }).catch((error) => {
               console.log(error.message); // error.message => "disabled"
+              setStatusGps(error.message)
+              setLoading(false)
             //   navigation.navigate('Register')
           });
 
@@ -117,22 +116,23 @@ console.log(TOKEN)
     }
 
     const requestLocationPermission =  async () => {
+        let info ='';
         try {
             const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-              'title': 'Location Permission',
-              'message': 'MyMapApp needs access to your location'
-            }
+              {
+                'title': 'Location Permission',
+                'message': 'MyMapApp needs access to your location'
+              }
             )
     
            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-               console.log("Location permission granted")
+            //   setEnableLocation(true)
            } else {
-               console.log("Location permission denied")
+            //   setEnableLocation(false)
            }
         } catch (err) {
-           console.warn(err)
+            info=1
         }
       }
     
@@ -146,12 +146,67 @@ console.log(TOKEN)
     }
 
     const handleAction = () => {
-        if(form.description != '' && form.lat != '' && form.lng !=''){
-            navigation.navigate('Proof', {form : form})
+            setLoading(true)
+        if(statusGps =='disabled' ){
+            LocationServicesDialogBox.checkLocationServicesIsEnabled({
+                message: "<h2 style='color: #0af13e'>Use Location ?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
+                ok: "YES",
+                cancel: "NO",
+            }).then(function(success) { 
+                setStatusGps(success.status)
+                Promise.all([requestLocationPermission()]).then((res) => {
+                    // console.log('corrrrrr',res);
+                    Geolocation.getCurrentPosition(
+                    (position) => {
+                        // positionNew = position
+                        console.log( 'posisiisii ', (position.coords.latitude));
+                        setForm({
+                            ...form,
+                            lat : position.coords.latitude,
+                            lng : position.coords.longitude
+                        })
+                       handleData(position)
+                    },
+                    (error) => {
+                        console.log(error);    
+                        setLoading(false)
+                    },
+                        { enableHighAccuracy: true, timeout: 200000, maximumAge: 1000, accuracy : 'high'},
+                    );
+                }).catch((e) => {
+                    console.log(e);
+                    setLoading(false)
+                })
+            }).catch((error) => {
+                console.log(error.message); // error.message => "disabled"
+                //   navigation.navigate('Register')
+                setStatusGps(error.message)
+                setLoading(false)
+            });
+        }else{
+            handleData()
+        }
+
+        // if(form.description != '' && form.lat != '' && form.lng !=''){
+        //     navigation.navigate('Proof', {form : form})
+        // }else{
+        //     alert ('data belum lengkap')
+        // }
+        // console.log(selectedItem);
+    }
+
+    const handleData=(position=null) => {
+        let dataUpload=[];
+        let data = form;
+        if(position!=null){
+            data.lat= position.coords.latitude
+            data.lng= position.coords.longitude 
+          }
+        if(data.description != '' && data.lat != '' && data.lng !=''){
+            navigation.navigate('Proof', {form : data})
         }else{
             alert ('data belum lengkap')
         }
-        console.log(selectedItem);
     }
 
 

@@ -63,9 +63,9 @@ const Public =({navigation})=>{
 
 
     const signupOnesignal = async () => {
-        OneSignal.setAppId("282dff1a-c5b2-4c3d-81dd-9e0c2b82114b");
-        OneSignal.setLogLevel(6, 0);
-        OneSignal.setRequiresUserPrivacyConsent(false);
+        // OneSignal.setAppId("282dff1a-c5b2-4c3d-81dd-9e0c2b82114b");
+        // OneSignal.setLogLevel(6, 0);
+        // OneSignal.setRequiresUserPrivacyConsent(false);
         // dispatch(token_api_one_signal(device['userId']))
         const device = await OneSignal.getDeviceState();
         return device.userId;
@@ -73,11 +73,25 @@ const Public =({navigation})=>{
 
 
     const handleRegister = () => {
-        if(form.name != '' && form.passwordNew !='' && form.address !='' && form.phone != '' && form.gender !='' && form._id_onesignal !=''){
+            let data = form;
             setLoading(true)
+            if(!data._id_onesignal){
+                signupOnesignal().then((res) => {
+                    data._id_onesignal = res;
+                    handleData(data)
+                })
+            }else{
+                handleData(data)
+            }
+            // console.log(form);
+    }
+
+    const handleData = (data) => {
+        if(data.name != '' && data.passwordNew !='' && data.address !='' && data.phone != '' && data.gender !='' && data._id_onesignal !=''){
+            // setLoading(true)
             var mes = ''
 
-            API.registerCustomerPublic(form).then((result) => {
+            API.registerCustomerPublic(data).then((result) => {
                 mes = result.data.errorInfo ? result.data.errorInfo[2] : '';
                 setLoading(false)
                 API.OTP({phone:result.data.phone, OTP : OTP}).then((res) => {
@@ -96,7 +110,6 @@ const Public =({navigation})=>{
         }else{
             alert('mohon lengkapi data anda')
         }
-            // console.log(form);
     }
 
     return(
