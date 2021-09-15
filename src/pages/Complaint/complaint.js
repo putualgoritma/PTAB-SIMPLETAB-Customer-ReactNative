@@ -196,7 +196,7 @@ const Complaint =({navigation})=>{
     }
 
     const handleData=(position=null) => {
-        let dataUpload=[];
+        let dataUpload=[]; 
         let data = form;
         if(position!=null){
             data.lat= position.coords.latitude
@@ -204,7 +204,9 @@ const Complaint =({navigation})=>{
           }
         if(data.description != '' && data.lat != '' && data.lng !=''){
             navigation.navigate('Proof', {form : data})
+            setLoading(false)
         }else{
+            setLoading(false)
             alert ('data belum lengkap')
         }
     }
