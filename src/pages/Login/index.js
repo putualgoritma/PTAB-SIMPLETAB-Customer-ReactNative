@@ -46,9 +46,7 @@ const Login =(props)=>{
 
     const notif = async () => {
         try{
-          OneSignal.setAppId("282dff1a-c5b2-4c3d-81dd-9e0c2b82114b");
-          OneSignal.setLogLevel(6, 0);
-          OneSignal.setRequiresUserPrivacyConsent(false);
+            
           // dispatch(token_api_one_signal(device['userId']))
           const device = await OneSignal.getDeviceState()
 
@@ -118,17 +116,45 @@ const Login =(props)=>{
         })
     }
 
-    const handleAction = () => {
-        if(form.phone != null && form.password != null && form.OTP != null){
-            console.log(form.OTP);
-            setLoading(true)
-            API.login(form).then((result) => {
+    const handleAction =  () => {
+        let data = form;
+        setLoading(true)
+        if(!data._id_onesignal){
+            signupOnesignal().then((res) => {
+                data._id_onesignal = res;
+                handleData(data)
+            })
+        }else{
+            handleData(data)
+        }
+        
+    }
+
+    const signupOnesignal = async () => {
+        // OneSignal.setAppId("282dff1a-c5b2-4c3d-81dd-9e0c2b82114b");
+        // OneSignal.setLogLevel(6, 0);
+        // OneSignal.setRequiresUserPrivacyConsent(false);
+        // dispatch(token_api_one_signal(device['userId']))
+        const device = await OneSignal.getDeviceState();
+        return device.userId;
+    }
+
+    // const idOneSignal = async() => {
+    //     let device = await OneSignal.getDeviceState();
+    //     data
+    // }
+    
+    const handleData = (data) => {
+        if(data.phone != null && data.password != null && data.OTP != null && data._id_onesignal){
+            console.log(data.OTP);
+            // setLoading(true)
+            API.login(data).then((result) => {
                 // console.log('response' ,result);
                 // navigation.navigate('SMS', {form : form})
                 // setLoading(false)
-                API.OTP({phone:result.data.phone, OTP : form.OTP}).then((res) => {
+                API.OTP({phone:result.data.phone, OTP : data.OTP}).then((res) => {
                     console.log(res);
-                    navigation.replace('SMS', {user : result.data, OTP : form.OTP, TOKEN : result.token})
+                    navigation.replace('SMS', {user : result.data, OTP : data.OTP, TOKEN : result.token})
                     setLoading(false)
                 }).catch((e) => {
                     console.log(e);
@@ -143,9 +169,9 @@ const Login =(props)=>{
             })
         }else{
             alert('Mohon isi data dengan Lengkap')
+            setLoading(false)
         }
     }
-    
     
 
     return(

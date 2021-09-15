@@ -58,7 +58,7 @@ const Show =({navigation,route})=>{
 
     return(
         <View style={styles.container}>
-            {onFullScreen && <View style={{width:'100%', height:'100%'}} >
+            {(onFullScreen && data.video !='') && <View style={{width:'100%', height:'100%'}} >
                 <VideoPlayer
                     src={{uri :  Config.REACT_APP_BASE_URL + `${String(data.video).replace('public/', '')}` }}
                     onFullScreen = {() => setOnFullScreen (false)}
@@ -147,14 +147,22 @@ const Show =({navigation,route})=>{
 
                                     <TextInput title="Video Keluhan" fontWeight='bold'/>
                                     <View style={{width:'80%', height:220}}>
-                                        {!loadingVideo && <Text style={{fontSize : 17}}>Video Loading...</Text>}
-                                        <VideoPlayer
-                                            src={{uri :  Config.REACT_APP_BASE_URL + `${String(data.video).replace('public/', '')}` }}
-                                            onFullScreen = {() => setOnFullScreen (true)}
-                                            onLoad={() => {setLoadingVideo(loadingVideo ? false : true); return loadingVideo}} 
-                                            poster="https://somesite/thumb.png"
-                                            
-                                        />
+                                        {/* {!loadingVideo && <Text style={{fontSize : 17}}>Video Loading...</Text>} */}
+                                        {data.video !='' && 
+                                            <VideoPlayer
+                                                src={{uri :  Config.REACT_APP_BASE_URL + `${String(data.video).replace('public/', '')}` }}
+                                                onFullScreen = {() => setOnFullScreen (true)}
+                                                onLoad={() => {setLoadingVideo(loadingVideo ? false : true); return loadingVideo}} 
+                                                poster="https://somesite/thumb.png"
+                                                
+                                            />
+                                        }
+                                        {data.video =='' && 
+                                            <Image
+                                                source = {require('../../assets/img/ImageVideo.png')}
+                                                style={{height: 220, width: 280, marginRight: 10}}
+                                            /> 
+                                        }
                                     </View>
                                     <View style={{flexDirection:'row', width:'80%'}}>
                                         <View >
