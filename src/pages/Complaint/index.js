@@ -133,8 +133,8 @@ const HistoryComplaint = ({ navigation }) => {
                             <View style={[styles.content, { borderColor: borderStatus }]}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <View style={{ flex: 1, height: 200, justifyContent: 'center' }}>
-                                        <ImageBackground source={require('../../assets/img/ImageFotoLoading.png')} style={{ flex: 1, height: 200 }} >
-                                            {/* {loadingImage && <Image source={require('../../assets/img/ImageFotoLoading.png')} style={{width:150, height:200}}/>} */}
+                                        <ImageBackground source={require('../../assets/img/ImageLoading.gif')} style={{ flex: 1, height: 200 }} >
+                                            {/* {loadingImage && <Image source={require('../../assets/img/ImageLoading.gif')} style={{width:150, height:200}}/>} */}
                                             <Image
                                                 source={{ uri: Config.REACT_APP_BASE_URL + `${String(imagefoto).replace('public/', '')}` }}
                                                 style={{ flex: 1 }}

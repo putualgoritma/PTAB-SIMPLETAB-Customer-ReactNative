@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, ImageBackground, Modal, ScrollView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import Config from 'react-native-config';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import { Spinner, TextInput, Title, VideoPlayer } from '../../component';
+import { Spinner, TextInput, Title, VideoPlayer,DataView } from '../../component';
 import Distance from '../../utils/distance';
 
 
@@ -26,7 +26,9 @@ const Show =({navigation,route})=>{
     // const [imagePengerjaan,setimagePengerjaan] = useState(data.action.length > 0 ? JSON.parse(data.action[panjang-1].image) : null )
     const [imagePengerjaan,setimagePengerjaan] = useState(data.action.length > 0 ? (data.action[panjang-1].image != null && data.action[panjang-1].image !='' ?    JSON.parse(data.action[panjang-1].image) : null) : null )
 
-
+    const [imagesDone, setImagesDone] = useState([]);
+    const [ShowImageDone, setShowImageDone] = useState(false)
+    const [imageDone,setimageDone] = useState(data.action.length > 0 ? (data.action[panjang-1].image_done != null && data.action[panjang-1].image_done !='' ?    JSON.parse(data.action[panjang-1].image_done) : null) : null )
 
     // const imagepengerjaan = data.action.length >0 ? (JSON.parse(data.action[0].image)[0]): null
 
@@ -49,6 +51,18 @@ const Show =({navigation,route})=>{
           imagePengerjaan.map((item, index) => {
               imagesPengerjaan.push({
                url: Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}?time="${new Date()}`,
+              })
+          })
+   
+        }
+         setLoading(false)
+      }, [])
+
+    useEffect(() => {
+        if(imageDone != null){
+          imageDone.map((item, index) => {
+              imagesDone.push({
+        url: Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}?time="${new Date()}`,
               })
           })
    
@@ -126,7 +140,7 @@ const Show =({navigation,route})=>{
                                     <View style={{width:'80%'}}>
                                         <TouchableHighlight onPress ={image != null ? () =>{ setShowImage(true);console.log(images);} : null}>
                                         <ScrollView style={{flexDirection:'row',}}horizontal={true}>
-                                        <ImageBackground source={require('../../assets/img/ImageFotoLoading.png') } style={{ height : 220, width : 280}} >
+                                        <ImageBackground source={require('../../assets/img/ImageLoading.gif') } style={{ height : 220, width : 280}} >
                                             {image && image.map((item,index) => {
                                                     return (
                                                     
@@ -186,7 +200,7 @@ const Show =({navigation,route})=>{
                                     <View style={{width:'80%'}}>
                                         <TouchableHighlight onPress ={imagePengerjaan != null ? () =>{ setShowImagePengerjaan(true);} : null}>
                                         <ScrollView style={{flexDirection:'row',}}horizontal={true}>
-                                        <ImageBackground source={require('../../assets/img/ImageFotoLoading.png') } style={{ height : 220, width : 280}} >
+                                        <ImageBackground source={require('../../assets/img/ImageLoading.gif') } style={{ height : 220, width : 280}} >
                                             {imagePengerjaan && imagePengerjaan.map((item,index) => {
                                                     return (
                                                         <View style={{marginVertical:5}}>
@@ -203,6 +217,41 @@ const Show =({navigation,route})=>{
                                         </ScrollView>  
                                         </TouchableHighlight>
                                     </View>
+
+                                    {data.status =='close' &&
+                                <View>
+                                    <DataView title='Foto Selesai' />
+                                    <Modal visible={ShowImageDone} transparent={true} enablePreload={true}
+                                        onRequestClose={() => setShowImageDone(false)}
+                                        onDoubleClick={() => setShowImageDone(true)}
+                                    >
+                                        <ImageViewer imageUrls={imagesDone}/>
+                                    </Modal>
+                                    <View style={{width:'90%'}}>
+                                        <TouchableHighlight onPress ={imageDone != null ? () =>{ setShowImageDone(true);} : null}>
+                                        <ScrollView style={{flexDirection:'row',}}horizontal={true}>
+                                        <ImageBackground source={require('../../assets/img/ImageLoading.gif') } style={{ height : 220, width : 280}} >
+                                            {imageDone && imageDone.map((item,index) => {
+                                                    return (
+                                                        <View style={{marginVertical:5}}>
+                                                            
+                                                            <Image
+                                                                key={index}
+                                                                onLoadEnd={() => {setLoadingImage(false); console.log('end');}}
+                                                                source = {{uri : Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}?time="${new Date()}`}}
+                                                                style={{height: 220, width: 280, marginRight: 10, resizeMode : 'stretch'}}
+                                                            /> 
+                                                          
+                                                        </View>
+                                                        
+                                                    )
+                                                })} 
+                                        </ImageBackground>
+                                        </ScrollView>  
+                                        </TouchableHighlight>
+                                    </View>
+                                </View>
+                                }
 
                                    
                                     {/* <TextInput title="Foto Pengerjaan" fontWeight='bold'/>
