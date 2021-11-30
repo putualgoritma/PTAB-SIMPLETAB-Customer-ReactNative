@@ -207,7 +207,7 @@ const Complaint =({navigation})=>{
             setLoading(false)
         }else{
             setLoading(false)
-            alert ('data belum lengkap')
+            alert ('Mohon Lengkapi Data')
         }
     }
 

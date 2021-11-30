@@ -158,7 +158,7 @@ const AddMeter = ({ navigation }) => {
 
     const handleCtm = () => {
         let dataUpload = [];
-        let message = 'Mohon lengkapi data';
+        let message = 'Mohon Lengkapi Data';
         let send = false;
         if (Object.keys(response).length > 0 && form.wmmeteran > 0 && form.norek != '' && form.lng != '') {
             dataUpload =

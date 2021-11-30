@@ -1,32 +1,19 @@
-import { faCamera, faPlus, faPlusCircle, faTrash, faUndo, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faCamera, faPlusCircle, faTrash, faUndo, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import React, { useEffect, useState } from 'react';
 import {
-    StyleSheet,
-    View,
-    ScrollView,
-    ImageBackground,
-    PermissionsAndroid,
-    Image,
-    Video,
-    Alert,
-    Text,
-    TouchableOpacity
+    Alert, Image, ImageBackground,
+    PermissionsAndroid, ScrollView, StyleSheet, Text,
+    TouchableOpacity, View
 } from 'react-native';
+import RNFetchBlob from 'react-native-fetch-blob';
 import { launchCamera } from 'react-native-image-picker';
 import { useSelector } from 'react-redux';
 import {
-    Footer,
-    Title,
-    ButtonIcon,
-    TextInput,
-    Button,
-    VideoPlayer,
-    Spinner,
+    Button, ButtonIcon, Footer, Spinner, TextInput, Title, VideoPlayer
 } from '../../component';
-import RNFetchBlob from 'react-native-fetch-blob';
 import { colors } from '../../utils/colors';
 import Distance from '../../utils/distance';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 const ButtonImage = (props) => {
     const [qty, setQty] = useState(1)
@@ -201,7 +188,7 @@ const Proof = ({ navigation, route }) => {
                     ];
                 send = true
             } else {
-                message = 'Maksimal Size Bukti Video 20 Mb'
+                message = 'Size Video Melebihi 20 Mb'
             }
 
         } else if (responses.length >= 2 && responses.length <= 3) {
@@ -260,19 +247,19 @@ const Proof = ({ navigation, route }) => {
                 })
             } else {
                 if (video != null && responses.length < 1) {
-                    message = 'mohon gambar diisi min 1'
+                    message = 'Mohon Tambahkan Minimal 1 Foto'
                 }
                 if (video == null && responses.length <= 2) {
-                    message = 'Mohon isi gambar min 2 jika tidak tersedia video'
+                    message = 'Mohon Tambahkan Minimal 2 Foto Jika Tidak Menambahkan Video'
                 }
                 if (video == null && responses.length >= 3) {
-                    message = 'Max upload 3 gambar'
+                    message = 'Maksimal Menambahkan 3 Foto'
                 }
 
                 alert(message)
             }
         } else {
-            alert('Mohon Lengkapi data')
+            alert('Mohon Lengkapi Data')
         }
 
     }
@@ -322,7 +309,7 @@ const Proof = ({ navigation, route }) => {
                                     onPress={
                                         () => Alert.alert(
                                             'Peringatan',
-                                            `Bukti Video sizenya tidak boleh lebih besar dari 20 Mb ! `,
+                                            `Mohon Size Video Tidak Melebihi 20 Mb`,
                                             [
                                                 {
                                                     text: 'Tidak',

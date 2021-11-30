@@ -69,21 +69,21 @@ const Profile =({navigation})=>{
                             editable={false}
                         />  
                         <TextInput
-                            title="No Handphone :"
+                            title="No Telepon :"
                         />
                         <InputLine
-                            placeholder="No Handphone"
+                            placeholder="No Telepon"
                             value={USER.phone}
                             editable={false}
                         />
                 </View> 
-                <View style={{alignItems:'center',paddingVertical:40}}>
+                {/* <View style={{alignItems:'center',paddingVertical:40}}>
                         <Button
                         title="Simpan"
                         // navigation={()=>navigation.navigate('Menu')}
                         onPress = {() => console.log(USER)}
                         />
-                    </View>    
+                </View>     */}
             </ScrollView>
             <Footer
                 navigation = {navigation}

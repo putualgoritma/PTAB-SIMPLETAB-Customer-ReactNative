@@ -63,9 +63,10 @@ const ChangePhone = ({ navigation,route  }) => {
 
     const handleButton = () => {
         let dataUpload = [];
-        let message = 'Mohon lengkapi data';
+        let message = 'Mohon Lengkapi Data';
         let send = false;
-        if (Object.keys(response).length > 0 && form.norek != '' && form.telp != '' && form.alamat != '') {
+        // if (Object.keys(response).length > 0 && form.norek != '' && form.telp != '' && form.alamat != '') {
+        if (response !=null  && form.norek != '' && form.telp != '' && form.alamat != '') {
             dataUpload =
                 [
                     {
@@ -205,6 +206,7 @@ const ChangePhone = ({ navigation,route  }) => {
                                 <Distance distanceV={5} />
                                 <Distance distanceV={10} />
                                 <Button title="Kirim" onPress={handleButton} />
+                                                               
                                 <Distance distanceV={10} />
                             </View>
                         </View>

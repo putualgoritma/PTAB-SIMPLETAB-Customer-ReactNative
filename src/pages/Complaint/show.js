@@ -82,6 +82,7 @@ const Show =({navigation,route})=>{
             </View>}
              
             <ScrollView>
+                
             <View style={{backgroundColor:'#FFFFFF', width:'100%', height:165}}></View>
                 <ImageBackground source={require('../../assets/img/background.png')} style={styles.image}>
                     <View style={{alignItems:'center'}}>
@@ -89,6 +90,7 @@ const Show =({navigation,route})=>{
                             <View style={{alignItems:'center',paddingVertical:10}}>
                                 <Title title="Detail Tiket"/>
                                 <Distance distanceV={5}/>
+                              
                                 <View style={{flexDirection:'row', width:'80%'}}>
                                     <View >
                                         <TextInput title="Tanggal " fontWeight='bold'/>
@@ -158,10 +160,10 @@ const Show =({navigation,route})=>{
                                         </ScrollView>  
                                         </TouchableHighlight>
                                     </View>
-
+                                    {data.video !='' && 
+                                    <>
                                     <TextInput title="Video Keluhan" fontWeight='bold'/>
                                     <View style={{width:'80%', height:220}}>
-                                        {/* {!loadingVideo && <Text style={{fontSize : 17}}>Video Loading...</Text>} */}
                                         {data.video !='' && 
                                             <VideoPlayer
                                                 src={{uri :  Config.REACT_APP_BASE_URL + `${String(data.video).replace('public/', '')}` }}
@@ -178,6 +180,8 @@ const Show =({navigation,route})=>{
                                             /> 
                                         }
                                     </View>
+                                    </>
+                                    }                           
                                     <View style={{flexDirection:'row', width:'80%'}}>
                                         <View >
                                             <TextInput title="Memo Pengerjaan" fontWeight='bold'/>
@@ -188,7 +192,8 @@ const Show =({navigation,route})=>{
 
                                         </View>
                                     </View>
-
+                                    {imagePengerjaan !=null &&
+                                    <>
                                     <TextInput title="Foto Pengerjaan" fontWeight='bold'/>
 
                                     <Modal visible={ShowImagePengerjaan} transparent={true} enablePreload={true}
@@ -210,14 +215,16 @@ const Show =({navigation,route})=>{
                                                                 source = {{uri : Config.REACT_APP_BASE_URL + `${String(item).replace('public/', '')}?time="${new Date()}`}}
                                                                 style={{height: 220, width: 280, marginRight: 10, resizeMode : 'stretch'}}
                                                             /> 
+                                                            
                                                         </View>
                                                     )
-                                                })} 
+                                                })}   
                                         </ImageBackground>
                                         </ScrollView>  
-                                        </TouchableHighlight>
+                                        </TouchableHighlight> 
                                     </View>
-
+                                    </>
+                                    }
                                     {data.status =='close' &&
                                 <View>
                                     <DataView title='Foto Selesai' />
