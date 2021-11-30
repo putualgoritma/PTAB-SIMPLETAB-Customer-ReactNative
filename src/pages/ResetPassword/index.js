@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import Distance from '../../utils/distance';
-import { ImageBackground, ScrollView, StyleSheet, PermissionsAndroid, Image, Text, TouchableOpacity, Alert, View } from 'react-native';
-import { Button, ButtonIcon, Input, TextArea, TextInput, Title, Spinner } from '../../component';
-import { faCamera } from '@fortawesome/free-solid-svg-icons';
-import { launchCamera } from 'react-native-image-picker';
-import { useSelector } from 'react-redux';
-import RNFetchBlob from 'react-native-fetch-blob';
-import { useIsFocused } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { Alert, ImageBackground, ScrollView, StyleSheet, View } from 'react-native';
+import { Button, Input, Spinner, TextInput, Title } from '../../component';
 import API from '../../service';
+import Distance from '../../utils/distance';
 
 
 const ResetPassword = ({ navigation }) => {

@@ -103,12 +103,13 @@ const Public =({navigation})=>{
                     setLoading(false)
                 })
             }).catch((e) => {
-                console.log('eadad',e.request);
+                // console.log('eadad',e.request);
                 setLoading(false)
-                alert('Email atau No Hp sudah terdaftar')
+                alert('Email atau No Telepon sudah terdaftar')
             })
         }else{
-            alert('mohon lengkapi data anda')
+            alert('Mohon Lengkapi Data')
+            setLoading(false)
         }
     }
 
@@ -128,10 +129,10 @@ const Public =({navigation})=>{
                              title="Masyarakat Umum"
                         />
                         <TextInput
-                            title="No Handphone"
+                            title="No Telepon"
                         />
                         <Input
-                              placeholder="No Handphone"
+                              placeholder="No Telepon"
                               onChangeText = {(value) => handleForm('phone', value)}
                               keyboardType = 'number-pad'
                             //   keyboardType = 'number'
@@ -154,7 +155,7 @@ const Public =({navigation})=>{
                          <TextInput
                               title="Email"
                         />
-                        <Text style={{fontSize : 10, color :'red'}}>Boleh di isi atau tidak</Text>
+                        <Text style={{fontSize : 10, color :'red'}}>Email Boleh di isi atau tidak</Text>
                         <Input
                               placeholder="Email"
                               onChangeText = {(value) => handleForm('email', value)}
@@ -182,7 +183,7 @@ const Public =({navigation})=>{
                             />
                         </View>
                     </View>
-                    <View style={{alignItems:'center',paddingVertical:10}}>
+                    <View style={{alignItems:'center',paddingVertical:20}}>
                         <Button
                             title="Lanjut"
                             // navigation={()=>navigation.navigate('SMS')}
