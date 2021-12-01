@@ -71,19 +71,19 @@ const BillList = ({ navigation, route }) => {
                     Rupiah(sisa),
                 ]
             })
+            total = tagihan
             if(tunggakan>0 && tunggakan<2){
                 denda = 10000
-                total = tagihan + denda
+                total += denda
                 denda = Rupiah(denda);
             }
             if(tunggakan>1 && tunggakan<4){
                 denda = 50000
-                total = tagihan + denda
+                total += denda
                 denda = Rupiah(denda);
             }
             if(tunggakan>3){
                 denda = 'SSB (Sanksi Denda Setara Sambungan Baru)'
-                total = tagihan
             }
             
             tagihan = Rupiah(tagihan);            
@@ -150,7 +150,7 @@ const BillList = ({ navigation, route }) => {
                 </View>
                 <Distance distanceV={10} />
                 <View style={{ paddingLeft: 10 }} >
-                    <Text style={{ fontSize: 19, color: '#696969', fontWeight: 'bold' }}>Jumlah Tunggakan</Text>
+                    <Text style={{ fontSize: 19, color: '#696969', fontWeight: 'bold' }}>Jumlah Tagihan</Text>
                     <Distance distanceV={5} />
                     <DataView title='1. Tagihan Air' txt={recap.tagihan} />
                     <DataView title='2. Denda' txt={recap.denda} />
