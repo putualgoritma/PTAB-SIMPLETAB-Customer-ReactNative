@@ -6,7 +6,7 @@ import { Footer, Button, Title, Input, TextInput, TextArea, ButtonIcon, ImageFot
 import Distance from '../../utils/distance'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 import { useSelector } from 'react-redux';
 import RNFetchBlob from 'react-native-fetch-blob';
 
