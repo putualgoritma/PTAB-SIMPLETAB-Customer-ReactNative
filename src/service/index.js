@@ -21,6 +21,7 @@ const tikcetStore = (data, token) => Post(Config.REACT_APP_TICKET_STORE, false, 
 const OTP = (data) =>Post(Config.REACT_APP_OTP, false, data);
 const scanCode = (data) =>Post('/api/open/customer/code', false, data);
 const reset = (data) => Post('/api/open/customer/reset', false, data);
+const register = (data) => Post('/api/open/customer/register-upd', false, data);
 // PUT
 
 const API = {
@@ -37,6 +38,7 @@ const API = {
       ctmcustomer,
       reset,
       ctmuse,
+      register,
 }
 
 export default API;

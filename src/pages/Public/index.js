@@ -140,10 +140,12 @@ const Public =({navigation})=>{
                         <TextInput
                               title="Password"
                         />
+                        <Text style={{fontSize : 11, color :'red'}}>Password standar: 123456</Text>
                         <Input
                               placeholder="Password"
                               onChangeText = {(value) => handleForm('passwordNew', value)}
                               secureTextEntry = {true}
+                              value = '123456'
                          />
                         <TextInput
                              title="Nama"
@@ -155,7 +157,7 @@ const Public =({navigation})=>{
                          <TextInput
                               title="Email"
                         />
-                        <Text style={{fontSize : 10, color :'red'}}>Email Boleh di isi atau tidak</Text>
+                        <Text style={{fontSize : 11, color :'red'}}>Email Boleh di isi atau tidak</Text>
                         <Input
                               placeholder="Email"
                               onChangeText = {(value) => handleForm('email', value)}

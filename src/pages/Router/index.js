@@ -25,6 +25,7 @@ import PhoneScan from '../ChangePhone/Scan'
 import FareList from '../Fare/FareList'
 import FareScan from '../Fare/Scan'
 import ResetPassword from '../ResetPassword'
+import Register from '../Login/register'
 
 
 const Stack = createStackNavigator();
@@ -154,6 +155,11 @@ const Router = () =>{
              <Stack.Screen
                 name="ResetPassword"
                 component={ResetPassword}
+                options={{headerShown:false}}
+            />
+            <Stack.Screen
+                name="Register"
+                component={Register}
                 options={{headerShown:false}}
             />
         </Stack.Navigator>

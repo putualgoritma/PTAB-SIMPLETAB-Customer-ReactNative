@@ -5916,6 +5916,13 @@ react-native-onesignal@^4.2.0:
   dependencies:
     invariant "^2.2.2"
 
+react-native-password-eye@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-password-eye/-/react-native-password-eye-1.0.5.tgz#2e2fc2b69fc43f10046d8372f17d53ee31f46d63"
+  integrity sha512-kIY7y5agdLeZMFygTGNXeRtGYIx87kt2IxEoaFnwSaJ5MkkIDxQCWMsOvxqXJfYhgmeRm0QvxBK2AbXWJRM2DQ==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-safe-area-context@^3.2.0:
   version "3.2.0"
   resolved "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-3.2.0.tgz"

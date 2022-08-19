@@ -121,7 +121,7 @@ const BillList = ({ navigation, route }) => {
                     <DataView title='Alamat' txt={customer.alamat} />
                     <DataView title='Gol. Tarif' txt={customer.idgol} />
                     <DataView title='Areal' txt={customer.idareal} />
-                    <DataView title='Status' txt={customer.status = '1' ? 'Aktif' : 'Pasif'} />
+                    <DataView title='Status' txt={customer.status == 1 ? 'Aktif' : 'Pasif'} />
                     <Distance distanceV={10} />
                 </View>
                 <View style={{ alignItems: 'center' }}>

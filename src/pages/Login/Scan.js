@@ -1,5 +1,5 @@
 'use strict';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 
@@ -19,6 +19,10 @@ const PendingView = () => (
 
 const Scan =({navigation}) => {
   
+    //   useEffect(() => {
+    //     //alert('back')
+    //     navigation.navigate('Login', {code : 'ec63533b-dd69-1eab-857b-afcf9b640dda'})
+    // }, [])  
     // const [barcode, setBarcode] = useState(null)
 
 

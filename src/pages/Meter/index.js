@@ -50,10 +50,11 @@ const Meter = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            {loading && <Spinner />}
+            {loading && <Spinner />}            
             <ScrollView>
-                <Header2 />
-                <View style={{ paddingLeft: 10 }}>
+                <Header2 />                
+                <View style={{ paddingLeft: 10, paddingRight: 10 }}>
+                <Text style={styles.notify}>Catat Meter Mandiri ditujukan untuk pelanggan yang rumahnya terkunci lebih dari 4 bulan. Untuk pendaftaran silakan datangi Bagian Hubungan Langganan di Kantor Pusat Perumda Tirta Amertha Buana Jln. Wagimin, No. 27, Kediri, Tabanan 82121. Tel. (0361) 931-1213, 931-1706. Siapkan No. SBG, KTP, Nomor telepon aktif (bisa di-WA), dan (biaya) meterai.</Text>
                     <Title
                         title="History Baca"
                     />
@@ -141,6 +142,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#696969',
         paddingVertical: 5
+    },
+    notify: {
+        fontSize: 15,
+        color: '#ff0000',
+        paddingVertical: 5,
+        textAlign: 'justify',
     },
     data: {
         color: '#696969'
