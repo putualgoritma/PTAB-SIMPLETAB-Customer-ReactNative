@@ -62,7 +62,7 @@ const WalkthroughableImage = walkthroughable(Image);
                     </View>
                     <Distance distanceV={10}/>
                     <View style={{backgroundColor:'#0C5CBF', width:'90%', height:50, borderRadius:5,}}>
-                        <Text style={{color:'#FFFFFF', fontSize:15, fontWeight:'bold', padding:12}}>Layanan PDAM</Text>
+                        <Text style={{color:'#FFFFFF', fontSize:15, fontWeight:'bold', padding:12}}>Layanan Perumda TAB</Text>
                     </View>
                     <View style={{flexDirection:'row', width:'90%', alignItems:'center'}}>
                         {/* <CopilotStep

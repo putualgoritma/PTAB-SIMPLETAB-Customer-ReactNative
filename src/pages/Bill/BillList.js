@@ -15,7 +15,7 @@ const BillList = ({ navigation, route }) => {
     const isFocused = useIsFocused();
     const TOKEN = useSelector((state) => state.TokenReducer);
     const [tableData, setTableData] = useState([])
-    const tableHead = ['No', 'Nomor REK', 'Periode', 'Tanggal', 'M3', 'Wajib Dibayar(Rp)', 'Terbayar(Rp)', 'Denda(Rp)', 'Sisa(Rp)'];
+    const tableHead = ['No', 'Nomor SBG', 'Periode', 'Tanggal', 'M3', 'Wajib Dibayar(Rp)', 'Terbayar(Rp)', 'Denda(Rp)', 'Sisa(Rp)'];
     const widthArr = [40, 60, 100, 100, 60, 140, 140, 100, 100]
 
     const [customer, setCustomer] = useState({})

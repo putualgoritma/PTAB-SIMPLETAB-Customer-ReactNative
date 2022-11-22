@@ -226,7 +226,7 @@ const Login = (props) => {
                     <Text style={styles.textbold}>LOGIN</Text>                                            
                         <View style={{ width: '100%', alignItems: 'center' }}>
                             <CopilotStep
-                                text="Masukan No SBG (Nomor Stand Meter Pelanggan)"
+                                text="Masukan No SBG (Nomor Sambungan Pelanggan)"
                                 order={1}
                                 name="SatuUnique"
                             >
