@@ -128,8 +128,9 @@ const Register = ({ navigation, route }) => {
                                 <Input
                                     placeholder="Masukan No Telepon"
                                     value={form.phone}
+                                    keyboardType = 'numeric'
                                     width='90%'
-                                    onChangeText={(value) => handleForm('phone', value)}
+                                    onChangeText={(value) => handleForm('phone', value.replace(/[^0-9]/g, ''))}
                                 />
                                 <Distance distanceV={10} />
                                 <TextInput title="Password" />
