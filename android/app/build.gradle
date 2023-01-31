@@ -144,8 +144,8 @@ android {
         applicationId "com.simpeltab"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "8.0"
+        versionCode 11
+        versionName "11.0"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
     signingConfigs {
@@ -206,6 +206,9 @@ android {
 }
 
 dependencies {
+         implementation 'androidx.work:work-runtime:2.7.1'
+    implementation "androidx.annotation:annotation:1.1.0"
+    
     implementation 'com.facebook.fresco:fresco:2.0.0'
     // For animated GIF support
     implementation 'com.facebook.fresco:animated-gif:2.0.0'

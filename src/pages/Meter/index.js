@@ -37,7 +37,7 @@ const Meter = ({ navigation }) => {
 
     const ctmAPi = () => {
         //alert(USER.code)
-        API.ctms(USER.code, TOKEN).then((result) => {
+        API.ctms(USER.id, TOKEN).then((result) => {
             setCtm(result.data)
             setLoading(false)
             console.log('nilai ctm', result.data)
@@ -54,9 +54,11 @@ const Meter = ({ navigation }) => {
             <ScrollView>
                 <Header2 />                
                 <View style={{ paddingLeft: 10, paddingRight: 10 }}>
-                <Text style={styles.notify}>Catat Meter Mandiri ditujukan untuk pelanggan yang rumahnya terkunci lebih dari 4 bulan. Untuk pendaftaran silakan datangi Bagian Hubungan Langganan di Kantor Pusat Perumda Tirta Amertha Buana Jln. Wagimin, No. 27, Kediri, Tabanan 82121. Tel. (0361) 931-1213, 931-1706. Siapkan No. SBG, KTP, Nomor telepon aktif (bisa di-WA), dan (biaya) meterai.</Text>
+                <Text style={[styles.notify, {fontSize: 16}]}>PERHATIAN!!!</Text>
+                <Text style={styles.notify}>
+    untuk stand meter hanya di ketik angka yg berwarna hitam saja yg ada di meteran.paling lambat di kirim tanggal 20 bulan ini.</Text>
                     <Title
-                        title="History Baca"
+                        title="STAND METER"
                     />
                     <ButtonAdd
                         title="Baca Meter"
@@ -77,32 +79,47 @@ const Meter = ({ navigation }) => {
              */}
                 {ctm && ctm.map((item, index) => {
                     return (
-                        <View>
+                        <View key={index}>
                             <Distance distanceV={5} />
                             <View style={{ alignItems: 'center' }}>
                                 <View style={{ backgroundColor: '#7DE74B', width: 200, height: 35, borderTopRightRadius: 15, borderTopLeftRadius: 15, alignItems: 'center' }}>
-                                    <Text style={styles.textStatus}>{item.bulanrekening}/{item.tahunrekening}</Text>
+                                    <Text style={styles.textStatus}>{item.month}/{item.year}</Text>
                                 </View>
                                 <View style={{ backgroundColor: '#FFFFFF', width: '90%', borderRadius: 9, borderWidth: 3, borderColor: '#CAFEC0', height: 'auto', padding: 7 }}>
                                     <View style={{ height: 'auto', flexDirection: 'row' }}>
                                         <View style={{ flex: 1 }}>
                                             {/* {loadingImage && <Image source={require('../../assets/img/ImageFotoLoading.png')} style={{ width: 150, height: 150 }} />} */}
+                                            { item.status == "approve" &&
+                                            <ImageBackground source={require('../../assets/img/ImageFotoLoading.png') } style={{ flex:1, height: 200}} >
+                                            <Image
+                                                source={{ uri: Config.REACT_APP_ALTERNATIVE_CTM + `${String(item.img)}` }}
+                                                style={{ flex: 1 }}
+                                                onLoadEnd={() => setLoadingImage(false)}
+                                                onLoadStart={() => setLoadingImage(true)}
+                                            />
+                                                                                    {/* {console.log(item.img)} */}
+                                        </ImageBackground>
+
+                                            }
+                                             { item.status != "approve" &&
                                             <ImageBackground source={require('../../assets/img/ImageFotoLoading.png') } style={{ flex:1, height: 200}} >
                                                 <Image
-                                                    source={{ uri: Config.REACT_APP_BASE_CTM + `${String(item.filegambar).replace('public/', '')}` }}
+                                                    source={{ uri: Config.REACT_APP_ALTERNATIVE_CTM + `${String(item.img.replace("/gambar/", "/gambar-test/"))}` }}
                                                     style={{ flex: 1 }}
                                                     onLoadEnd={() => setLoadingImage(false)}
                                                     onLoadStart={() => setLoadingImage(true)}
                                                 />
+                                                {/* {console.log(item.img.replace("/gambar/", "/gambar-test/"))} */}
                                             </ImageBackground>
+                }
                                         </View>
                                         <View style={{ paddingLeft: 8, flex: 1.2, height: 'auto' }}>
                                             <Text style={styles.title}>ID Pelanggan : </Text>
-                                            <Text style={styles.data}>{item.nomorrekening}</Text>
+                                            <Text style={styles.data}>{item.norek}</Text>
                                             <Text style={styles.title}>Tgl. Pencatatan</Text>
-                                            <Text style={styles.data}>{item.tanggal}</Text>
-                                            <Text style={styles.title}>Pemakaian</Text>
-                                            <Text style={styles.data}>{item.pencatatanmeter}</Text>
+                                            <Text style={styles.data}>{item.datecatatf3}</Text>
+                                            <Text style={styles.title}>Stand Meter</Text>
+                                            <Text style={styles.data}>{item.wmmeteran}</Text>
                                         </View>
                                     </View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'flex-end', height: 'auto', paddingTop: 5 }}>

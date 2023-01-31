@@ -28,20 +28,33 @@ const DetailMeter =({navigation,route})=>{
                                         <View style={{alignItems:'center'}}>
                                             <Title title="Detail Baca Meter" width={'90%'}/>
                                             <TextInput title="ID Pelanggan" width='90%'/> 
-                                            <Text style={styles.text} >{data.nomorrekening}</Text>
+                                            <Text style={styles.text} >{data.norek}</Text>
                                             <TextInput title="Bulan" width='90%'/>
-                                            <Text style={styles.text} >{data.bulanrekening}</Text>
+                                            <Text style={styles.text} >{data.month}</Text>
                                             <TextInput title="Pemakaian" width='90%'/>
-                                            <Text style={styles.text} >{data.pencatatanmeter}</Text>                                            
+                                            <Text style={styles.text} >{data.wmmeteran}</Text>                                            
                                             <TextInput title="Foto" width='90%'/> 
                                             <View style={{marginVertical:5}}>
                                             <ImageBackground source={require('../../assets/img/ImageFotoLoading.png') } style={{ height : 220, width : 280}} >
-                                                <Image
-                                                    source={{ uri: Config.REACT_APP_BASE_CTM + `${String(data.filegambar).replace('public/', '')}` }}
-                                                    style={{ width:200, height:200 }}
-                                                    onLoadEnd={() => setLoadingImage(false)}
-                                                    onLoadStart={() => setLoadingImage(true)}
-                                                />
+                                                { data.status == "approve" &&
+      <Image
+      source={{ uri: Config.REACT_APP_ALTERNATIVE_CTM + `${String(data.img)}` }}
+      style={{ width:200, height:200 }}
+      onLoadEnd={() => setLoadingImage(false)}
+      onLoadStart={() => setLoadingImage(true)}
+  />
+                                                }
+
+{ data.status != "approve" &&
+      <Image
+      source={{ uri: Config.REACT_APP_ALTERNATIVE_CTM + `${String(data.img).replace("/gambar/", "/gambar-test/")}` }}
+      style={{ width:200, height:200 }}
+      onLoadEnd={() => setLoadingImage(false)}
+      onLoadStart={() => setLoadingImage(true)}
+  />
+                                                }
+                                          
+                                          
                                             </ImageBackground>      
                                             </View>                                  
                                          </View>
